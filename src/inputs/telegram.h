@@ -29,7 +29,7 @@ void handle(uint8_t n_msgs) {
         print(F(", text: "));
         printRaw(text);
         print(F(", from_name: "));
-        printRaw(from_name);
+        printlnRaw(from_name);
     }
 }
 
@@ -48,7 +48,7 @@ void setup() {
         return;
     }
 
-    notifyAdmin(F("I'm alive, feed be!"));
+    notifyAdmin(F("I'm alive, feed me!"));
     ready = true;
 }
 
