@@ -17,8 +17,7 @@
 #include "matrix/display.h"
 
 void setup() {
-    // prep watchdog
-    delay(0);
+    delay(0); // watchdog timer (WDT)
 
     Pinout::setup();
     digitalWrite(Pinout::STATUS_LED, true);
@@ -32,6 +31,7 @@ void setup() {
 
     println(F(".prepare connections."));
     WiFiLoginManager::setup("ModischMatrix");
+    delay(10);
 
     println(F(".prepare inputs."));
     Input_Telegram::setup();
@@ -39,6 +39,7 @@ void setup() {
 
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
+    delay(10);
 }
 
 void loop() {
@@ -48,5 +49,6 @@ void loop() {
 
     PersistenceManager::trySave();
 
-    heartbeatSerial();
+    //heartbeatSerial();
+    delay(1);
 }

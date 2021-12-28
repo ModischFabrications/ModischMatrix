@@ -9,5 +9,6 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 ColumnLimit: 100
 AllowShortBlocksOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: WithoutElse 
+# AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+
 ---
