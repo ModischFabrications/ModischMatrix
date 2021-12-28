@@ -25,10 +25,10 @@ void setup() {
     println(F("Starting up..."));
 
     println(F(".prepare outputs."));
-    Matrix::setup();
+    Display::setup();
 
     println(F(".prepare connections."));
-    WiFiLoginManager::setup("Matrix");
+    WiFiLoginManager::setup("ModischMatrix");
 
     println(F(".prepare inputs."));
     Input_Telegram::setup();

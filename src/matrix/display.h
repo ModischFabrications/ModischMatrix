@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h> // https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA
 
-namespace Matrix {
+namespace Display {
 using namespace Pinout;
 
 const uint8_t PANEL_RES_X = 64;

@@ -4,9 +4,11 @@
 #include <UniversalTelegramBot.h> // https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
 #include <WiFiClientSecure.h>
 
+// TODO technically a connector, especially with admin notifications
 namespace Input_Telegram {
 
 const String BOT_TOKEN = "TODO CHANGE ME";
+const String ADMIN_ID = "TODO CHANGE ME";
 const uint16_t POLL_DELAY = 2000; // min time, could be larger due to long running animations
 // const X509List cert(TELEGRAM_CERTIFICATE_ROOT);
 
@@ -33,11 +35,19 @@ void handle(uint8_t n_msgs) {
     }
 }
 
+void notifyAdmin(const String& msg){
+    // or msg, but that's probably less performant
+    bot.sendMessage(ADMIN_ID, msg, "");
+}
+
 // contract: WiFi must be enabled already
 void setup() {
     if (!bot.getMe()){
         logError(F("T:Can't find myself!"));
+        return;
     }
+
+    notifyAdmin(F("I'm alive, feed be!"));
 }
 
 uint32_t t_last_poll = 0;

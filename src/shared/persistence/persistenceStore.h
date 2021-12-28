@@ -65,8 +65,8 @@ const Configuration loadSettings() {
     return defaultConfiguration;
   }
 
-  // content should be correct, return it
-  Configuration settings;
+  // default isn't actually used, but it prevents compile warnings
+  Configuration settings = defaultConfiguration;
   EEPROM.get(EEPROM_SETTINGS_ADDR, settings);
 
   return settings;
