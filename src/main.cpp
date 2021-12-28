@@ -12,7 +12,8 @@
 
 #include "inputs/telegram.h"
 #include "inputs/touch.h"
-//#include "inputs/website.h"
+#include "inputs/website.h"
+
 #include "matrix/display.h"
 
 void setup() {

@@ -1,12 +1,14 @@
 
 
 
-https://cpp4arduino.com/2018/11/21/eight-tips-to-use-the-string-class-efficiently.html
+## Strings
+Can't run from them forever, some libs require them. Keep their disadvantages in mind though!
 
-F()-macro prevent preemptive init of "String" ref, use it!
-Use const String& refs for passing them around. 
-Use +=, which reduces allocations, ideally prefixed with .reserve(n). 
-Use compile time concatenation with spaces. 
+Some best practices, stolen from [here](https://cpp4arduino.com/2018/11/21/eight-tips-to-use-the-string-class-efficiently.html):
+- F()-macro prevent preemptive init of "String" ref, use it!
+- Use const String& refs for passing them around. 
+- Use +=, which reduces allocations, ideally prefixed with .reserve(n). 
+- Use compile time concatenation with spaces. 
 
 ## TODO
 Flash: self-reports 4MB, Uploader can only find 1MB. 
