@@ -34,8 +34,6 @@ void setupWiFi(const char* name) {
     wifiManager.setMinimumSignalQuality(10);
     wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1),
                                     IPAddress(255, 255, 255, 0));
-
-    // LAN name if successfully connected
     WiFi.hostname(name);
 
     // try connecting, show captive portal on fail
@@ -46,7 +44,6 @@ void setupWiFi(const char* name) {
         ESP.restart();
     }
 
-    // if you get here you have connected to the WiFi
     println(F("connected to the local network"));
 }
 
@@ -59,28 +56,28 @@ void setupMDNS(const char* name) {
     println(F("mDNS ready"));
 }
 
-void testConnection() {
+void waitForConnection() {
     if (WiFi.status() != WL_CONNECTED) {
         logError(F("WiFi seems to be disconnected!"));
         return;
     }
     print(F("Testing connection to "));
     printlnRaw(testHost.toString());
-    if (!Ping.ping(testHost, 4)) {
-        logError(F("Can't connect to anything"));
-        return;
-    }
-    print(F("RTT: "));
-    printlnRaw(Ping.averageTime());
 
-    println(F("All good!"));
+    while (Ping.ping(testHost, 2) && Ping.averageTime() <= 0){
+        print(F("."));
+        delay(100);
+    }
+
+    print(F("Connected, RTT: "));
+    printlnRaw(Ping.averageTime());
 }
 
 void setup(const char* name) {
     setupWiFi(name);
     delay(100);
     setupMDNS(name);
-    testConnection();
+    waitForConnection();
 }
 
 } // namespace WiFiLoginManager
