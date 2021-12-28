@@ -78,6 +78,7 @@ void testConnection() {
 
 void setup(const char* name) {
     setupWiFi(name);
+    delay(100);
     setupMDNS(name);
     testConnection();
 }

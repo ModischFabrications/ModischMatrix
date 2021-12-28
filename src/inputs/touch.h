@@ -14,7 +14,7 @@ void setup() {
     // touchRead takes ~ 0.5ms
     for (uint8_t i_b : Pinout::TOUCH) {
         uint16_t touchVal = touchRead(i_b);
-        print(F("Touch "));
+        print(F("Touch P"));
         printRaw(i_b);
         print(F(" initial: "));
         printlnRaw(touchVal);

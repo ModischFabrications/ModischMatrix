@@ -1,5 +1,5 @@
 
-
+Telegram Bot is technically a connector, especially with admin notifications. 
 
 ## Strings
 Can't run from them forever, some libs require them. Keep their disadvantages in mind though!

@@ -44,7 +44,7 @@ void heartbeatSerial() {
         lastMsg = time;
     }
 
-    lastCycle = millis();
+    lastCycle = time;
 }
 
 // protected method to enforce "F" and ensure flag usage

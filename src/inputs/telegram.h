@@ -5,31 +5,32 @@
 #include <UniversalTelegramBot.h> // https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
 #include <WiFiClientSecure.h>
 
-// TODO technically a connector, especially with admin notifications
 namespace Input_Telegram {
 
-const uint16_t POLL_DELAY = 2000; // min time, could be larger due to long running animations
-// const X509List cert(TELEGRAM_CERTIFICATE_ROOT);
+const uint16_t POLL_DELAY = 10 * 1000; // min time, could be larger due to long running animations
 
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(T_BOT_TOKEN, secured_client);
+
+void logMsg(const telegramMessage& msg) {
+    print(F("T> "));
+    printRaw(msg.from_name);
+    print(F("("));
+    printRaw(msg.from_id);
+    print(F("): "));
+    printlnRaw(msg.text);
+}
+
+// TODO pairing
 
 void handle(uint8_t n_msgs) {
     println(F("T:Recv msg, handling.."));
 
     for (int i = 0; i < n_msgs; i++) {
-        String chat_id = bot.messages[i].chat_id;
-        String text = bot.messages[i].text;
-        String from_name = bot.messages[i].from_name;
+        telegramMessage msg = bot.messages[i];
+        msg.text.trim();
 
-        if (from_name == "") from_name = "Guest";
-
-        print(F("chat_id: "));
-        printRaw(chat_id);
-        print(F(", text: "));
-        printRaw(text);
-        print(F(", from_name: "));
-        printlnRaw(from_name);
+        logMsg(msg);
     }
 }
 
@@ -43,10 +44,7 @@ bool ready = false;
 void setup() {
     secured_client.setCACert(TELEGRAM_CERTIFICATE_ROOT);
 
-    if (!bot.getMe()) {
-        logError(F("T:Can't find myself!"));
-        return;
-    }
+    if (!bot.getMe()) { logWarning(F("T:Can't find myself!")); }
 
     notifyAdmin(F("I'm alive, feed me!"));
     ready = true;
@@ -58,6 +56,7 @@ void loop() {
 
     uint32_t now = millis();
     if (now - t_last_poll > POLL_DELAY) {
+        println(F("Checking for updates..."));
         int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
 
         while (numNewMessages) {

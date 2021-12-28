@@ -25,6 +25,7 @@ void setup() {
 
     setupSerial(115200);
     println(F("Starting up..."));
+    PersistenceStore::setup();
 
     println(F(".prepare outputs."));
     Display::setup();
@@ -42,7 +43,6 @@ void setup() {
 
 void loop() {
     // impossible to align loop times with variable length web calls!
-    // TimeService::timeUpdate();
 
     Input_Telegram::loop();
 
