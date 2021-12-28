@@ -9,8 +9,9 @@
 namespace WiFiLoginManager {
 
 namespace {
+// const char* testHost = "8.8.8.8";
 WiFiManager wifiManager;
-}
+} // namespace
 
 // gets called when WiFiManager enters configuration mode
 void configModeCallback(WiFiManager* myWiFiManager) {
@@ -27,7 +28,7 @@ void setupWiFi(const char* name) {
     // wifiManager.resetSettings();
 
     wifiManager.setAPCallback(configModeCallback);
-    //wifiManager.setConnectTimeout(5);
+    // wifiManager.setConnectTimeout(5);
     wifiManager.setMinimumSignalQuality(10);
     wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1),
                                     IPAddress(255, 255, 255, 0));
@@ -54,10 +55,24 @@ void setupMDNS(const char* name){
     }
 }*/
 
+void testConnection() {
+    if (WiFi.status() != WL_CONNECTED) {
+        logError(F("WiFi seems to be disconnected!"));
+        return;
+    }
+    /*
+        print(F("Testing connection to "));
+        printlnRaw(testHost);
+
+
+
+        println(F("All good!"));*/
+}
+
 void setup(const char* name) {
     setupWiFi(name);
     // setupMDNS(name);
-    // TODO test connection?
+    testConnection();
 }
 
 } // namespace WiFiLoginManager

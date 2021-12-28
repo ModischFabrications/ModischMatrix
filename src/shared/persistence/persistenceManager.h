@@ -3,9 +3,9 @@
 #include <Arduino.h>
 #include <stdint.h>
 
-#include "shared/SerialWrapper.h"
 #include "./configuration.h"
 #include "./persistenceStore.h"
+#include "shared/SerialWrapper.h"
 
 // definition for all handlers
 typedef void (*fListener)();
@@ -44,49 +44,47 @@ uint8_t i_listeners = 0;
 
 // notify everyone interested that a new configuration is available
 void callListeners() {
-  for (uint8_t i = 0; i < i_listeners; i++) {
-    printlnRaw("Calling listener " + String(i));
+    for (uint8_t i = 0; i < i_listeners; i++) {
+        printlnRaw("Calling listener " + String(i));
 
-    fListener listener = listeners[i];
+        fListener listener = listeners[i];
 
-    // check for value
-    if (listener == NULL) {
-      println(F("Listener not initialised"));
+        // check for value
+        if (listener == NULL) { println(F("Listener not initialised")); }
+        // unpack function pointer from list and call
+        (*listener)();
     }
-    // unpack function pointer from list and call
-    (*listener)();
-  }
 }
 
 } // namespace
 
 // access current Configuration from EEPROM, including lazy load
 const Configuration get() {
-  // singleton-like
-  if (!initialized) {
-    println(F("Loading initial config from EEPROM"));
-    configuration = PersistenceStore::loadSettings();
-    initialized = true;
-    callListeners();
-  }
+    // singleton-like
+    if (!initialized) {
+        println(F("Loading initial config from EEPROM"));
+        configuration = PersistenceStore::loadSettings();
+        initialized = true;
+        callListeners();
+    }
 
-  return configuration;
+    return configuration;
 }
 
 // write Configuration to EEPROM, lazy save after a small timeout to reduce EEPROM wear
 void set(Configuration newConfig) {
-  if (configuration == newConfig) {
-    println(F("config identical, skipping save"));
-    return;
-  }
+    if (configuration == newConfig) {
+        println(F("config identical, skipping save"));
+        return;
+    }
 
-  // reference too dangerous
-  configuration = newConfig;
+    // reference too dangerous
+    configuration = newConfig;
 
-  // set "moving" timer to save as soon as user is done
-  tNextSavepoint = (millis() + delayToSaveMs);
+    // set "moving" timer to save as soon as user is done
+    tNextSavepoint = (millis() + delayToSaveMs);
 
-  callListeners();
+    callListeners();
 }
 
 /**
@@ -94,23 +92,21 @@ void set(Configuration newConfig) {
  * saves configuration to EEPROM if timeout has passed.
  * */
 void trySave() {
-  if (tNextSavepoint != 0 && millis() >= tNextSavepoint) {
-    PersistenceStore::saveSettings(configuration);
-    tNextSavepoint = 0;
+    if (tNextSavepoint != 0 && millis() >= tNextSavepoint) {
+        PersistenceStore::saveSettings(configuration);
+        tNextSavepoint = 0;
 
-    println(F("Saving to EEPROM"));
-  }
+        println(F("Saving to EEPROM"));
+    }
 }
 
 // Calls listeners automatically while loading a initial config
 void registerListener(fListener listener) {
-  println(F("Adding listener"));
+    println(F("Adding listener"));
 
-  if (i_listeners >= N_MAX_LISTENERS) {
-    println(F("List is full, unable to add listener"));
-  }
+    if (i_listeners >= N_MAX_LISTENERS) { println(F("List is full, unable to add listener")); }
 
-  listeners[i_listeners++] = listener;
+    listeners[i_listeners++] = listener;
 }
 
 } // namespace PersistenceManager

@@ -6,8 +6,8 @@
 
 #include "shared/SerialWrapper.h"
 #include "shared/fileServer.h"
-#include "shared/persistence/persistenceManager.h"
 #include "shared/network/WiFiLoginManager.h"
+#include "shared/persistence/persistenceManager.h"
 //#include "shared/network/timeService.h"
 
 #include "inputs/telegram.h"
@@ -21,6 +21,7 @@ void setup() {
     delay(0);
 
     Pinout::setup();
+    digitalWrite(Pinout::STATUS_LED, true);
 
     setupSerial(115200);
     println(F("Starting up..."));
@@ -36,11 +37,12 @@ void setup() {
     Input_Touch::setup();
 
     println(F(".. Done!"));
+    digitalWrite(Pinout::STATUS_LED, false);
 }
 
 void loop() {
     // impossible to align loop times with variable length web calls!
-    //TimeService::timeUpdate();
+    // TimeService::timeUpdate();
 
     Input_Telegram::loop();
 

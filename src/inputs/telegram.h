@@ -22,8 +22,7 @@ void handle(uint8_t n_msgs) {
         String text = bot.messages[i].text;
         String from_name = bot.messages[i].from_name;
 
-        if (from_name == "")
-            from_name = "Guest";
+        if (from_name == "") from_name = "Guest";
 
         print(F("chat_id: "));
         printRaw(chat_id);
@@ -39,6 +38,7 @@ void notifyAdmin(const String& msg) {
     bot.sendMessage(T_ADMIN_ID, msg, "");
 }
 
+bool ready = false;
 // contract: WiFi must be enabled already
 void setup() {
     secured_client.setCACert(TELEGRAM_CERTIFICATE_ROOT);
@@ -49,10 +49,13 @@ void setup() {
     }
 
     notifyAdmin(F("I'm alive, feed be!"));
+    ready = true;
 }
 
 uint32_t t_last_poll = 0;
 void loop() {
+    if (!ready) return;
+
     uint32_t now = millis();
     if (now - t_last_poll > POLL_DELAY) {
         int numNewMessages = bot.getUpdates(bot.last_message_received + 1);
