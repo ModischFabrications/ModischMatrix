@@ -26,11 +26,13 @@ void configModeCallback(WiFiManager* myWiFiManager) {
 void setupWiFi(const char* name) {
     println(F("setting up wifi (with captive portal)"));
 
+    WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
+
     // DEBUGGING:
     // wifiManager.resetSettings();
 
     wifiManager.setAPCallback(configModeCallback);
-    // wifiManager.setConnectTimeout(5);
+    // wifiManager.setConnectTimeout(15); // spams console?
     wifiManager.setMinimumSignalQuality(10);
     wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1),
                                     IPAddress(255, 255, 255, 0));
