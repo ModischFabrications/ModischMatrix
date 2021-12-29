@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef DEBUG
+#define TELEGRAM_DEBUG
+#endif
+
 #include "secrets.h"
 #include <Arduino.h>
 #include <UniversalTelegramBot.h> // https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
@@ -39,18 +43,19 @@ void displayPairingKey() {
 }
 
 void pairUser(const String& chat_id) {
-    if (iPairs >= N_MAX_PAIRED) iPairs -= N_MAX_PAIRED;
+    if (iPairs >= N_MAX_PAIRED)
+        iPairs -= N_MAX_PAIRED;
     // add to Set of IDs
     pairedKeys[iPairs++] = chat_id.c_str();
 }
 
 bool isPaired(const String& chat_id) {
     print(F("Pairs: "));
-    for (const char* i : pairedKeys)
-    {
+    for (const char* i : pairedKeys) {
         printRaw(i);
         println(F(", "));
-        if (chat_id.equals(i)) return true;
+        if (chat_id.equals(i))
+            return true;
     }
     return false;
 }
@@ -134,15 +139,17 @@ void notifyAdmin(const String& msg) {
 bool ready = false;
 // contract: WiFi must be enabled already
 void setup() {
-    print(F("Connecting to Telegram Bot API"));
+    println(F("Connecting to Telegram Bot API"));
     secured_client.setCACert(TELEGRAM_CERTIFICATE_ROOT);
-    bot.waitForResponse = 4000;
+    secured_client.setTimeout(5);
+    // secured_client.setInsecure();   // this shouldn't be necessary with active Cert
+    bot.waitForResponse = 5 * 1000;
 
     if (!bot.getMe()) {
         logWarning(F("T: Can't find myself!"));
     }
 
-    //pairUser(T_ADMIN_ID);
+    // pairUser(T_ADMIN_ID);
 
     notifyAdmin(F("I'm alive, feed me!"));
     ready = true;

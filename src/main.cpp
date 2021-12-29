@@ -11,7 +11,7 @@
 #include "shared/persistence/persistenceManager.h"
 //#include "shared/network/timeService.h"
 
-#include "inputs/telegram.h"
+//#include "inputs/telegram.h"
 #include "inputs/touch.h"
 #include "inputs/website.h"
 
@@ -35,8 +35,9 @@ void setup() {
     delay(10);
 
     println(F(".prepare inputs."));
+    Website::setup();
     Input_Touch::setup();
-    Input_Telegram::setup();
+    // Input_Telegram::setup();
 
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
@@ -46,12 +47,12 @@ void setup() {
 void loop() {
     // impossible to align loop times with variable length web calls!
 
-    Input_Telegram::loop();
+    // Input_Telegram::loop();
 
     PersistenceManager::trySave();
 
-    //heartbeatSerial();
+    // heartbeatSerial();
     delay(1);
 
-    //loopTimer.check(Serial);
+    // loopTimer.check(Serial);
 }
