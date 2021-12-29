@@ -66,11 +66,14 @@ void handleCommand(const String& chat_id, SafeString& cmd, SafeString& param1, S
 }
 
 void handleCommand(const telegramMessage& msg) {
-    if (msg.text == "/start" || msg.text == "/help") {
+    if (msg.text.startsWith("/start") || msg.text.startsWith("/help")) {
+        bot.sendMessage(msg.chat_id, F("Hello there 👋🏼 I'm here to give you easy access to ModischMatrix functions."));
         // probably useless, Telegram offers native command selection now
         sendModeKeyboard(msg.chat_id);
+        return;
     }
 
+    // TODO handle @BOTNAME postfixes
     createSafeString(sMsg, 60);
     sMsg = msg.text.c_str();
 
@@ -95,7 +98,6 @@ void handle(uint8_t n_msgs) {
 
     for (int i = 0; i < n_msgs; i++) {
         telegramMessage msg = bot.messages[i];
-        // TODO handle @BOTNAME postfixes
         msg.text.trim();
 
         logMsg(msg);

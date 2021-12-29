@@ -24,7 +24,7 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, true);
 
     setupSerial(115200);
-    println(F("Starting up..."));
+    println(F("Starting up, this will take ~30 seconds..."));
     PersistenceStore::setup();
 
     println(F(".prepare outputs."));
@@ -42,8 +42,6 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, false);
     delay(10);
 }
-
-// TODO reboot every x Days ( with > 1h without activity, set flag to not reset in that case)
 
 void loop() {
     // impossible to align loop times with variable length web calls!

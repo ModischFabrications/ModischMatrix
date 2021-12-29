@@ -30,3 +30,8 @@ another 2s needed until connection is established
 Implement all in/outputs
 
 fix formatter crash on new (v13) format
+
+reboot every x Days ( with > 1h without activity)
+set flag to restore UI in this case!
+if (millis() > ONLINE_TIME && millis() - lastActivity > INACTIVE_TIME) ESP.restart();
+
