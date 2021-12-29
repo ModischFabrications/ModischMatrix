@@ -63,8 +63,8 @@ void waitForConnection() {
     }
     print(F("Testing connection to "));
     printlnRaw(testHost.toString());
-    
-    while (!Ping.ping(testHost, 2) || Ping.averageTime() <= 0){
+
+    while (!Ping.ping(testHost, 2) || Ping.averageTime() <= 0.2f) {
         print(F("."));
         delay(100);
     }

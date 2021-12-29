@@ -13,6 +13,10 @@ const char* pairingKey = "hunter2";
 WiFiClientSecure secured_client;
 UniversalTelegramBot bot(T_BOT_TOKEN, secured_client);
 
+const uint8_t N_MAX_PAIRED = 10;
+const char* pairedKeys[N_MAX_PAIRED] = {nullptr};
+uint8_t iPairs = 0;
+
 void logMsg(const telegramMessage& msg) {
     print(F("T> "));
     printRaw(msg.from_name);
@@ -23,24 +27,32 @@ void logMsg(const telegramMessage& msg) {
     println(F("\""));
 }
 
-// TODO pairing
-
 void sendModeKeyboard(const String& chat_id) {
     bot.sendMessageWithReplyKeyboard(chat_id, F("Choose a command: "), "",
                                      F("[[\"/off\",\"/on\"], \"/clock\"]"), true);
 }
 
 void displayPairingKey() {
+    print(F("Pairing Key: "));
+    printlnRaw(pairingKey);
     // TODO show on display
 }
 
 void pairUser(const String& chat_id) {
+    if (iPairs >= N_MAX_PAIRED) iPairs -= N_MAX_PAIRED;
     // add to Set of IDs
+    pairedKeys[iPairs++] = chat_id.c_str();
 }
 
 bool isPaired(const String& chat_id) {
-    // TODO check Set of IDs
-    return chat_id == T_ADMIN_ID;
+    print(F("Pairs: "));
+    for (const char* i : pairedKeys)
+    {
+        printRaw(i);
+        println(F(", "));
+        if (chat_id.equals(i)) return true;
+    }
+    return false;
 }
 
 void handleCommand(const String& chat_id, SafeString& cmd, SafeString& param1, SafeString& param2) {
@@ -67,7 +79,9 @@ void handleCommand(const String& chat_id, SafeString& cmd, SafeString& param1, S
 
 void handleCommand(const telegramMessage& msg) {
     if (msg.text.startsWith("/start") || msg.text.startsWith("/help")) {
-        bot.sendMessage(msg.chat_id, F("Hello there 👋🏼 I'm here to give you easy access to ModischMatrix functions."));
+        bot.sendMessage(
+            msg.chat_id,
+            F("Hello there 👋🏼 I'm here to give you easy access to ModischMatrix functions."));
         // probably useless, Telegram offers native command selection now
         sendModeKeyboard(msg.chat_id);
         return;
@@ -127,6 +141,8 @@ void setup() {
     if (!bot.getMe()) {
         logWarning(F("T: Can't find myself!"));
     }
+
+    //pairUser(T_ADMIN_ID);
 
     notifyAdmin(F("I'm alive, feed me!"));
     ready = true;
