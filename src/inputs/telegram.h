@@ -30,15 +30,39 @@ void sendModeKeyboard(const String& chat_id) {
                                      F("[[\"/off\",\"/on\"], \"/clock\"]"), true);
 }
 
-void handleCommand(const String& chat_id, SafeString& cmd, SafeString& param1, SafeString& param2){
-    if (cmd == "/pair"){
+void displayPairingKey() {
+    // TODO show on display
+}
+
+void pairUser(const String& chat_id) {
+    // add to Set of IDs
+}
+
+bool isPaired(const String& chat_id) {
+    // TODO check Set of IDs
+    return chat_id == T_ADMIN_ID;
+}
+
+void handleCommand(const String& chat_id, SafeString& cmd, SafeString& param1, SafeString& param2) {
+    if (cmd == "/pair") {
+        if (param1.isEmpty()) {
+            bot.sendMessage(chat_id, F("Missing key, I expect \"/pair KEY\""));
+        }
         if (param1 != pairingKey) {
             bot.sendMessage(chat_id, F("Sorry, that's not my key"));
             return;
         }
+        pairUser(chat_id);
         bot.sendMessage(chat_id, F("Paired successfully!"));
-        // TODO do something
+    } else if (!isPaired(chat_id)) {
+        bot.sendMessage(
+            chat_id,
+            F("I don't know you yet, let's pair! \nCall /pair KEY with the displayed characters"));
+        displayPairingKey();
+        return;
     }
+
+    // everything is valid at this point
 }
 
 void handleCommand(const telegramMessage& msg) {
@@ -46,8 +70,6 @@ void handleCommand(const telegramMessage& msg) {
         // probably useless, Telegram offers native command selection now
         sendModeKeyboard(msg.chat_id);
     }
-
-    // CMD PARAM1 PARAM2
 
     createSafeString(sMsg, 60);
     sMsg = msg.text.c_str();

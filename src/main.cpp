@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <loopTimer.h>
 
 #define DEBUG
 
@@ -34,13 +35,15 @@ void setup() {
     delay(10);
 
     println(F(".prepare inputs."));
-    Input_Telegram::setup();
     Input_Touch::setup();
+    Input_Telegram::setup();
 
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
     delay(10);
 }
+
+// TODO reboot every x Days ( with > 1h without activity, set flag to not reset in that case)
 
 void loop() {
     // impossible to align loop times with variable length web calls!
@@ -51,4 +54,6 @@ void loop() {
 
     //heartbeatSerial();
     delay(1);
+
+    //loopTimer.check(Serial);
 }
