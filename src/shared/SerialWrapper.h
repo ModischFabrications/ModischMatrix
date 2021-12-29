@@ -50,13 +50,18 @@ void heartbeatSerial() {
     lastCycle = time;
 }
 
+void println(){
+    if (!USE_SERIAL) return;
+    Serial.println();
+}
+
 // protected method to enforce "F" and ensure flag usage
 void println(const __FlashStringHelper* string) {
     if (!USE_SERIAL) return;
     Serial.println(string);
 }
 
-void printlnRaw(String string) {
+void printlnRaw(const String& string) {
     if (!USE_SERIAL) return;
     Serial.println(string);
 }
@@ -66,17 +71,37 @@ void printlnRaw(uint16_t number) {
     Serial.println(number);
 }
 
+void printlnRaw(uint8_t number) {
+    if (!USE_SERIAL) return;
+    Serial.println(number);
+}
+
+void printlnRaw(float number) {
+    if (!USE_SERIAL) return;
+    Serial.println(number);
+}
+
 void print(const __FlashStringHelper* string) {
     if (!USE_SERIAL) return;
     Serial.print(string);
 }
 
-void printRaw(String string) {
+void printRaw(const String& string) {
     if (!USE_SERIAL) return;
     Serial.print(string);
 }
 
 void printRaw(uint16_t number) {
+    if (!USE_SERIAL) return;
+    Serial.print(number);
+}
+
+void printRaw(uint8_t number) {
+    if (!USE_SERIAL) return;
+    Serial.print(number);
+}
+
+void printRaw(float number) {
     if (!USE_SERIAL) return;
     Serial.print(number);
 }
