@@ -25,7 +25,7 @@ void setup() {
 
     setupSerial(115200);
     println(F("Starting up, this will take ~5 seconds..."));
-    PersistenceStore::setup();
+    PersistenceManager::setup();
 
     println(F(".prepare outputs."));
     Display::setup();
@@ -42,11 +42,12 @@ void setup() {
     println(F(".prepare logic."));
     Controller::setup();
 
+    PersistenceManager::callListeners();
+
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
     delay(10);
     Controller::showLogin();
-    Controller::hideAfter(5000);
 }
 
 void loop() {

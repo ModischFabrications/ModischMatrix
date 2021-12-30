@@ -36,6 +36,7 @@ void GetAPI(AsyncWebServerRequest* request) {
     }
     message += F("OK: \n");
 
+// TODO streamline
     String paramKey;
     paramKey.reserve(20);
     paramKey = F("state");

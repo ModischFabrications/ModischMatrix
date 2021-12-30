@@ -10,7 +10,7 @@ namespace Input_Touch {
 // they seem to be 70 when unconnected and 13 when touched on this board
 const uint16_t TOUCH_THRESHOLD = 20; // triggered *below* this!
 
-enum Touched { NONE, TOP, LEFT, RIGHT };
+enum Touched : uint8_t { NONE, TOP, LEFT, RIGHT };
 
 Touched touched = NONE;
 
@@ -34,12 +34,11 @@ void logAllTouches() {
 }
 
 void setup() {
-    logAllTouches();
-
-// TODO find out why Top is always 0!
     // touchAttachInterrupt(Pinout::TOUCH_TOP, touchedTop, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_LEFT, touchedLeft, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_RIGHT, touchedRight, TOUCH_THRESHOLD);
+    delay(10);
+    logAllTouches();
 }
 
 void loop() {

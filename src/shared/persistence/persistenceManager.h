@@ -68,7 +68,7 @@ const Configuration get() {
         println(F("Loading initial config from EEPROM"));
         configuration = PersistenceStore::loadSettings();
         initialized = true;
-        callListeners();
+        //callListeners();
     }
 
     return configuration;
@@ -113,6 +113,8 @@ void registerListener(fListener listener) {
 
     listeners[i_listeners++] = listener;
 }
+
+void setup() { PersistenceStore::setup(); }
 
 void loop() { trySave(); }
 

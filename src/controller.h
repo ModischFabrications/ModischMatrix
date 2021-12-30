@@ -6,30 +6,39 @@
 #include <Arduino.h>
 
 namespace Controller {
-bool visible = true;
-
-enum Mode { OFF, IDLE, CLOCK, WEATHER };
+enum Mode : uint8_t { OFF = 0, STATIC, CLOCK, WEATHER };
 
 Mode mode;
 uint32_t timeout = 0;
 
+void setMode(uint8_t new_mode);
+void printText(const String& msg);
+
 void hideAfter(uint16_t milliseconds) { timeout = millis() + milliseconds; }
 
-void turnOff() {
-    visible = false;
-    Display::flashBorder();
-    Display::clear();
-}
+void turnOff() { Display::clear(); }
 
 void setVisibility(bool on) {
     if (!on)
         turnOff();
 }
 
+void setBrightness(uint8_t brightness) {
+    Config::Configuration config = PersistenceManager::get();
+    config.brightness = brightness;
+    PersistenceManager::set(config);
+    // display updated from config callback
+}
+
+void updateConfig() {
+    Config::Configuration config = PersistenceManager::get();
+    Display::setBrightness(config.brightness);
+    // TODO switch to state
+}
+
 void printText(const String& msg) {
-    if (!visible)
-        return;
     Display::printText(msg);
+    setMode(STATIC);
 }
 
 void showLogin() {
@@ -41,11 +50,8 @@ void showLogin() {
 }
 
 void setMode(uint8_t new_mode) {
-    if (new_mode == OFF) {
-        ;
-        return;
-    }
-    visible = true;
+    print(F("New Mode: "));
+    printlnRaw(new_mode);
     switch (new_mode) {
     case OFF:
         turnOff();
@@ -56,18 +62,6 @@ void setMode(uint8_t new_mode) {
     Config::Configuration config = PersistenceManager::get();
     config.mode = new_mode;
     PersistenceManager::set(config);
-}
-
-void setBrightness(uint8_t brightness) {
-    // TODO update display
-    Config::Configuration config = PersistenceManager::get();
-    config.brightness = brightness;
-    PersistenceManager::set(config);
-}
-
-void updateConfig() {
-    Config::Configuration config = PersistenceManager::get();
-    Display::setBrightness(config.brightness);
 }
 
 void setup() {
@@ -85,7 +79,7 @@ void loop() {
 
     switch (mode) {
     case OFF:
-    case IDLE:
+    case STATIC:
     default:
         break;
     case CLOCK:

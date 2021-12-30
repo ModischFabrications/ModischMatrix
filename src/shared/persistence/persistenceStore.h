@@ -1,5 +1,7 @@
 #pragma once
 
+// Shouldn't be included manually, use Manager!
+
 // https://github.com/esp8266/Arduino/tree/master/libraries/EEPROM
 #include <EEPROM.h>
 
