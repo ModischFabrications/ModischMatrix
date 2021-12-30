@@ -21,19 +21,21 @@ void notFound(AsyncWebServerRequest* request) {
 }
 
 void GetRoot(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", "Hello there!");
+    request->send(200, "text/plain", "Hello there! Check /api for commands");
     println(F("W> /"));
 }
 
 void GetAPI(AsyncWebServerRequest* request) {
     String message = F("Possible Commands, chain with \"&\":\n");
-    message.reserve(120);
+    message.reserve(200);
+    // always show possible commands
+    message += F("/api?state=1\n?mode={0..4}\n?brightness={0..255}\n?print=TXT\n?timeout=SECONDS\n\n");
     if (request->params() <= 0) {
-        // show possible commands
-        message += F("/API?state=1\n?mode={0..4}\n?brightness={0..255}\n?print=TXT");
         request->send(200, "text/plain", message);
         return;
     }
+    message += F("OK: \n");
+
     String paramKey;
     paramKey.reserve(20);
     paramKey = F("state");
@@ -45,24 +47,37 @@ void GetAPI(AsyncWebServerRequest* request) {
     }
     paramKey = F("mode");
     if (request->hasParam(paramKey)) {
-        message += paramKey + "=";
+        message += "\n" + paramKey + "=";
         uint8_t val = request->getParam(paramKey)->value().toInt();
         message += val;
         Controller::setMode(val);
     }
     paramKey = F("brightness");
     if (request->hasParam(paramKey)) {
-        message += paramKey + "=";
+        message += "\n" + paramKey + "=";
         uint8_t val = request->getParam(paramKey)->value().toInt();
         message += val;
         Controller::setBrightness(val);
     }
     paramKey = F("print");
     if (request->hasParam(paramKey)) {
-        message += paramKey + "=";
-        const String val = request->getParam(paramKey)->value();
+        message += "\n" + paramKey + "=";
+        String val = request->getParam(paramKey)->value();
         message += val;
-        Controller::print(val);
+        val.replace(F("\\n"), F("\n"));
+        Controller::printText(val);
+    }
+    paramKey = F("timeout");
+    if (request->hasParam(paramKey)) {
+        message += "\n" + paramKey + "=";
+        uint16_t val = request->getParam(paramKey)->value().toInt();
+        message += val;
+        Controller::hideAfter(val * 1000);
+    }
+    paramKey = F("login");
+    if (request->hasParam(paramKey)) {
+        message += "\n" + paramKey;
+        Controller::showLogin();
     }
     request->send(200, "text/plain", message);
     Display::flashBorder();

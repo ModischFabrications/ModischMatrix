@@ -1,27 +1,66 @@
 #pragma once
 
+#include "controller.h"
 #include "pinout.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 
 namespace Input_Touch {
 
-const uint16_t TOUCH_THRESHOLD = 40;
+// they seem to be 70 when unconnected and 13 when touched on this board
+const uint16_t TOUCH_THRESHOLD = 20; // triggered *below* this!
 
-// TODO attach callbacks
+enum Touched { NONE, TOP, LEFT, RIGHT };
+
+Touched touched = NONE;
+
+void touchedTop() { touched = TOP; }
+void touchedLeft() { touched = LEFT; }
+void touchedRight() { touched = RIGHT; }
+
+// touchRead takes ~ 0.5ms
+void logTouch(uint8_t pin) {
+    uint16_t touchVal = touchRead(pin);
+    print(F("Touch P"));
+    printRaw(pin);
+    print(F(" value: "));
+    printlnRaw(touchVal);
+}
+
+void logAllTouches() {
+    for (uint8_t i_b : Pinout::TOUCH) {
+        logTouch(i_b);
+    }
+}
 
 void setup() {
-    // touchRead takes ~ 0.5ms
-    for (uint8_t i_b : Pinout::TOUCH) {
-        uint16_t touchVal = touchRead(i_b);
-        print(F("Touch P"));
-        printRaw(i_b);
-        print(F(" initial: "));
-        printlnRaw(touchVal);
+    logAllTouches();
 
-        // set in next compile from prev prints
-        touchAttachInterrupt(i_b, nullptr, TOUCH_THRESHOLD);
+// TODO find out why TOp is always 0!
+    // touchAttachInterrupt(Pinout::TOUCH_TOP, touchedTop, TOUCH_THRESHOLD);
+    touchAttachInterrupt(Pinout::TOUCH_LEFT, touchedLeft, TOUCH_THRESHOLD);
+    touchAttachInterrupt(Pinout::TOUCH_RIGHT, touchedRight, TOUCH_THRESHOLD);
+}
+
+void loop() {
+    switch (touched) {
+    case NONE:
+    default:
+        return;
+    case TOP:
+        Controller::turnOff();
+        break;
+    case LEFT:
+        Controller::printText(F("Ooooouuh \n left is \n love!"));
+        Controller::hideAfter(2000);
+        break;
+    case RIGHT:
+        Controller::printText(F("Ooooouuh \n right is \n ripe!"));
+        Controller::hideAfter(2000);
+        break;
     }
+    logAllTouches();
+    touched = NONE;
 }
 
 } // namespace Input_Touch

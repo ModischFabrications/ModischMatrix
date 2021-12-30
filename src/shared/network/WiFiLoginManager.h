@@ -13,7 +13,10 @@ namespace {
 // IPAddress testHost(8, 8, 8, 8);
 IPAddress testHost(1, 1, 1, 1);
 WiFiManager wifiManager;
+String _hostname;
 } // namespace
+
+const String getHostname() { return _hostname; }
 
 // gets called when WiFiManager enters configuration mode
 void configModeCallback(WiFiManager* myWiFiManager) {
@@ -34,8 +37,7 @@ void setupWiFi(const char* name) {
     wifiManager.setAPCallback(configModeCallback);
     // wifiManager.setConnectTimeout(15); // spams console?
     wifiManager.setMinimumSignalQuality(10);
-    wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1),
-                                    IPAddress(255, 255, 255, 0));
+    wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1), IPAddress(255, 255, 255, 0));
     WiFi.hostname(name);
 
     // try connecting, show captive portal on fail
@@ -54,8 +56,11 @@ void setupMDNS(const char* name) {
     if (!MDNS.begin(name)) { // Start the mDNS responder
         logWarning(F("Error setting up mDNS responder!"));
     }
-    // TODO? MDNS.addService("http", "tcp", 80);
-    println(F("mDNS ready"));
+    MDNS.addService("http", "tcp", 80);
+    _hostname = name;
+    _hostname += F(".local");
+    print(F("mDNS ready at "));
+    printlnRaw(_hostname);
 }
 
 void waitForConnection() {

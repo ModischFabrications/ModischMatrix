@@ -45,12 +45,15 @@ uint8_t i_listeners = 0;
 // notify everyone interested that a new configuration is available
 void callListeners() {
     for (uint8_t i = 0; i < i_listeners; i++) {
-        printlnRaw("Calling listener " + String(i));
+        print(F("Calling listener "));
+        printlnRaw(i);
 
         fListener listener = listeners[i];
 
         // check for value
-        if (listener == NULL) { println(F("Listener not initialised")); }
+        if (listener == nullptr) {
+            println(F("Listener not initialised"));
+        }
         // unpack function pointer from list and call
         (*listener)();
     }
@@ -104,9 +107,13 @@ void trySave() {
 void registerListener(fListener listener) {
     println(F("Adding listener"));
 
-    if (i_listeners >= N_MAX_LISTENERS) { println(F("List is full, unable to add listener")); }
+    if (i_listeners >= N_MAX_LISTENERS) {
+        println(F("List is full, unable to add listener"));
+    }
 
     listeners[i_listeners++] = listener;
 }
+
+void loop() { trySave(); }
 
 } // namespace PersistenceManager

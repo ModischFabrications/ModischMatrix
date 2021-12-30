@@ -28,17 +28,16 @@ void printText(const String& msg, uint16_t colorText = white, uint16_t colorBg =
 }
 
 void setBrightness(uint8_t brightness) {
-    screen->setBrightness8(90); // 0-255
+    screen->setBrightness8(brightness); // 0-255
 }
 
 void setupText() {
-    screen->setTextSize(1); // size 1 == 8 pixels high
+    screen->setTextSize(1); // size 1..3; 1 is 8 pixels high
     screen->setTextWrap(true);
 }
 
 void setupPanel() {
-    HUB75_I2S_CFG::i2s_pins _pins = {R1,   G1,   BL1,  R2,   G2,  BL2, CH_A,
-                                     CH_B, CH_C, CH_D, CH_E, LAT, OE,  CLK};
+    HUB75_I2S_CFG::i2s_pins _pins = {R1, G1, BL1, R2, G2, BL2, CH_A, CH_B, CH_C, CH_D, CH_E, LAT, OE, CLK};
     // Module configuration
     HUB75_I2S_CFG mxconfig(PANEL_RES_X, // module width
                            PANEL_RES_Y, // module height

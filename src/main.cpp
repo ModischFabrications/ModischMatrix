@@ -39,20 +39,25 @@ void setup() {
     Input_Touch::setup();
     // Input_Telegram::setup();
 
+    println(F(".prepare logic."));
+    Controller::setup();
+
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
     delay(10);
+    Controller::showLogin();
+    Controller::hideAfter(5000);
 }
 
 void loop() {
     // impossible to align loop times with variable length web calls!
+    Input_Touch::loop();
+    Controller::loop();
+
+    PersistenceManager::loop();
 
     // Input_Telegram::loop();
-
-    PersistenceManager::trySave();
-
+    // loopTimer.check(Serial);
     // heartbeatSerial();
     delay(1);
-
-    // loopTimer.check(Serial);
 }
