@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "functional": "cpp"
+        "functional": "cpp",
+        "*.tcc": "cpp",
+        "streambuf": "cpp",
+        "regex": "cpp"
     }
 }
