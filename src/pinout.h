@@ -7,10 +7,12 @@ namespace Pinout {
 // https://i0.wp.com/randomnerdtutorials.com/wp-content/uploads/2018/08/ESP32-DOIT-DEVKIT-V1-Board-Pinout-30-GPIOs-Copy.png
 
 // ESP32 buildin
-const uint8_t TOUCH_LEFT = 4; // able to interrupt
-const uint8_t TOUCH_TOP = 2;  // able to interrupt
+const uint8_t TOUCH_LEFT = 4;
+// const uint8_t TOUCH_TOP = 2;        // ONBOARD LED, CHANGE IN UPCOMING RELEASES!
 const uint8_t TOUCH_RIGHT = 15;
-const uint8_t TOUCH[] = {TOUCH_LEFT, TOUCH_TOP, TOUCH_RIGHT};
+const uint8_t TOUCH[] = {TOUCH_LEFT,
+                         // TOUCH_TOP,
+                         TOUCH_RIGHT};
 
 const uint8_t STATUS_LED = LED_BUILTIN;
 
@@ -48,6 +50,10 @@ const uint8_t LAT = 5;
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
+
+    for (uint8_t p : Pinout::TOUCH) {
+        pinMode(p, INPUT);  // prevents shorts
+    }
 
     // Matrix sets up itself
 }

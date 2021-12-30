@@ -3,6 +3,7 @@
 ***WIP!***
 -----------
 
+Touch2/Top seems to be connected to the onboard LED, can't use it for touch. 
 
 
 Telegram Bot is technically a connector, especially with admin notifications. 

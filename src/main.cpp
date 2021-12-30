@@ -24,7 +24,7 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, true);
 
     setupSerial(115200);
-    println(F("Starting up, this will take ~30 seconds..."));
+    println(F("Starting up, this will take ~5 seconds..."));
     PersistenceStore::setup();
 
     println(F(".prepare outputs."));

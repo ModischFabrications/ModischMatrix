@@ -28,15 +28,15 @@ void logTouch(uint8_t pin) {
 }
 
 void logAllTouches() {
-    for (uint8_t i_b : Pinout::TOUCH) {
-        logTouch(i_b);
+    for (uint8_t p : Pinout::TOUCH) {
+        logTouch(p);
     }
 }
 
 void setup() {
     logAllTouches();
 
-// TODO find out why TOp is always 0!
+// TODO find out why Top is always 0!
     // touchAttachInterrupt(Pinout::TOUCH_TOP, touchedTop, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_LEFT, touchedLeft, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_RIGHT, touchedRight, TOUCH_THRESHOLD);
