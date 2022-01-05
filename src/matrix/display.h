@@ -17,6 +17,8 @@ MatrixPanel_I2S_DMA* screen = nullptr;
 const uint16_t black = screen->color565(0, 0, 0);
 const uint16_t white = screen->color565(255, 255, 255);
 const uint16_t grey = screen->color565(64, 64, 64);
+const uint16_t blue = screen->color565(3, 144, 252);
+const uint16_t orange = screen->color565(252, 152, 3);
 
 void clear() { screen->clearScreen(); }
 
@@ -56,6 +58,17 @@ void setupPanel() {
     // initial values come from persistence/controller
 }
 
+void colorDot(uint16_t color){
+    // top right corner
+    screen->drawPixel(screen->width(), 0, color);
+}
+
+void flashDot(){
+    colorDot(white);
+    delay(200);
+    colorDot(black);
+}
+
 void flashBorder() {
     screen->drawRect(0, 0, screen->width(), screen->height(), grey);
     delay(200);
@@ -64,7 +77,7 @@ void flashBorder() {
 
 void flashScreen() {
     screen->clearScreen();
-    screen->fillScreenRGB888(127, 127, 127);
+    screen->fillScreen(grey);
     delay(1000);
     screen->clearScreen();
 }

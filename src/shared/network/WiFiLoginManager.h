@@ -16,6 +16,10 @@ WiFiManager wifiManager;
 String _hostname;
 } // namespace
 
+typedef void (*fListener)();
+
+fListener onConfigNeeded = nullptr;
+
 const String getHostname() { return _hostname; }
 
 // gets called when WiFiManager enters configuration mode
@@ -24,6 +28,7 @@ void configModeCallback(WiFiManager* myWiFiManager) {
     // auto generated SSID might be unknown
     printlnRaw(myWiFiManager->getConfigPortalSSID());
     printlnRaw(WiFi.softAPIP().toString());
+    if (onConfigNeeded != nullptr) (*onConfigNeeded)();
 }
 
 void setupWiFi(const char* name) {

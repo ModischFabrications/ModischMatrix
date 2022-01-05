@@ -22,6 +22,7 @@ void setup() {
 
     Pinout::setup();
     digitalWrite(Pinout::STATUS_LED, true);
+    Display::colorDot(Display::blue);
 
     setupSerial(115200);
     println(F("Starting up, this will take ~5 seconds..."));
@@ -31,6 +32,7 @@ void setup() {
     Display::setup();
 
     println(F(".prepare connections."));
+    WiFiLoginManager::onConfigNeeded = [] {Display::colorDot(Display::orange);};
     WiFiLoginManager::setup("ModischMatrix");
     delay(10);
 
@@ -46,6 +48,7 @@ void setup() {
 
     println(F(".. Done!"));
     digitalWrite(Pinout::STATUS_LED, false);
+    Display::colorDot(Display::black);
     delay(10);
     Controller::showLogin();
 }

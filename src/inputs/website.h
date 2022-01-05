@@ -81,7 +81,7 @@ void GetAPI(AsyncWebServerRequest* request) {
         Controller::showLogin();
     }
     request->send(200, "text/plain", message);
-    Display::flashBorder();
+    Display::flashDot();
 }
 
 bool ready = false;
