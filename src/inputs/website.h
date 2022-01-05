@@ -26,6 +26,8 @@ void GetRoot(AsyncWebServerRequest* request) {
 }
 
 void GetAPI(AsyncWebServerRequest* request) {
+    RebootManager::setActive();
+    
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
     // always show possible commands

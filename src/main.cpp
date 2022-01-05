@@ -62,6 +62,8 @@ void loop() {
 
     // Input_Telegram::loop();
 
+    RebootManager::loop();
+
     // loopTimer.check(Serial);
     // heartbeatSerial();
     delay(1);

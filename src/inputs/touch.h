@@ -4,6 +4,7 @@
 #include "pinout.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
+#include "shared/rebootManager.h"
 
 namespace Input_Touch {
 
@@ -60,6 +61,7 @@ void loop() {
     }
     logAllTouches();
     touched = NONE;
+    RebootManager::setActive();
 }
 
 } // namespace Input_Touch
