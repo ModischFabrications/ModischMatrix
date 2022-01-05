@@ -1,9 +1,10 @@
 #pragma once
 
-#include "matrix/display.h"
+#include "display.h"
 #include "shared/serialWrapper.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
+#include "modes/clock.h"
 #include <Arduino.h>
 
 namespace Controller {
@@ -69,6 +70,8 @@ void setup() {
     setVisibility(true);
     // TODO
     PersistenceManager::registerListener(updateConfig);
+
+    Modes_Clock::setup();
 }
 
 void loop() {
@@ -84,8 +87,7 @@ void loop() {
     default:
         break;
     case CLOCK:
-        // TODO pass to clock extension
-        printText("04:20");
+        Modes_Clock::loop();
         break;
     case WEATHER:
         // TODO pass to weather extension
