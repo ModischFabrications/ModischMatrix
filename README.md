@@ -3,13 +3,13 @@
 # ModischMatrix
 
 This firmware is used to drive my custom made RGB-Matrix-Display. It's based on a ESP32 devboard and a commercial RGB Panel for the looks. 
-They are connected through my (also custom made) PCB, see ![HUB75_Driver_PCB](https://github.com/ModischFabrications/HUB75_Driver_PCB/). 
-Everything is housed in a 3D-printed enclosure, see ![HUB75_Panel_Enclosure](TODO).
+They are connected through my (also custom made) PCB, see [HUB75_Driver_PCB](https://github.com/ModischFabrications/HUB75_Driver_PCB/). 
+Everything is housed in a 3D-printed enclosure, see [HUB75_Panel_Enclosure](TODO).
 
 I don't plan on selling (premade) kits yet, but feel free to contact for inquiries. 
 Making everything yourself should set you back ~60€ and half a day of work, but requires some finesse.
 
-Features are best described by the available API calls, see ![API](#API).
+Features are best described by the available API calls, see [API](#API).
 1. Print Texts
 2. ...
 
@@ -32,7 +32,7 @@ Watch out, disconnected devices will persist a bit longer than powered.
 
 Use `modischmatrix.local` or DHCP IP address to connect to the MatrixDisplay. Former is nicer, latter more robust, especially with static assignment.
 
-More features are always added, check ![enhancement issues](https://github.com/ModischFabrications/ModischMatrix/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement). 
+More features are always added, check [enhancement issues](https://github.com/ModischFabrications/ModischMatrix/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement). 
 
 Feel free to add more!
 
@@ -49,12 +49,12 @@ Blank spaces are usually resolved by your browser, force newlines with \n. Most 
 ## Dependencies 
 See platformio.ini for details, should be handled automatically.
 
-- ESP Async WebServer : Can't recommend it enough, crazy how easy it can be. Way better than the native Webserver, try it yourself!
+- https://github.com/me-no-dev/ESPAsyncWebServer : Can't recommend it enough, crazy how easy it can be. Way better than the native Webserver, try it yourself!
 - https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA : Powerful, but complex. Read Readme thoroughly.
 - https://github.com/tzapu/WiFiManager : Great solution for semi-automatic WiFi login. Step aside hard-coded credentials!
 - https://github.com/marian-craciunescu/ESP32Ping@^1.6 : Simple tool, does what it says. Somewhat unstable.
-- UniversalTelegramBot : Great idea, sadly pretty unstable and performance-hungry. Deactivated for now. 
-- SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations yet, so deactivated for now. 
+- https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot : Great idea, sadly pretty unstable and performance-hungry. Deactivated for now. 
+- https://github.com/PowerBroker2/SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations yet, so deactivated for now. 
 
 ## References
 These were useful while refining the concept, check them out as well if you are still shopping around: 
@@ -116,11 +116,8 @@ I'm always happy about feedback, especially the ones with a solution as a pull r
 
 Press Shift+Alt+F to apply formatting. 
 
-This project using the Clang Formatter with a style configuration ´.clang-format´ file. A fitting extension should be recommended once checking this project out. 
+This project using the Clang Formatter with a style configuration ´.clang-format´ file. A fitting extension should be recommended when checking this project out. 
 
 
 ## Known Issues
 Touch2/Top seems to be connected to the onboard LED, can't use it for touch. See https://github.com/ModischFabrications/HUB75_Driver_PCB/issues/1 .
-
-
-Telegram Bot is technically a connector, especially with admin notifications. 

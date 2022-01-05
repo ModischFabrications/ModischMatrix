@@ -4,6 +4,8 @@
 #define TELEGRAM_DEBUG
 #endif
 
+// Telegram Bot is technically a connector, especially with admin notifications. Might want to rename it.
+
 #include "secrets.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
