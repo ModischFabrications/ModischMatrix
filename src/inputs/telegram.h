@@ -5,7 +5,7 @@
 #endif
 
 #include "secrets.h"
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <UniversalTelegramBot.h> // https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
 #include <WiFiClientSecure.h>

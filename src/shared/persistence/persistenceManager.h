@@ -5,7 +5,7 @@
 
 #include "./configuration.h"
 #include "./persistenceStore.h"
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 
 // definition for all handlers
 typedef void (*fListener)();

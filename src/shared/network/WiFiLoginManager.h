@@ -5,7 +5,7 @@
 #include <ESP32Ping.h> // https://github.com/marian-craciunescu/ESP32Ping
 #include <ESPmDNS.h>
 
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 
 namespace WiFiLoginManager {
 

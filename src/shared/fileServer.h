@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include <LITTLEFS.h>
 
-#include "SerialWrapper.h"
+#include "serialWrapper.h"
 
 namespace FileServer {
 void setup();

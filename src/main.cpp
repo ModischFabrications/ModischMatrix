@@ -5,7 +5,7 @@
 
 #include "pinout.h"
 
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 #include "shared/fileServer.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"

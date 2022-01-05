@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 #include <HTTPClient.h>
 
 namespace analytics {

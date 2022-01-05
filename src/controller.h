@@ -1,7 +1,7 @@
 #pragma once
 
 #include "matrix/display.h"
-#include "shared/SerialWrapper.h"
+#include "shared/serialWrapper.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
 #include <Arduino.h>
