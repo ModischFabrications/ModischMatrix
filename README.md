@@ -2,16 +2,88 @@
 
 # ModischMatrix
 
-***WIP!***
+This firmware is used to drive my custom made RGB-Matrix-Display. It's based on a ESP32 devboard and a commercial RGB Panel for the looks. 
+They are connected through my (also custom made) PCB, see ![HUB75_Driver_PCB](https://github.com/ModischFabrications/HUB75_Driver_PCB/). 
+Everything is housed in a 3D-printed enclosure, see ![HUB75_Panel_Enclosure](TODO).
+
+I don't plan on selling (premade) kits yet, but feel free to contact for inquiries. 
+Making everything yourself should set you back ~60€ and half a day of work, but requires some finesse.
+
+Features are best described by the available API calls, see ![API](#API).
+1. Print Texts
+2. ...
 
 
-## Known Issues
-Touch2/Top seems to be connected to the onboard LED, can't use it for touch. See https://github.com/ModischFabrications/HUB75_Driver_PCB/issues/1 .
+## Usage
+
+### First Setup
+1. Build the hardware as referenced in the PCB manual 
+2. Open Jumper, power Matrix via connector and ESP32 via USB
+2. Checkout this repo and Build + Upload with PlatformIO
+3. Watch serial output, try connecting to the new WiFi hotspot-> WiFiLoginPortal
+4. If everything worked the hotspot should disappear and the clock should show up. Repeat if not.
+5. Test some commands to the displayed address, look for visual feedback
+5. Remove USB, connect jumper for final deployment
+
+Finding out your clock IP address is easy: Either watch the serial output or use a network analyser, for example [Network Analyzer](https://play.google.com/store/apps/details?id=net.techet.netanalyzerlite.an) (Android).
+Watch out, disconnected devices will persist a bit longer than powered.
+
+## API
+
+Use `modischmatrix.local` or DHCP IP address to connect to the MatrixDisplay. Former is nicer, latter more robust, especially with static assignment.
+
+More features are always added, check ![enhancement issues](https://github.com/ModischFabrications/ModischMatrix/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement). 
+
+Feel free to add more!
+
+Brightness, timeout and more can be appended to all commands. 
+
+### Text
+Blank spaces are usually resolved by your browser, force newlines with \n. Most special characters aren't supported, try your luck.
+
+`http://modischmatrix.local/api?print=Hey%20there!\n%20Like%20it?\n%20YES%20%20NO%20%20&brightness=30`
 
 
-Telegram Bot is technically a connector, especially with admin notifications. 
 
-## Design Decisions
+
+## Dependencies 
+See platformio.ini for details, should be handled automatically.
+
+- ESP Async WebServer : Can't recommend it enough, crazy how easy it can be. Way better than the native Webserver, try it yourself!
+- https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA : Powerful, but complex. Read Readme thoroughly.
+- https://github.com/tzapu/WiFiManager : Great solution for semi-automatic WiFi login. Step aside hard-coded credentials!
+- https://github.com/marian-craciunescu/ESP32Ping@^1.6 : Simple tool, does what it says. Somewhat unstable.
+- UniversalTelegramBot : Great idea, sadly pretty unstable and performance-hungry. Deactivated for now. 
+- SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations yet, so deactivated for now. 
+
+## References
+These were useful while refining the concept, check them out as well if you are still shopping around: 
+
+1. https://github.com/ModischFabrications/HUB75-DMA-Test * 
+2. https://2dom.github.io/PixelTimes/
+2. https://github.com/rorosaurus/esp32-hub75-driver
+3. https://github.com/witnessmenow/ESP32-i2s-Matrix-Shield
+3. https://www.instructables.com/Morphing-Digital-Clock/
+4. https://github.com/bogd/esp32-morphing-clock
+5. https://github.com/marcmerlin/AnimatedGIFs
+6. https://github.com/LukPopp0/MatrixDisplay
+7. https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/
+8. https://github.com/witnessmenow/ESP8266-Led-Matrix-Web-Draw
+
+* Great guy, love him like myself. 
+
+Similar products, copy functionality: 
+1. https://www.banggood.com/Cascadable-Dimmable-RGB-Full-Color-Voice-Activated-32+8-Dot-Matrix-Spectrum-Clock-Kit-Electronic-Production-DIY-Parts-p-1892932.html
+2. ..? Might want to research more and extend this list.
+
+
+## Design Choices
+
+### Web Calls
+I'm not good with HTML, so everything is based on simple calls instead. GET instead of POST is semantically worse, but much easier to use with generic web browsers. 
+
+### Shared Library
+Many features persist between projects, so I try to keep a collection of important infrastructure. Might be extracted into a submodule eventually. 
 
 ### Strings
 Sure, cStrings (char[]) have great performance and memory safety, but I don't have 10 years time to learn and use them properly. 
@@ -28,9 +100,27 @@ Some best practices, stolen from [here](https://cpp4arduino.com/2018/11/21/eight
 SafeStrings should be an easier and safer alternative with automatic debugging and more. Pass by ref (&), but don't const them. Currently not used, haven't committed to it fully. 
 
 
-## Example Commands
-Use `modischmatrix.local` or hardcoded IP address. Former is nicer, latter more robust.
+### Telegram Bot
+Functionally equivalent to web calls, but easier to make accessible. 
+Problem: Bots are always reachable, but we don't want the matrix to be controlled by everyone. 
 
-`http://modischmatrix.local/api?print=Hey%20there!\n%20Like%20it?\n%20YES%20%20NO%20%20&brightness=30`
+(A) Explicit whitelisting from admin: Cool, but manual labor and won't prevent out-of-house controls. 
+
+(B) Pairing: Inspired by Android TV. Display pairing code on matrix, use as auth-key. 
+
+Solution B is easier and usable without manual intervention. Allows timeout as well, makes cleanup easier. 
+
+## Contributing
+### CPP Formatting
+I'm always happy about feedback, especially the ones with a solution as a pull request. 
+
+Press Shift+Alt+F to apply formatting. 
+
+This project using the Clang Formatter with a style configuration ´.clang-format´ file. A fitting extension should be recommended once checking this project out. 
 
 
+## Known Issues
+Touch2/Top seems to be connected to the onboard LED, can't use it for touch. See https://github.com/ModischFabrications/HUB75_Driver_PCB/issues/1 .
+
+
+Telegram Bot is technically a connector, especially with admin notifications. 
