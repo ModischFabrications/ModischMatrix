@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <loopTimer.h>
+//#include <loopTimer.h>    // part of SafeStrings
 
 #define DEBUG
 
@@ -9,7 +9,6 @@
 #include "shared/fileServer.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
-//#include "shared/network/timeService.h"
 
 //#include "inputs/telegram.h"
 #include "inputs/touch.h"
