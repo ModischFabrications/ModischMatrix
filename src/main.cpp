@@ -15,6 +15,7 @@
 #include "inputs/website.h"
 
 #include "matrix/display.h"
+#include "controller.h"
 
 void setup() {
     delay(0); // watchdog timer (WDT)
@@ -57,7 +58,7 @@ void loop() {
     PersistenceManager::loop();
 
     // Input_Telegram::loop();
-    
+
     // loopTimer.check(Serial);
     // heartbeatSerial();
     delay(1);
