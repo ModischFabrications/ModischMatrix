@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <SafeString.h>
+//#include <SafeString.h>
 
 #ifdef DEBUG
 const bool USE_SERIAL = true;
@@ -29,7 +29,10 @@ void setupSerial(int baud) {
     Serial.begin(baud);
     Serial.println(); // init monitor
 
+#ifdef SafeString_class_h
+#pragma message "Rerouting SafeString Output to Serial"
     SafeString::setOutput(Serial);
+#endif
 }
 
 void heartbeatSerial() {

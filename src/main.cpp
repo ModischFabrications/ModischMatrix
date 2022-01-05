@@ -57,6 +57,7 @@ void loop() {
     PersistenceManager::loop();
 
     // Input_Telegram::loop();
+    
     // loopTimer.check(Serial);
     // heartbeatSerial();
     delay(1);
