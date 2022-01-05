@@ -1,3 +1,5 @@
+[![PlatformIO CI](https://github.com/ModischFabrications/ModischMatrix/actions/workflows/pio.yml/badge.svg)](https://github.com/ModischFabrications/ModischMatrix/actions/workflows/pio.yml)
+
 # ModischMatrix
 
 ***WIP!***
