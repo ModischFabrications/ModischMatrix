@@ -56,7 +56,8 @@ See platformio.ini for details, should be handled automatically.
 ## References
 These were useful while refining the concept, check them out as well if you are still shopping around: 
 
-1. https://github.com/ModischFabrications/HUB75-DMA-Test * 
+1. https://github.com/ModischFabrications/HUB75-DMA-Test \* 
+1. https://github.com/ModischFabrications/Verdandi \* 
 2. https://2dom.github.io/PixelTimes/
 2. https://github.com/rorosaurus/esp32-hub75-driver
 3. https://github.com/witnessmenow/ESP32-i2s-Matrix-Shield
@@ -67,7 +68,7 @@ These were useful while refining the concept, check them out as well if you are 
 7. https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/
 8. https://github.com/witnessmenow/ESP8266-Led-Matrix-Web-Draw
 
-* Great guy, love him like myself. 
+\* Great guy, love him like myself. 
 
 Similar products, copy functionality: 
 1. https://www.banggood.com/Cascadable-Dimmable-RGB-Full-Color-Voice-Activated-32+8-Dot-Matrix-Spectrum-Clock-Kit-Electronic-Production-DIY-Parts-p-1892932.html
