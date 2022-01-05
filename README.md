@@ -7,12 +7,9 @@ They are connected through my (also custom made) PCB, see [HUB75_Driver_PCB](htt
 Everything is housed in a 3D-printed enclosure, see [HUB75_Panel_Enclosure](TODO).
 
 I don't plan on selling (premade) kits yet, but feel free to contact for inquiries. 
-Making everything yourself should set you back ~60€ and half a day of work, but requires some finesse.
+Making everything yourself should set you back ~60€ and half a day of work, but requires some tools, parts and finesse.
 
 Features are best described by the available API calls, see [API](#API).
-1. Print Texts
-2. ...
-
 
 ## Usage
 
@@ -30,11 +27,11 @@ Watch out, disconnected devices will persist a bit longer than powered.
 
 ## API
 
-Use `modischmatrix.local` or DHCP IP address to connect to the MatrixDisplay. Former is nicer, latter more robust, especially with static assignment.
+Use `modischmatrix.local` or the DHCP IP address to connect to the MatrixDisplay. Former is nicer, latter more robust, especially with static assignment.
 
 More features are always added, check [enhancement issues](https://github.com/ModischFabrications/ModischMatrix/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement). 
 
-Feel free to add more!
+Feel free to add more yourself!
 
 Brightness, timeout and more can be appended to all commands. 
 
