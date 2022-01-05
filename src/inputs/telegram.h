@@ -11,6 +11,7 @@
 #include <Arduino.h>
 #include <UniversalTelegramBot.h> // https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot
 #include <WiFiClientSecure.h>
+#include <SafeString.h>
 
 namespace Input_Telegram {
 
