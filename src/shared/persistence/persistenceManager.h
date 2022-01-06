@@ -44,6 +44,12 @@ uint8_t i_listeners = 0;
 
 // notify everyone interested that a new configuration is available
 void callListeners() {
+    if (!initialized) {
+        println(F("Loading initial config from EEPROM"));
+        configuration = PersistenceStore::loadSettings();
+        initialized = true;
+    }
+
     for (uint8_t i = 0; i < i_listeners; i++) {
         print(F("Calling listener "));
         printlnRaw(i);
@@ -65,10 +71,9 @@ void callListeners() {
 const Configuration get() {
     // singleton-like
     if (!initialized) {
-        println(F("Loading initial config from EEPROM"));
+        println(F("PM: Loading initial config from EEPROM"));
         configuration = PersistenceStore::loadSettings();
         initialized = true;
-        //callListeners();
     }
 
     return configuration;
@@ -77,7 +82,7 @@ const Configuration get() {
 // write Configuration to EEPROM, lazy save after a small timeout to reduce EEPROM wear
 void set(Configuration newConfig) {
     if (configuration == newConfig) {
-        println(F("config identical, skipping save"));
+        println(F("PM: config identical, skipping save"));
         return;
     }
 
@@ -99,16 +104,17 @@ void trySave() {
         PersistenceStore::saveSettings(configuration);
         tNextSavepoint = 0;
 
-        println(F("Saving to EEPROM"));
+        println(F("PM: Saving to EEPROM"));
     }
 }
 
 // Calls listeners automatically while loading a initial config
 void registerListener(fListener listener) {
-    println(F("Adding listener"));
+    println(F("PM: Adding listener"));
 
     if (i_listeners >= N_MAX_LISTENERS) {
-        println(F("List is full, unable to add listener"));
+        logError(F("PM: List is full, unable to add listener"));
+        return;
     }
 
     listeners[i_listeners++] = listener;
