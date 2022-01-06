@@ -31,7 +31,7 @@ void GetAPI(AsyncWebServerRequest* request) {
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
     // always show possible commands
-    message += F("/api?state=1\n?mode={0..4}\n?brightness={0..255}\n?print=TXT\n?timeout=SECONDS\n\n");
+    message += F("/api?\n?mode={0..4}\n?brightness={0..255}\n?print=TXT\n?timeout=SECONDS\n?login\n\n");
     if (request->params() <= 0) {
         request->send(200, "text/plain", message);
         return;
@@ -41,13 +41,6 @@ void GetAPI(AsyncWebServerRequest* request) {
 // TODO streamline
     String paramKey;
     paramKey.reserve(20);
-    paramKey = F("state");
-    if (request->hasParam(paramKey)) {
-        message += paramKey + "=";
-        bool state = request->getParam(paramKey)->value().toInt() != 0;
-        message += state;
-        Controller::setVisibility(state);
-    }
     paramKey = F("mode");
     if (request->hasParam(paramKey)) {
         message += "\n" + paramKey + "=";
