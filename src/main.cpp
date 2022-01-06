@@ -22,7 +22,6 @@ void setup() {
 
     Pinout::setup();
     digitalWrite(Pinout::STATUS_LED, true);
-    Display::colorDot(Display::blue);
 
     setupSerial(115200);
     println(F("Starting up, this will take ~5 seconds..."));
@@ -30,6 +29,7 @@ void setup() {
 
     println(F(".prepare outputs."));
     Display::setup();
+    Display::colorDot(Display::blue);   // asap
 
     println(F(".prepare connections."));
     WiFiLoginManager::onConfigNeeded = [] {Display::colorDot(Display::orange);};
