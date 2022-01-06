@@ -26,7 +26,7 @@ void callListeners();
 
 const uint8_t N_MAX_LISTENERS = 7;
 
-const uint16_t delayToSaveMs = (5 * 1000);
+const uint16_t delayToSaveMs = (60 * 1000);
 
 // we are unable to determine if a variable was initialized and
 // we don't want to define a "null" Configuration as default
