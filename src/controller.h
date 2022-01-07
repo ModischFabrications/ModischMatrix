@@ -125,7 +125,7 @@ void loop() {
         break;
     case WEATHER:
         // TODO pass to weather extension
-        printText("Too Cold!\n (TODO)");
+        Display::printText("Too Cold!\n (TODO)");
         delay(500);
         break;
     }

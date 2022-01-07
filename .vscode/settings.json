@@ -8,6 +8,13 @@
         "bitset": "cpp",
         "string_view": "cpp",
         "initializer_list": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "fstream": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "cmath": "cpp",
+        "tuple": "cpp"
     }
 }

@@ -13,7 +13,7 @@ void setup() {
 void loop() {
     // TODO write NTP time to matrix
     Display::printText(F("04:20"));
-    delay(1);
+    delay(500);
 }
 
 } // namespace Modes_Clock

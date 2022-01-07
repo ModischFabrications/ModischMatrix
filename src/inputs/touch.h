@@ -35,11 +35,11 @@ void logAllTouches() {
 }
 
 void setup() {
+    logAllTouches();
+    delay(10);  // make sure touch pins are loaded
     // touchAttachInterrupt(Pinout::TOUCH_TOP, touchedTop, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_LEFT, touchedLeft, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_RIGHT, touchedRight, TOUCH_THRESHOLD);
-    delay(10);
-    logAllTouches();
 }
 
 void loop() {
