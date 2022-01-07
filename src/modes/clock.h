@@ -8,10 +8,12 @@
 // maybe morph using https://github.com/hwiguna/HariFun_166_Morphing_Clock/blob/master/Latest/MorphingClock/Digit.cpp
 
 namespace Modes_Clock {
-
+namespace {
 const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 3600;
 const int daylightOffset_sec = 3600;
+
+const uint16_t UPDATE_DELAY = 30 * 1000;
 
 struct tm timeinfo;
 void updateLocalTime() {
@@ -20,27 +22,28 @@ void updateLocalTime() {
     }
 }
 
-void printLocalTime() { Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S"); }
-
 char out[10];
+uint32_t nextUpdate = 0;
 void displayLocalTime() {
+    uint32_t now = millis();
+    if (now < nextUpdate) return;
+    nextUpdate = now + UPDATE_DELAY;
     strftime(out, sizeof(out), "%H:%M", &timeinfo);
     Display::screen->setTextSize(2);
     Display::screen->setCursor(2, 8);
     Display::screen->clearScreen();
     Display::screen->print(out);
+    print(F("C:"));
+    printlnRaw(out);
 }
+} // namespace
 
-void setup() {
-    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
-    updateLocalTime();
-    printLocalTime();
-}
+void setup() { configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); }
 
 void loop() {
     updateLocalTime();
     displayLocalTime();
-    delay(500);
+    delay(100);
 }
 
 } // namespace Modes_Clock
