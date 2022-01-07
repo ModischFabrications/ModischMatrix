@@ -7,6 +7,7 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 
+// manages all modes, they shouldn't be accessed directly!
 namespace Controller {
 enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, WEATHER, SIZE };
 
@@ -67,6 +68,7 @@ void setBrightness(uint8_t brightness) {
 }
 
 void printText(const String& msg) {
+    Display::setupText();
     Display::printText(msg);
     setMode(STATIC);
 }
@@ -77,6 +79,7 @@ void showLogin() {
     msg += F("\n");
     msg += WiFi.localIP().toString();
     Display::clear();
+    Display::setupText();
     Display::printText(msg);
     setMode(LOGIN);
 }
