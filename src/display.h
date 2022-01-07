@@ -25,7 +25,7 @@ void clear() { screen->clearScreen(); }
 void printText(const String& msg, uint16_t colorText = white, uint16_t colorBg = black) {
     screen->clearScreen();
     screen->setTextColor(colorText, colorBg);
-    screen->setCursor(2, 2);
+    screen->setCursor(1, 1);
     screen->print(msg);
 }
 
@@ -60,7 +60,7 @@ void setupPanel() {
 
 void colorDot(uint16_t color){
     // top right corner
-    screen->drawPixel(screen->width(), 0, color);
+    screen->drawPixel(screen->width()-1, 0, color);
 }
 
 void flashDot(){

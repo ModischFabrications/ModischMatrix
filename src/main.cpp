@@ -50,7 +50,7 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, false);
     Display::colorDot(Display::black);
     delay(10);
-    Controller::showLogin();
+    //Controller::showLogin();
 }
 
 void loop() {
