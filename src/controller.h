@@ -3,6 +3,7 @@
 #include "display.h"
 #include "modes/clock.h"
 #include "modes/colorwave.h"
+#include "modes/fire.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
 #include "shared/serialWrapper.h"
@@ -10,7 +11,7 @@
 
 // manages all modes, they shouldn't be accessed directly!
 namespace Controller {
-enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, WEATHER, COLORWAVE, SIZE };
+enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, DASHBOARD, COLORWAVE, FIRE, SIZE };
 
 void turnOff();
 void setMode(uint8_t new_mode);
@@ -41,12 +42,16 @@ void _toMode(Mode new_mode) {
         println(F("CLOCK"));
         Display::clear();
         break;
+    case DASHBOARD:
+        println(F("DASHBOARD"));
+        Display::clear();
+        break;
     case COLORWAVE:
         println(F("COLORWAVE"));
         Display::clear();
         break;
-    case WEATHER:
-        println(F("WEATHER"));
+    case FIRE:
+        println(F("FIRE"));
         Display::clear();
         break;
     default:
@@ -115,7 +120,9 @@ void setup() {
     PersistenceManager::registerListener(updateConfig);
 
     Modes_Clock::setup();
+    // TODO DASHBOARD
     Modes_Colorwave::setup();
+    Modes_Fire::setup();
 }
 
 void loop() {
@@ -132,13 +139,16 @@ void loop() {
     case CLOCK:
         Modes_Clock::loop();
         break;
+    case DASHBOARD:
+        // TODO pass to dashboard extension
+        Display::printText("Too Cold!\n (TODO)");
+        delay(1000);
+        break;
     case COLORWAVE:
         Modes_Colorwave::loop();
         break;
-    case WEATHER:
-        // TODO pass to weather extension
-        Display::printText("Too Cold!\n (TODO)");
-        delay(500);
+    case FIRE:
+        Modes_Fire::loop();
         break;
     }
 }
