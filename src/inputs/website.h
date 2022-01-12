@@ -31,7 +31,7 @@ void GetAPI(AsyncWebServerRequest* request) {
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
     // always show possible commands
-    message += F("/api?\n?mode={0..4}\n?brightness={0..255}\n?print=TXT\n?timeout=SECONDS\n?login\n\n");
+    message += F("/api?\n?mode={0..4}\n?brightness={0..255}\n?print=TXT\n?timeout=SECONDS\n\n");
     if (request->params() <= 0) {
         request->send(200, "text/plain", message);
         return;
@@ -69,11 +69,6 @@ void GetAPI(AsyncWebServerRequest* request) {
         uint16_t val = request->getParam(paramKey)->value().toInt();
         message += val;
         Controller::hideAfter(val * 1000);
-    }
-    paramKey = F("login");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey;
-        Controller::showLogin();
     }
     request->send(200, "text/plain", message);
     Display::flashDot();
