@@ -15,6 +15,7 @@ const uint8_t HEIGHT = Display::PANEL_RES_Y;
 // heavily inspired by
 // https://www.reddit.com/r/FastLED/comments/lbnp53/fake_fire_w_fastled_a_project_ive_been_toying/
 // https://pastebin.com/pxMLWP7j
+// Sadly, neither pretty for fully adapted for this lib
 
 // Color Palette(s)
 DEFINE_GRADIENT_PALETTE(fire_pal){
@@ -50,23 +51,21 @@ uint16_t XY(uint8_t x, uint8_t y) {
 
 uint8_t intensity[WIDTH * HEIGHT];
 void updateScreen() {
-    // nth Row for map
-    for (int row = (HEIGHT - 1); row >= 1; row--) {
-        for (int col = (WIDTH - 2); col >= 1; col--) {
-            int newcol =
-                ((intensity[XY(row - 1, col - 1)] + intensity[XY(row - 1, col)] + intensity[XY(row - 1, col + 1)]) /
-                 3) /
-                random8(1, 5);
-            intensity[XY(row, col)] = newcol;
+    // update intensity with neighboring average of lower row
+    for (uint8_t row = (HEIGHT - 1); row >= 1; row--) {
+        for (uint8_t col = (WIDTH - 2); col >= 1; col--) {
+            uint16_t avgCol =
+                (intensity[XY(row - 1, col - 1)] + intensity[XY(row - 1, col)] + intensity[XY(row - 1, col + 1)]) / 3;
+            intensity[XY(row, col)] = avgCol / random8(1, 3); // magic numbers, smaller seems to make bigger flames
         }
     }
 
-    // Creation Row
+    // Create new fire column
     // If one of the LEDs on either side is already 'on fire' then there is a higher chance of ignition
     // If not, it has a low chance to self-ignite
     byte catchOn = 50;    // Chance to spread fire - higher number less chance (0-254) default: 50
     byte ignite = 253;    // Chance to self-ignite - higher number less chance (0-254) default: 253
-    byte chgchance = 245; // higher number less chance (0-254) default: 245
+    byte chgchance = 125; // higher number less chance (0-254) default: 245
 
     for (int i = 0; i <= (WIDTH - 1); i++) {
         if (random8() > chgchance)
