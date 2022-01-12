@@ -30,7 +30,7 @@ void displayLocalTime() {
     nextUpdate = now + UPDATE_DELAY;
     strftime(out, sizeof(out), "%H:%M", &timeinfo);
     Display::screen->setTextSize(2);
-    Display::screen->setCursor(2, 8);
+    Display::screen->setCursor(3, 8);
     Display::screen->clearScreen();
     Display::screen->print(out);
     print(F("C:"));
