@@ -2,6 +2,7 @@
 
 #include "display.h"
 #include "modes/clock.h"
+#include "modes/colorwave.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
 #include "shared/serialWrapper.h"
@@ -9,7 +10,7 @@
 
 // manages all modes, they shouldn't be accessed directly!
 namespace Controller {
-enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, WEATHER, SIZE };
+enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, WEATHER, COLORWAVE, SIZE };
 
 void turnOff();
 void setMode(uint8_t new_mode);
@@ -38,6 +39,10 @@ void _toMode(Mode new_mode) {
         break;
     case CLOCK:
         println(F("CLOCK"));
+        Display::clear();
+        break;
+    case COLORWAVE:
+        println(F("COLORWAVE"));
         Display::clear();
         break;
     case WEATHER:
@@ -110,6 +115,7 @@ void setup() {
     PersistenceManager::registerListener(updateConfig);
 
     Modes_Clock::setup();
+    Modes_Colorwave::setup();
 }
 
 void loop() {
@@ -125,6 +131,9 @@ void loop() {
         break;
     case CLOCK:
         Modes_Clock::loop();
+        break;
+    case COLORWAVE:
+        Modes_Colorwave::loop();
         break;
     case WEATHER:
         // TODO pass to weather extension
