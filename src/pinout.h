@@ -52,7 +52,7 @@ void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
 
     for (uint8_t p : Pinout::TOUCH) {
-        pinMode(p, INPUT);  // prevents shorts
+        pinMode(p, INPUT); // prevents shorts
     }
 
     // Matrix sets up itself

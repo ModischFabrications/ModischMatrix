@@ -2,9 +2,9 @@
 
 #include "controller.h"
 #include "pinout.h"
+#include "shared/rebootManager.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
-#include "shared/rebootManager.h"
 
 namespace Input_Touch {
 
@@ -36,7 +36,7 @@ void logAllTouches() {
 
 void setup() {
     logAllTouches();
-    delay(10);  // make sure touch pins are loaded
+    delay(10); // make sure touch pins are loaded
     // touchAttachInterrupt(Pinout::TOUCH_TOP, touchedTop, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_LEFT, touchedLeft, TOUCH_THRESHOLD);
     touchAttachInterrupt(Pinout::TOUCH_RIGHT, touchedRight, TOUCH_THRESHOLD);

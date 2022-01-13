@@ -27,8 +27,7 @@ void setup() {}
 uint32_t nextUpdate = 0;
 void loop() {
     uint32_t now = millis();
-    if (now < nextUpdate)
-        return;
+    if (now < nextUpdate) return;
     nextUpdate = now + UPDATE_DELAY;
     updateScreen();
 }

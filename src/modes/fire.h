@@ -68,8 +68,7 @@ void updateScreen() {
     byte chgchance = 125; // higher number less chance (0-254) default: 245
 
     for (int i = 0; i <= (WIDTH - 1); i++) {
-        if (random8() > chgchance)
-            continue;
+        if (random8() > chgchance) continue;
         byte rCol = random8();
         if (i >= 1 && i <= (WIDTH - 2)) {
             if (intensity[XY(0, i - 1)] > 0 || intensity[XY(0, i + 1)] > 0) {
@@ -100,8 +99,7 @@ void updateScreen() {
         CRGB c = ColorFromPalette(activePalette, intensity[i]);
         uint8_t x = i / HEIGHT;
         uint8_t y = i % HEIGHT;
-        if (true)
-            y = HEIGHT - 1 - y;
+        if (true) y = HEIGHT - 1 - y;
         Display::screen->drawPixelRGB888(x, y, c.r, c.g, c.b);
     }
 }

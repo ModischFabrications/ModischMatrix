@@ -27,7 +27,7 @@ void GetRoot(AsyncWebServerRequest* request) {
 
 void GetAPI(AsyncWebServerRequest* request) {
     RebootManager::setActive();
-    
+
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
     // always show possible commands
@@ -38,7 +38,7 @@ void GetAPI(AsyncWebServerRequest* request) {
     }
     message += F("OK: \n");
 
-// TODO streamline
+    // TODO streamline
     String paramKey;
     paramKey.reserve(20);
     paramKey = F("mode");

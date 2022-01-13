@@ -53,7 +53,7 @@ void heartbeatSerial() {
     lastCycle = time;
 }
 
-void println(){
+void println() {
     if (!USE_SERIAL) return;
     Serial.println();
 }

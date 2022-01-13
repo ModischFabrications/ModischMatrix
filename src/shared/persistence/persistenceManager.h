@@ -57,9 +57,7 @@ void callListeners() {
         fListener listener = listeners[i];
 
         // check for value
-        if (listener == nullptr) {
-            println(F("Listener not initialised"));
-        }
+        if (listener == nullptr) { println(F("Listener not initialised")); }
         // unpack function pointer from list and call
         (*listener)();
     }

@@ -26,8 +26,7 @@ Mode mode;
 uint32_t timeout = 0;
 
 void _toMode(Mode new_mode) {
-    if (new_mode == mode)
-        return;
+    if (new_mode == mode) return;
     print(F("New Mode: "));
     switch (new_mode) {
     case OFF:

@@ -39,17 +39,17 @@ const uint16_t MAX_BYTES_USED = 127;
 
 // call once at startup to reserve (emulated) storage for usage
 void setup() {
-  // ESP needs to know how much storage we actually need, AVR won't
-  EEPROM.begin(MAX_BYTES_USED);
+    // ESP needs to know how much storage we actually need, AVR won't
+    EEPROM.begin(MAX_BYTES_USED);
 }
 
 // save settings to EEPROM for persistent storage
 void saveSettings(const Configuration settings) {
-  EEPROM.write(EEPROM_VERSION_ADDR, VERSION);
-  EEPROM.put(EEPROM_SETTINGS_ADDR, settings);
+    EEPROM.write(EEPROM_VERSION_ADDR, VERSION);
+    EEPROM.put(EEPROM_SETTINGS_ADDR, settings);
 
-  // commit planned changes
-  EEPROM.commit();
+    // commit planned changes
+    EEPROM.commit();
 }
 
 /**
@@ -58,21 +58,21 @@ void saveSettings(const Configuration settings) {
  * The chance that a random, unset combination is a match is very low.
  * */
 const Configuration loadSettings() {
-  // could be rubbish or zeros, either way should work
-  uint8_t savedVersion = EEPROM.read(EEPROM_VERSION_ADDR);
+    // could be rubbish or zeros, either way should work
+    uint8_t savedVersion = EEPROM.read(EEPROM_VERSION_ADDR);
 
-  if (savedVersion != VERSION) {
-    // save new default settings as fallback, updates version for next run
-    saveSettings(defaultConfiguration);
+    if (savedVersion != VERSION) {
+        // save new default settings as fallback, updates version for next run
+        saveSettings(defaultConfiguration);
 
-    return defaultConfiguration;
-  }
+        return defaultConfiguration;
+    }
 
-  // default isn't actually used, but it prevents compile warnings
-  Configuration settings = defaultConfiguration;
-  EEPROM.get(EEPROM_SETTINGS_ADDR, settings);
+    // default isn't actually used, but it prevents compile warnings
+    Configuration settings = defaultConfiguration;
+    EEPROM.get(EEPROM_SETTINGS_ADDR, settings);
 
-  return settings;
+    return settings;
 }
 
 } // namespace PersistenceStore

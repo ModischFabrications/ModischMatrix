@@ -58,12 +58,12 @@ void setupPanel() {
     // initial values come from persistence/controller
 }
 
-void colorDot(uint16_t color){
+void colorDot(uint16_t color) {
     // top right corner
-    screen->drawPixel(screen->width()-1, 0, color);
+    screen->drawPixel(screen->width() - 1, 0, color);
 }
 
-void flashDot(){
+void flashDot() {
     colorDot(white);
     delay(200);
     colorDot(black);

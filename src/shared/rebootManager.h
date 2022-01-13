@@ -24,8 +24,7 @@ void rebootNow() {
 void setActive() { scheduledRestart = millis() + INACTIVITY_THRESHOLD_MS; }
 
 void loop() {
-    if (millis() > MIN_REBOOT_DELAY_MS && scheduledRestart < millis())
-        rebootNow();
+    if (millis() > MIN_REBOOT_DELAY_MS && scheduledRestart < millis()) rebootNow();
 }
 
 } // namespace RebootManager

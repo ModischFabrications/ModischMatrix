@@ -16,9 +16,7 @@ const long gmtOffset_sec = 3600;
 const int daylightOffset_sec = 3600;
 
 void updateLocalTime() {
-    if (!getLocalTime(&timeinfo)) {
-        logError(F("Failed to obtain time"));
-    }
+    if (!getLocalTime(&timeinfo)) { logError(F("Failed to obtain time")); }
 }
 } // namespace
 
@@ -27,8 +25,7 @@ void setup() { configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); }
 uint32_t nextUpdate = 0;
 void loop() {
     uint32_t now = millis();
-    if (now < nextUpdate)
-        return;
+    if (now < nextUpdate) return;
     nextUpdate = now + UPDATE_DELAY;
     updateLocalTime();
 }

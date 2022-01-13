@@ -1,5 +1,6 @@
 ---
 # We'll use defaults from the LLVM style, but with 4 columns indentation.
+# see https://releases.llvm.org/12.0.1/tools/clang/docs/ClangFormatStyleOptions.html
 BasedOnStyle: LLVM
 IndentWidth: 4
 ---
@@ -9,6 +10,5 @@ DerivePointerAlignment: false
 PointerAlignment: Left
 ColumnLimit: 120
 AllowShortBlocksOnASingleLine: Empty
-# AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-
+AllowShortIfStatementsOnASingleLine: WithoutElse
 ---
