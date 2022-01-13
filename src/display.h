@@ -1,9 +1,12 @@
 #pragma once
 
+#define FASTLED_INTERNAL // disable pragma message
+
 #include "pinout.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h> // https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA
+#include <FastLED.h>
 
 namespace Display {
 using namespace Pinout;
