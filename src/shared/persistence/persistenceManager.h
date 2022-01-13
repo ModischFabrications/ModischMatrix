@@ -45,14 +45,14 @@ uint8_t i_listeners = 0;
 // notify everyone interested that a new configuration is available
 void callListeners() {
     if (!initialized) {
-        println(F("Loading initial config from EEPROM"));
+        println(F("PM: Loading initial config from EEPROM"));
         configuration = PersistenceStore::loadSettings();
         initialized = true;
     }
 
     for (uint8_t i = 0; i < i_listeners; i++) {
-        print(F("Calling listener "));
-        printlnRaw(i);
+        //print(F("Calling listener "));
+        //printlnRaw(i);
 
         fListener listener = listeners[i];
 
