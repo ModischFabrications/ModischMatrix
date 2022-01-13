@@ -7,17 +7,28 @@
 
 // maybe morph using https://github.com/hwiguna/HariFun_166_Morphing_Clock/blob/master/Latest/MorphingClock/Digit.cpp
 
-namespace Modes_Clock {
+namespace Modes_Dashboard {
 namespace {
 const uint16_t UPDATE_DELAY = 30 * 1000;
 
-char out[10];
+char out[16];
 void updateScreen() {
+    MatrixPanel_I2S_DMA* s = Display::screen;
+    s->clearScreen();
+    // TODO draw all static background elements as icon
+
+    s->setTextSize(1);
+
+    s->setCursor(4, 4);
     strftime(out, sizeof(out), "%H:%M", &TimeService::timeinfo);
-    Display::screen->setTextSize(2);
-    Display::screen->setCursor(3, 8);
-    Display::screen->clearScreen();
-    Display::screen->print(out);
+    s->print(out);
+
+    s->setCursor(2, 24);
+    strftime(out, sizeof(out), "%d.%m.%Y", &TimeService::timeinfo);
+    s->print(out);
+
+    // TODO weather
+
     print(F("."));
 }
 } // namespace
@@ -33,4 +44,4 @@ void loop() {
     updateScreen();
 }
 
-} // namespace Modes_Clock
+} // namespace Modes_Dashboard

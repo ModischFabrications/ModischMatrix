@@ -5,17 +5,18 @@
 
 #include "pinout.h"
 
-#include "shared/serialWrapper.h"
 #include "shared/fileServer.h"
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
+#include "shared/serialWrapper.h"
+#include "shared/timeService.h"
 
 //#include "inputs/telegram.h"
 #include "inputs/touch.h"
 #include "inputs/website.h"
 
-#include "display.h"
 #include "controller.h"
+#include "display.h"
 
 void setup() {
     delay(0); // watchdog timer (WDT)
@@ -29,14 +30,15 @@ void setup() {
 
     println(F(".prepare outputs."));
     Display::setup();
-    Display::colorDot(Display::blue);   // asap
+    Display::colorDot(Display::blue); // asap
 
     println(F(".prepare connections."));
-    WiFiLoginManager::onConfigNeeded = [] {Display::colorDot(Display::orange);};
+    WiFiLoginManager::onConfigNeeded = [] { Display::colorDot(Display::orange); };
     WiFiLoginManager::setup("ModischMatrix");
     delay(10);
 
     println(F(".prepare inputs."));
+    TimeService::setup();
     Website::setup();
     Input_Touch::setup();
     // Input_Telegram::setup();
@@ -50,11 +52,10 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, false);
     Display::colorDot(Display::black);
     delay(10);
-    //Controller::showLogin();
 }
 
 void loop() {
-    // impossible to align loop times with variable length web calls!
+    TimeService::loop();
     Input_Touch::loop();
     Controller::loop();
 

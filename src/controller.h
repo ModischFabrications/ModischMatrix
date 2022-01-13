@@ -1,9 +1,12 @@
 #pragma once
 
 #include "display.h"
+
 #include "modes/clock.h"
 #include "modes/colorwave.h"
+#include "modes/dashboard.h"
 #include "modes/fire.h"
+
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
 #include "shared/serialWrapper.h"
@@ -40,19 +43,19 @@ void _toMode(Mode new_mode) {
         break;
     case CLOCK:
         println(F("CLOCK"));
-        Display::clear();
+        Modes_Clock::updateScreen();
         break;
     case DASHBOARD:
         println(F("DASHBOARD"));
-        Display::clear();
+        Modes_Dashboard::updateScreen();
         break;
     case COLORWAVE:
         println(F("COLORWAVE"));
-        Display::clear();
+        Modes_Colorwave::updateScreen();
         break;
     case FIRE:
         println(F("FIRE"));
-        Display::clear();
+        Modes_Fire::updateScreen();
         break;
     default:
         println(F("UNKNOWN, discarding..."));
@@ -120,7 +123,7 @@ void setup() {
     PersistenceManager::registerListener(updateConfig);
 
     Modes_Clock::setup();
-    // TODO DASHBOARD
+    Modes_Dashboard::setup();
     Modes_Colorwave::setup();
     Modes_Fire::setup();
 }
@@ -140,9 +143,7 @@ void loop() {
         Modes_Clock::loop();
         break;
     case DASHBOARD:
-        // TODO pass to dashboard extension
-        Display::printText("Too Cold!\n (TODO)");
-        delay(1000);
+        Modes_Dashboard::loop();
         break;
     case COLORWAVE:
         Modes_Colorwave::loop();
