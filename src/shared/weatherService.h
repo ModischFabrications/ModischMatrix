@@ -52,8 +52,10 @@ String httpGETRequest(const char* serverName) {
         print(F("HTTP Response code: "));
         printlnRaw((uint16_t)httpResponseCode);
         payload = http.getString();
+        println(F("Response Body: "));
+        printlnRaw(payload);
     } else {
-        print(F("Error code: "));
+        print(F("Error: "));
         printlnRaw((uint16_t)httpResponseCode);
     }
     // Free resources
@@ -66,7 +68,6 @@ StaticJsonDocument<820> doc;
 void updateWeather() {
     println(F("Checking for weather update..."));
     String reply = httpGETRequest(URL);
-    printlnRaw(reply);
 
     // WARNING: the strings in the input will be duplicated in the JsonDocument.
     DeserializationError error = deserializeJson(doc, reply);

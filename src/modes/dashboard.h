@@ -3,6 +3,7 @@
 #include "display.h"
 #include "shared/serialWrapper.h"
 #include "shared/timeService.h"
+#include "shared/weatherService.h"
 #include <Arduino.h>
 
 // maybe morph using https://github.com/hwiguna/HariFun_166_Morphing_Clock/blob/master/Latest/MorphingClock/Digit.cpp
@@ -19,7 +20,7 @@ void updateScreen() {
 
     s->setTextSize(1);
 
-    s->setCursor(4, 4);
+    s->setCursor(2, 2);
     strftime(out, sizeof(out), "%H:%M", &TimeService::timeinfo);
     s->print(out);
 
@@ -27,7 +28,9 @@ void updateScreen() {
     strftime(out, sizeof(out), "%d.%m.%Y", &TimeService::timeinfo);
     s->print(out);
 
-    // TODO weather
+    s->setCursor(38, 2);
+    snprintf(out, sizeof(out), "%3.0fC", (double)WeatherService::weatherInfo.tempFeelsLike);
+    s->print(out);
 
     print(F("."));
 }
