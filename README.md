@@ -48,10 +48,13 @@ See platformio.ini for details, should be handled automatically.
 
 - https://github.com/me-no-dev/ESPAsyncWebServer : Can't recommend it enough, crazy how easy it can be. Way better than the native Webserver, try it yourself!
 - https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA : Powerful, but complex. Read Readme thoroughly.
+- https://github.com/FastLED/FastLED : *The* standard for high performance RGB pixel pushing. Low level, great control, great library!
+- https://github.com/adafruit/Adafruit-GFX-Library : Base library for many complex UI libraries. Simple and high level, good for fast solutions. 
 - https://github.com/tzapu/WiFiManager : Great solution for semi-automatic WiFi login. Step aside hard-coded credentials!
+- https://github.com/bblanchon/ArduinoJson : Great library to parse JSON files. Not javascript, but simple enough and allegedly better performing than stdlib solution. 
 - https://github.com/marian-craciunescu/ESP32Ping@^1.6 : Simple tool, does what it says. Somewhat unstable.
-- https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot : Great idea, sadly pretty unstable and performance-hungry. Deactivated for now. 
-- https://github.com/PowerBroker2/SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations yet, so deactivated for now. 
+- ~~https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot : Great idea, sadly pretty unstable and performance-hungry.~~
+- ~~https://github.com/PowerBroker2/SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations.~~
 
 ## References
 These were useful while refining the concept, check them out as well if you are still shopping around: 
@@ -69,7 +72,6 @@ These were useful while refining the concept, check them out as well if you are 
 1. https://github.com/witnessmenow/ESP8266-Led-Matrix-Web-Draw
 1. https://arduinojson.org/v6/assistant/
 1. All the examples of the libraries mentioned above
-1. 
 
 \* Great guy, love him like myself. 
 
