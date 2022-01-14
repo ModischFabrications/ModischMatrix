@@ -16,6 +16,22 @@
 
 namespace WeatherService {
 
+struct OWMData {
+    uint32_t timestamp = 0; // millis, not realtime
+    uint16_t weather_id;    // could use description instead
+
+    float tempFeelsLike;
+    float temp;
+    float temp_min;
+    float temp_max;
+
+    float windSpeed;
+
+    // sunrise/sunset ignored for now
+};
+
+OWMData weatherInfo;
+
 namespace {
 const uint32_t UPDATE_DELAY = 30 * 60 * 1000;
 
@@ -46,6 +62,7 @@ String httpGETRequest(const char* serverName) {
 }
 
 void updateWeather() {
+    println(F("Checking for weather update..."));
     String reply = httpGETRequest(URL);
     printlnRaw(reply);
 
@@ -55,13 +72,19 @@ void updateWeather() {
     deserializeJson(doc, reply);
     JsonObject obj = doc.as<JsonObject>();
 
-    float temp = obj[F("main")][F("temp")];
-    print(F("Temperature: "));
-    printlnRaw(temp);
+    weatherInfo.weather_id = obj[F("weather")][0][F("speed")];
 
-    float icon = obj[F("weather")][F("icon")];
-    print(F("Weather: "));
-    printlnRaw(icon);
+    weatherInfo.tempFeelsLike = (float)obj[F("main")][F("feels_like")] - 273.15;
+    weatherInfo.temp = (float)obj[F("main")][F("temp")] - 273.15;
+    weatherInfo.temp_min = (float)obj[F("main")][F("temp_min")] - 273.15;
+    weatherInfo.temp_max = (float)obj[F("main")][F("temp_max")] - 273.15;
+
+    weatherInfo.windSpeed = (float)obj[F("wind")][F("speed")];
+    weatherInfo.timestamp = millis();
+
+    print(F("Now at "));
+    printRaw(weatherInfo.tempFeelsLike);
+    println(F("°C"));
 }
 } // namespace
 
