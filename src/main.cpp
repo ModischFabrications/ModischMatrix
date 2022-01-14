@@ -1,11 +1,6 @@
 #include <Arduino.h>
-//#include <loopTimer.h>    // part of SafeStrings
 
 #define DEBUG
-
-#ifdef CI_BUILD
-#pragma message "-- CI Build --"
-#endif
 
 #include "pinout.h"
 
@@ -63,16 +58,15 @@ void setup() {
 void loop() {
     TimeService::loop();
     WeatherService::loop();
+
     Input_Touch::loop();
+    // Input_Telegram::loop();
     Controller::loop();
 
     PersistenceManager::loop();
 
-    // Input_Telegram::loop();
-
     RebootManager::loop();
 
-    // loopTimer.check(Serial);
     // heartbeatSerial();
     delay(1);
 }

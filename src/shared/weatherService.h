@@ -1,6 +1,6 @@
 #pragma once
 
-#include "secrets.h"
+#include "shared/secretsService.h"
 #include "shared/serialWrapper.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
