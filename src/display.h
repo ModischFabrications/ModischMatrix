@@ -8,6 +8,8 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h> // https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA
 #include <FastLED.h>
 
+// manages screen initialization and some utility methods. Bypassable by more complex interactions.
+
 namespace Display {
 using namespace Pinout;
 
@@ -84,8 +86,6 @@ void flashScreen() {
     delay(1000);
     screen->clearScreen();
 }
-
-// TODO copy from Tests\animations.h
 
 void setup() {
     println(F("Starting matrix..."));

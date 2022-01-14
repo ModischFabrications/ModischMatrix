@@ -58,15 +58,18 @@ These were useful while refining the concept, check them out as well if you are 
 
 1. https://github.com/ModischFabrications/HUB75-DMA-Test \* 
 1. https://github.com/ModischFabrications/Verdandi \* 
-2. https://2dom.github.io/PixelTimes/
-2. https://github.com/rorosaurus/esp32-hub75-driver
-3. https://github.com/witnessmenow/ESP32-i2s-Matrix-Shield
-3. https://www.instructables.com/Morphing-Digital-Clock/
-4. https://github.com/bogd/esp32-morphing-clock
-5. https://github.com/marcmerlin/AnimatedGIFs
-6. https://github.com/LukPopp0/MatrixDisplay
-7. https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/
-8. https://github.com/witnessmenow/ESP8266-Led-Matrix-Web-Draw
+1. https://2dom.github.io/PixelTimes/
+1. https://github.com/rorosaurus/esp32-hub75-driver
+1. https://github.com/witnessmenow/ESP32-i2s-Matrix-Shield
+1. https://www.instructables.com/Morphing-Digital-Clock/
+1. https://github.com/bogd/esp32-morphing-clock
+1. https://github.com/marcmerlin/AnimatedGIFs
+1. https://github.com/LukPopp0/MatrixDisplay
+1. https://randomnerdtutorials.com/esp32-touch-pins-arduino-ide/
+1. https://github.com/witnessmenow/ESP8266-Led-Matrix-Web-Draw
+1. https://arduinojson.org/v6/assistant/
+1. All the examples of the libraries mentioned above
+1. 
 
 \* Great guy, love him like myself. 
 

@@ -61,7 +61,7 @@ void loop() {
     }
     logAllTouches();
     touched = NONE;
-    RebootManager::setActive();
+    RebootManager::reset();
 }
 
 } // namespace Input_Touch

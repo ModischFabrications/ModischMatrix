@@ -8,6 +8,8 @@
 
 #include "./configuration.h"
 
+// MAKE SURE TO DEFINE VERSION IN YOUR CONFIG FILE!
+
 namespace PersistenceStore {
 // Preserve EEPROM while programming on AVR with the EESAVE fuse
 
@@ -18,8 +20,6 @@ void saveSettings(const Configuration settings);
 const Configuration loadSettings();
 
 namespace {
-
-// MAKE SURE TO DEFINE VERSION IN YOUR CONFIG FILE!
 
 /**
  * EEPROM has around 100k writes per cell, so use them carefully!

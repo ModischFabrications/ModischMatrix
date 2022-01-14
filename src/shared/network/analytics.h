@@ -3,6 +3,8 @@
 #include "shared/serialWrapper.h"
 #include <HTTPClient.h>
 
+// currently unused, but it could eventually be nice to have
+
 namespace analytics {
 const char* host = "analytics.modisch.me";
 

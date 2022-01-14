@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 namespace RebootManager {
+// reset clock to prevent millis overflow, reset memory fragmentation and free unused resources
 
 namespace {
 // <49 days to prevent millis overflow
@@ -21,7 +22,7 @@ void rebootNow() {
 
 } // namespace
 
-void setActive() { scheduledRestart = millis() + INACTIVITY_THRESHOLD_MS; }
+void reset() { scheduledRestart = millis() + INACTIVITY_THRESHOLD_MS; }
 
 void loop() {
     if (millis() > MIN_REBOOT_DELAY_MS && scheduledRestart < millis()) rebootNow();

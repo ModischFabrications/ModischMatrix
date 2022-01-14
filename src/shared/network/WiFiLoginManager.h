@@ -10,8 +10,9 @@
 namespace WiFiLoginManager {
 
 namespace {
-// IPAddress testHost(8, 8, 8, 8);
-IPAddress testHost(1, 1, 1, 1);
+// IPAddress testHost(8, 8, 8, 8);  // google
+IPAddress testHost(1, 1, 1, 1); // cloudflare
+
 WiFiManager wifiManager;
 String _hostname;
 } // namespace

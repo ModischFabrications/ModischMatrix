@@ -20,7 +20,7 @@ void set(Configuration newConfig);
 void trySave();
 void registerListener(fListener listener);
 
-// anonymous namespace hides globals towards other
+// anonymous namespace hides globals
 namespace {
 void callListeners();
 
@@ -32,9 +32,8 @@ const uint16_t delayToSaveMs = (60 * 1000);
 // we don't want to define a "null" Configuration as default
 bool initialized = false;
 
-// it's dangerous to leave this uninitialized but we get these values
-// with the first get()
-Configuration configuration;
+// it's dangerous to leave this uninitialized but we get these values with the first get()
+Configuration configuration = defaultConfiguration;
 uint32_t tNextSavepoint = 0;
 
 fListener listeners[N_MAX_LISTENERS] = {nullptr};
@@ -42,17 +41,22 @@ uint8_t i_listeners = 0;
 
 // -----------------------
 
-// notify everyone interested that a new configuration is available
-void callListeners() {
+void tryInit() {
+    // singleton-like
     if (!initialized) {
         println(F("PM: Loading initial config from EEPROM"));
         configuration = PersistenceStore::loadSettings();
         initialized = true;
     }
+}
+
+// notify everyone interested that a new configuration is available
+void callListeners() {
+    tryInit();
 
     for (uint8_t i = 0; i < i_listeners; i++) {
-        //print(F("Calling listener "));
-        //printlnRaw(i);
+        // print(F("Calling listener "));
+        // printlnRaw(i);
 
         fListener listener = listeners[i];
 
@@ -67,12 +71,7 @@ void callListeners() {
 
 // access current Configuration from EEPROM, including lazy load
 const Configuration get() {
-    // singleton-like
-    if (!initialized) {
-        println(F("PM: Loading initial config from EEPROM"));
-        configuration = PersistenceStore::loadSettings();
-        initialized = true;
-    }
+    tryInit();
 
     return configuration;
 }

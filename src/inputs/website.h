@@ -5,13 +5,9 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 
-/**
- * /cmd?state=1
- *
- */
-
 namespace Website {
 
+namespace {
 AsyncWebServer server(80);
 
 void notFound(AsyncWebServerRequest* request) {
@@ -26,7 +22,7 @@ void GetRoot(AsyncWebServerRequest* request) {
 }
 
 void GetAPI(AsyncWebServerRequest* request) {
-    RebootManager::setActive();
+    RebootManager::reset();
 
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
@@ -73,8 +69,8 @@ void GetAPI(AsyncWebServerRequest* request) {
     request->send(200, "text/plain", message);
     Display::flashDot();
 }
+} // namespace
 
-bool ready = false;
 // contract: WiFi must be enabled already
 void setup() {
     println(F("Preparing website"));
@@ -84,5 +80,7 @@ void setup() {
 
     server.begin();
 }
+
+void loop() {}
 
 } // namespace Website

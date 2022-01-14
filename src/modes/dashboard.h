@@ -6,7 +6,7 @@
 #include "shared/weatherService.h"
 #include <Arduino.h>
 
-// maybe morph using https://github.com/hwiguna/HariFun_166_Morphing_Clock/blob/master/Latest/MorphingClock/Digit.cpp
+// TODO: this mode really needs some love from an artist
 
 namespace Modes_Dashboard {
 namespace {

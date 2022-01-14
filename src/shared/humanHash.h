@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 
+// currently unused, but it might be useful for pairing later
 // this class will make a hash without similar looking or sounding chars
 
 const char* safeChars = "23456789ABCDEFGHKLMNPQRSTUVWXYZ";
@@ -25,14 +26,12 @@ uint16_t reverse16(uint16_t in) {
 }
 
 // CRC POLYNOME = x15 + 1 =  1000 0000 0000 0001 = 0x8001
-uint16_t crc16(const uint8_t* array, uint8_t length, uint16_t polynome = 0x8001,
-               uint16_t startmask = 0x0000, uint16_t endmask = 0x0000, bool reverseIn = false,
-               bool reverseOut = false) {
+uint16_t crc16(const uint8_t* array, uint8_t length, uint16_t polynome = 0x8001, uint16_t startmask = 0x0000,
+               uint16_t endmask = 0x0000, bool reverseIn = false, bool reverseOut = false) {
     uint16_t crc = startmask;
     while (length--) {
         uint8_t data = *array++;
-        if (reverseIn)
-            data = reverse8(data);
+        if (reverseIn) data = reverse8(data);
         crc ^= ((uint16_t)data) << 8;
         for (uint8_t i = 8; i; i--) {
             if (crc & (1 << 15)) {
@@ -43,8 +42,7 @@ uint16_t crc16(const uint8_t* array, uint8_t length, uint16_t polynome = 0x8001,
             }
         }
     }
-    if (reverseOut)
-        crc = reverse16(crc);
+    if (reverseOut) crc = reverse16(crc);
     crc ^= endmask;
     return crc;
 }
