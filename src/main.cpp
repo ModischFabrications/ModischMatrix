@@ -3,6 +3,10 @@
 
 #define DEBUG
 
+#ifdef CI_BUILD
+#pragma message "-- CI Build --"
+#endif
+
 #include "pinout.h"
 
 #include "shared/fileServer.h"
