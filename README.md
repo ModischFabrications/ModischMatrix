@@ -95,6 +95,8 @@ Some best practices, stolen from [here](https://cpp4arduino.com/2018/11/21/eight
 - local Strings seem to be okay
 - reboot once in a while to recover heap
 
+Use raw `char*` formatting if possible, see [here](https://cpp4arduino.com/2020/02/07/how-to-format-strings-without-the-string-class.html).
+
 SafeStrings should be an easier and safer alternative with automatic debugging and more. Pass by ref (&), but don't const them. Currently not used, haven't committed to it fully. 
 
 

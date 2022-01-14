@@ -10,6 +10,7 @@
 #include "shared/persistence/persistenceManager.h"
 #include "shared/serialWrapper.h"
 #include "shared/timeService.h"
+#include "shared/weatherService.h"
 
 //#include "inputs/telegram.h"
 #include "inputs/touch.h"
@@ -39,6 +40,7 @@ void setup() {
 
     println(F(".prepare inputs."));
     TimeService::setup();
+    WeatherService::setup();
     Website::setup();
     Input_Touch::setup();
     // Input_Telegram::setup();
@@ -56,6 +58,7 @@ void setup() {
 
 void loop() {
     TimeService::loop();
+    WeatherService::loop();
     Input_Touch::loop();
     Controller::loop();
 
