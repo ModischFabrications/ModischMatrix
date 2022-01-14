@@ -2,8 +2,8 @@ name: PlatformIO CI
 
 on:
   push:
-  paths-ignore:
-      - '**.md'
+    paths-ignore:
+        - '**.md'
   workflow_dispatch:
 
 jobs:
