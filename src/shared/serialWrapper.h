@@ -4,6 +4,7 @@
 //#include <SafeString.h>
 
 #ifdef DEBUG
+#pragma message("-- DEBUG Build, enabling serial output --")
 const bool USE_SERIAL = true;
 #else
 const bool USE_SERIAL = false;
