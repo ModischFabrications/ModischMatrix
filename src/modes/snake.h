@@ -116,19 +116,22 @@ void updateScreen() {
     uint32_t now = millis();
     if (now < nextSnack) return;
     nextSnack = now + SNACK_DELAY;
-    // TODO create snack
+    // TODO create snack instead
+    for (Snake sn : activeSnakes) {
+        sn.len += 1;
+    }
 }
 
 } // namespace
 
-bool setDirection(uint8_t player, const Direction direction) {
-    if (direction == OFF || direction == DEAD) return false;
+void setDirection(uint8_t player, const Direction direction) {
+    if (direction == OFF || direction == DEAD) return;
+    if (activeSnakes[player].dir == direction) return;
     activeSnakes[player].dir = direction;
-    print(F("P"));
+    print(F("P "));
     printRaw(player);
-    print(F(" to "));
+    print(F(" : DIR "));
     printlnRaw((uint8_t)direction);
-    return true;
 }
 
 void reset() {
