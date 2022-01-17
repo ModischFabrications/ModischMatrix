@@ -15,7 +15,7 @@ enum Direction : uint8_t { OFF, UP, DOWN, LEFT, RIGHT, DEAD };
 
 namespace {
 const uint16_t UPDATE_DELAY = 500;
-const uint16_t SNACK_DELAY = 4000;
+const uint16_t SNACK_DELAY = 10 * 1000;
 
 const uint8_t N_MAX_PLAYERS = 4;
 const uint8_t N_MAX_SNACKS = 4;
@@ -88,6 +88,9 @@ void printPlayer(uint8_t i) {
     print(F("P"));
     printRaw(i);
     print(F(": "));
+    print(F("Dir "));
+    printRaw((uint8_t)players[i].dir);
+    print(F(", Pos "));
     for (uint8_t i = 0; i < players[i].len; i++) {
         XY pos = players[i].pos[i];
         printRaw((int16_t)pos.x);
@@ -95,11 +98,13 @@ void printPlayer(uint8_t i) {
         printRaw((int16_t)pos.y);
         print(F("|"));
     }
+    print(F(" -> Len "));
+    printRaw((uint8_t)players[i].len);
     println();
 }
 
 void move() {
-    for (Snake sn : players) {
+    for (Snake& sn : players) {
         if (sn.dir == DEAD || sn.dir == OFF) continue;
         for (uint8_t i = 1; i < sn.len; i++) {
             sn.pos[i] = sn.pos[i - 1];
@@ -112,7 +117,7 @@ void move() {
 void draw() {
     Display::clear();
     for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
-        Snake sn = players[i];
+        Snake& sn = players[i];
         if (sn.dir == DEAD) continue;
         Display::screen->drawPixel(sn.pos[0].x, sn.pos[0].y, C_PLAYERS[i]);
         for (uint8_t j = 1; j < sn.len; j++) {
@@ -132,8 +137,9 @@ void updateScreen() {
     if (now < nextSnack) return;
     nextSnack = now + SNACK_DELAY;
     // TODO create snack instead
-    for (Snake sn : players) {
-        sn.len += 1;
+    println(F("New snack at [TODO]"));
+    for (Snake& sn : players) {
+        //sn.len += 1;
     }
 }
 
@@ -152,7 +158,7 @@ void setDirection(uint8_t player, const Direction direction) {
 void reset() {
     println(F("SN: Clearing board, creating new snakes"));
     Display::clear();
-    for (Snake sn : players) {
+    for (Snake& sn : players) {
         sn.dir = OFF;
         sn.len = 4;
         XY pos = XY(random8(0, WIDTH), random8(0, HEIGHT));
