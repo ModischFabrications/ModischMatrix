@@ -4,7 +4,6 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
-#include <FastLED.h>
 
 // multiplayer snake. Eat snacks to grow, let others crash into you.
 
@@ -21,8 +20,8 @@ const uint16_t SNACK_DELAY = 4000;
 const uint8_t N_MAX_PLAYERS = 4;
 const uint8_t N_MAX_SNACKS = 4;
 // trailing to darkness
-const CRGB C_PLAYERS[] = {CRGB::Blue, CRGB::Red, CRGB::Green, CRGB::Yellow};
-const CRGB C_FOOD = CRGB::White;
+const uint16_t C_PLAYERS[] = {0x001F, 0x07FF, 0xF81F, 0xFFE0};
+const uint16_t C_FOOD = 0xFFFF;
 const uint8_t MIN_LENGTH = 4;
 const uint8_t MAX_LENGTH = 32;
 

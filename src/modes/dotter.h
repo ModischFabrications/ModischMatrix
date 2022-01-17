@@ -4,7 +4,6 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
-#include <FastLED.h>
 
 // dots with random color and random positions. Starting bright, fading to black.
 // more examples: https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA/tree/master/examples/AuroraDemo
@@ -17,7 +16,7 @@ const uint8_t WIDTH = Display::PANEL_RES_X;
 const uint8_t HEIGHT = Display::PANEL_RES_Y;
 
 void newDot() {
-    Display::screen->drawPixel(random8(0, WIDTH), random8(0, HEIGHT), CRGB(random8(), random8(), random8()));
+    Display::screen->drawPixelRGB888(random8(0, WIDTH), random8(0, HEIGHT), random8(), random8(), random8());
 }
 
 void updateScreen() {
