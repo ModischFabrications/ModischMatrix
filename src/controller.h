@@ -121,6 +121,9 @@ void setMode(uint8_t new_mode) {
         return;
     }
 
+    // only to prevent log spam, PM deduplicates too
+    if (new_mode == mode) return;
+
     Config::Configuration config = PersistenceManager::get();
     config.mode = new_mode;
     PersistenceManager::set(config);

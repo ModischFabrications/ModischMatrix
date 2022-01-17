@@ -28,7 +28,10 @@ void updateScreen() {
 
 } // namespace
 
-void reset() { println(F("GOL: Clearing board, creating new seed")); }
+void reset() {
+    println(F("GOL: Clearing board, creating new seed"));
+    Display::clear();
+}
 
 void setup() {}
 

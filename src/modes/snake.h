@@ -62,7 +62,7 @@ struct Snake {
     uint8_t len = MIN_LENGTH;
 };
 
-Snake activeSnakes[N_MAX_PLAYERS];
+Snake players[N_MAX_PLAYERS];
 XY snacks[N_MAX_SNACKS];
 uint8_t iSnack = 0;
 
@@ -84,8 +84,22 @@ XY dirToPos(const Direction& dir) {
     }
 }
 
+void printPlayer(uint8_t i) {
+    print(F("P"));
+    printRaw(i);
+    print(F(": "));
+    for (uint8_t i = 0; i < players[i].len; i++) {
+        XY pos = players[i].pos[i];
+        printRaw((int16_t)pos.x);
+        print(F(","));
+        printRaw((int16_t)pos.y);
+        print(F("|"));
+    }
+    println();
+}
+
 void move() {
-    for (Snake sn : activeSnakes) {
+    for (Snake sn : players) {
         if (sn.dir == DEAD || sn.dir == OFF) continue;
         for (uint8_t i = 1; i < sn.len; i++) {
             sn.pos[i] = sn.pos[i - 1];
@@ -98,12 +112,14 @@ void move() {
 void draw() {
     Display::clear();
     for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
-        Snake sn = activeSnakes[i];
+        Snake sn = players[i];
         if (sn.dir == DEAD) continue;
         Display::screen->drawPixel(sn.pos[0].x, sn.pos[0].y, C_PLAYERS[i]);
         for (uint8_t j = 1; j < sn.len; j++) {
-            Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, C_PLAYERS[i]); //.fadeToBlackBy(i*(256/MAX_LENGTH-1));
+            // TODO dim down by i*(256/MAX_LENGTH-1)
+            Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, C_PLAYERS[i]);
         }
+        printPlayer(i);
     }
 }
 
@@ -116,7 +132,7 @@ void updateScreen() {
     if (now < nextSnack) return;
     nextSnack = now + SNACK_DELAY;
     // TODO create snack instead
-    for (Snake sn : activeSnakes) {
+    for (Snake sn : players) {
         sn.len += 1;
     }
 }
@@ -125,8 +141,8 @@ void updateScreen() {
 
 void setDirection(uint8_t player, const Direction direction) {
     if (direction == OFF || direction == DEAD) return;
-    if (activeSnakes[player].dir == direction) return;
-    activeSnakes[player].dir = direction;
+    if (players[player].dir == direction) return;
+    players[player].dir = direction;
     print(F("P "));
     printRaw(player);
     print(F(" : DIR "));
@@ -134,13 +150,13 @@ void setDirection(uint8_t player, const Direction direction) {
 }
 
 void reset() {
-    Display::clear();
     println(F("SN: Clearing board, creating new snakes"));
-    for (Snake sn : activeSnakes) {
+    Display::clear();
+    for (Snake sn : players) {
         sn.dir = OFF;
         sn.len = 4;
         XY pos = XY(random8(0, WIDTH), random8(0, HEIGHT));
-        for (uint8_t i = 1; i < sn.len; i++) {
+        for (uint8_t i = 0; i < sn.len; i++) {
             sn.pos[i] = pos;
         }
     }

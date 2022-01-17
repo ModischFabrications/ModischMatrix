@@ -7,6 +7,7 @@
 
 // dots with random color and random positions. Starting bright, fading to black.
 // more examples: https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA/tree/master/examples/AuroraDemo
+// TODO: could use a better defined color palette; looks a bit too wild right now. 
 
 namespace Modes_Dotter {
 namespace {

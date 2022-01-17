@@ -70,6 +70,11 @@ void printlnRaw(const String& string) {
     Serial.println(string);
 }
 
+void printlnRaw(int16_t number) {
+    if (!USE_SERIAL) return;
+    Serial.println(number);
+}
+
 void printlnRaw(uint16_t number) {
     if (!USE_SERIAL) return;
     Serial.println(number);
@@ -93,6 +98,11 @@ void print(const __FlashStringHelper* string) {
 void printRaw(const String& string) {
     if (!USE_SERIAL) return;
     Serial.print(string);
+}
+
+void printRaw(int16_t number) {
+    if (!USE_SERIAL) return;
+    Serial.print(number);
 }
 
 void printRaw(uint16_t number) {
