@@ -6,14 +6,14 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <FastLED.h>
 
+// heavily inspired by
+// https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA/blob/master/examples/2_PatternPlasma/2_PatternPlasma.ino
+
 namespace Modes_Colorwave {
 namespace {
 
 const uint8_t WIDTH = Display::PANEL_RES_X;
 const uint8_t HEIGHT = Display::PANEL_RES_Y;
-
-// heavily inspired by
-// https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA/blob/master/examples/2_PatternPlasma/2_PatternPlasma.ino
 
 uint16_t time_counter = 0, cycles = 0;
 CRGB currentColor;

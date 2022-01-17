@@ -5,7 +5,10 @@
 #include "modes/clock.h"
 #include "modes/colorwave.h"
 #include "modes/dashboard.h"
+#include "modes/dotter.h"
 #include "modes/fire.h"
+#include "modes/gameOfLife.h"
+#include "modes/snake.h"
 
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
@@ -14,7 +17,7 @@
 
 // manages all modes, they shouldn't be accessed directly!
 namespace Controller {
-enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, DASHBOARD, COLORWAVE, FIRE, SIZE };
+enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, DASHBOARD, COLORWAVE, FIRE, DOTTER, GOL, SNAKE, SIZE };
 
 void turnOff();
 void setMode(uint8_t new_mode);
@@ -24,6 +27,8 @@ void showLogin();
 namespace {
 Mode mode;
 uint32_t timeout = 0;
+
+// TODO struct ModeInterface (Mode, name, setup, loop, select, deselect)
 
 void _toMode(Mode new_mode) {
     if (new_mode == mode) return;
@@ -55,6 +60,18 @@ void _toMode(Mode new_mode) {
     case FIRE:
         println(F("FIRE"));
         Modes_Fire::updateScreen();
+        break;
+    case DOTTER:
+        println(F("DOTTER"));
+        Display::clear();
+        break;
+    case GOL:
+        println(F("GOL"));
+        Modes_GOL::reset();
+        break;
+    case SNAKE:
+        println(F("SNAKE"));
+        Modes_Snake::reset();
         break;
     default:
         println(F("UNKNOWN, discarding..."));
@@ -125,6 +142,9 @@ void setup() {
     Modes_Dashboard::setup();
     Modes_Colorwave::setup();
     Modes_Fire::setup();
+    Modes_Dotter::setup();
+    Modes_GOL::setup();
+    Modes_Snake::setup();
 }
 
 void loop() {
@@ -149,6 +169,15 @@ void loop() {
         break;
     case FIRE:
         Modes_Fire::loop();
+        break;
+    case DOTTER:
+        Modes_Dotter::loop();
+        break;
+    case GOL:
+        Modes_GOL::loop();
+        break;
+    case SNAKE:
+        Modes_Snake::loop();
         break;
     }
 }

@@ -6,16 +6,16 @@
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <FastLED.h>
 
+// heavily inspired by
+// https://www.reddit.com/r/FastLED/comments/lbnp53/fake_fire_w_fastled_a_project_ive_been_toying/
+// https://pastebin.com/pxMLWP7j
+// Sadly, neither pretty for fully adapted for this lib
+
 namespace Modes_Fire {
 namespace {
 
 const uint8_t WIDTH = Display::PANEL_RES_X;
 const uint8_t HEIGHT = Display::PANEL_RES_Y;
-
-// heavily inspired by
-// https://www.reddit.com/r/FastLED/comments/lbnp53/fake_fire_w_fastled_a_project_ive_been_toying/
-// https://pastebin.com/pxMLWP7j
-// Sadly, neither pretty for fully adapted for this lib
 
 // Color Palette(s)
 DEFINE_GRADIENT_PALETTE(fire_pal){
