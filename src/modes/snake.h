@@ -33,7 +33,7 @@ struct XY {
     int8_t y = 0;
 
     XY() : x{0}, y{0} {}
-    XY(int8_t x, int8_t y) : x{x}, y{y} {}
+    XY(int8_t _x, int8_t _y) : x{_x}, y{_y} {}
     bool const operator==(const XY other) const { return x == other.x && y == other.y; }
     XY const operator+(const XY other) const { return XY(x + other.x, y + other.y); }
     XY const operator+=(const XY other) {
@@ -160,6 +160,7 @@ void reset() {
             sn.pos[i] = pos;
         }
     }
+    printPlayer(0);
 }
 
 void setup() { reset(); }
