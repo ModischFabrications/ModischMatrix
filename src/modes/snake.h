@@ -14,7 +14,7 @@ namespace Modes_Snake {
 enum Direction : uint8_t { OFF, UP, DOWN, LEFT, RIGHT, DEAD };
 
 namespace {
-const uint16_t UPDATE_DELAY = 500;
+const uint16_t UPDATE_DELAY = 400;
 const uint16_t SNACK_DELAY = 10 * 1000;
 
 const uint8_t N_MAX_PLAYERS = 4;
@@ -34,12 +34,15 @@ struct XY {
 
     XY() : x{0}, y{0} {}
     XY(int8_t _x, int8_t _y) : x{_x}, y{_y} {}
-    bool const operator==(const XY other) const { return x == other.x && y == other.y; }
-    XY const operator+(const XY other) const { return XY(x + other.x, y + other.y); }
-    XY const operator+=(const XY other) {
+    bool const operator==(const XY& other) const { return x == other.x && y == other.y; }
+    XY const operator+(const XY& other) const { return XY(x + other.x, y + other.y).wrapped(); }
+    XY const operator+=(const XY& other) {
         x += other.x;
         y += other.y;
+        return wrapped();
+    }
 
+    XY wrapped() {
         while (x >= WIDTH)
             x -= WIDTH;
         while (y >= HEIGHT)
@@ -48,12 +51,10 @@ struct XY {
             x += WIDTH;
         while (y < 0)
             y += HEIGHT;
-
-        this->x = x;
-        this->y = y;
-
         return *this;
     }
+
+    static XY random() { return XY(random8(0, WIDTH), random8(0, HEIGHT)); }
 };
 
 struct Snake {
@@ -84,29 +85,30 @@ XY dirToPos(const Direction& dir) {
     }
 }
 
-void printPlayer(uint8_t i) {
+void printPlayer(uint8_t ip) {
     print(F("P"));
-    printRaw(i);
+    printRaw(ip);
     print(F(": "));
+    Snake& p = players[ip];
     print(F("Dir "));
-    printRaw((uint8_t)players[i].dir);
+    printRaw((uint8_t)p.dir);
     print(F(", Pos "));
-    for (uint8_t i = 0; i < players[i].len; i++) {
-        XY pos = players[i].pos[i];
+    for (uint8_t i = 0; i < p.len; i++) {
+        XY pos = p.pos[i];
         printRaw((int16_t)pos.x);
         print(F(","));
         printRaw((int16_t)pos.y);
         print(F("|"));
     }
     print(F(" -> Len "));
-    printRaw((uint8_t)players[i].len);
+    printRaw((uint8_t)p.len);
     println();
 }
 
 void move() {
     for (Snake& sn : players) {
         if (sn.dir == DEAD || sn.dir == OFF) continue;
-        for (uint8_t i = 1; i < sn.len; i++) {
+        for (uint8_t i = sn.len - 1; i > 0; i--) {
             sn.pos[i] = sn.pos[i - 1];
         }
         sn.pos[0] = sn.pos[1] + dirToPos(sn.dir);
@@ -124,8 +126,8 @@ void draw() {
             // TODO dim down by i*(256/MAX_LENGTH-1)
             Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, C_PLAYERS[i]);
         }
-        printPlayer(i);
     }
+    printPlayer(0);
 }
 
 uint32_t nextSnack = 0;
@@ -138,9 +140,6 @@ void updateScreen() {
     nextSnack = now + SNACK_DELAY;
     // TODO create snack instead
     println(F("New snack at [TODO]"));
-    for (Snake& sn : players) {
-        //sn.len += 1;
-    }
 }
 
 } // namespace
@@ -148,6 +147,7 @@ void updateScreen() {
 void setDirection(uint8_t player, const Direction direction) {
     if (direction == OFF || direction == DEAD) return;
     if (players[player].dir == direction) return;
+    if (player >= N_MAX_PLAYERS) return;
     players[player].dir = direction;
     print(F("P "));
     printRaw(player);
@@ -161,7 +161,7 @@ void reset() {
     for (Snake& sn : players) {
         sn.dir = OFF;
         sn.len = 4;
-        XY pos = XY(random8(0, WIDTH), random8(0, HEIGHT));
+        XY pos = XY::random();
         for (uint8_t i = 0; i < sn.len; i++) {
             sn.pos[i] = pos;
         }
