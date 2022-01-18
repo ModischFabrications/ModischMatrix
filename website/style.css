@@ -1,11 +1,21 @@
 * {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 12px;
-  color: #AAA;
+  color: rgb(31, 31, 31);
 }
 
 body {
   margin:0;
-  padding:0;
-  background-color: black;
+  padding:32px;
+  background-color: rgb(255, 255, 255);
+}
+
+.container{
+  display: flex;
+}
+.fixed{
+  width: 300px;
+}
+.flex-item{
+  flex-grow: 1;
 }

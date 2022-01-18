@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-type" content="text/html"; charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html" ; charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0, shrink-to-fit=no" />
     <meta name="author" content="Modisch Fabrications">
     <title>ModischMatrix</title>
@@ -11,8 +11,60 @@
     <script src="script.js"></script>
 </head>
 
-<body id="body" onload="onBodyLoad()">
-    Test Page, please ignore. 
+<body onload="init()">
+
+    <h1 style="border-radius: 1rem;
+                margin: auto;
+                width: fit-content;
+                padding: 2rem;
+                background: black;
+                color: white;
+                margin-bottom: 1rem;
+        ">
+        ModischMatrix
+    </h1>
+
+    <div class="container">
+        <div class="fixed">
+            Print text:
+            <input id="printTxt" type="text">
+            <input id="printSubmit" type="submit">
+        </div>
+
+        <div class="flex-item">
+            Set Mode to:
+            <select id="mode" oninput='onValueChange(this, "mode")'>
+                <option value="0">Off</option>
+                <option value="2">Login</option>
+                <option value="3" selected>Clock</option>
+                <option value="4">Dashboard</option>
+                <option value="5">Colorwave</option>
+                <option value="6">Fire</option>
+                <option value="7">Sprinkles</option>
+                <option value="8">Game of Life</option>
+                <option value="9">Snake</option>
+            </select>
+        </div>
+    </div>
+
+    <div>
+        <input id="brightnessEnabled" type="checkbox" />
+        Set brightness to:
+        <input id="brightnessSlider" style="width: 50%;" type="range" min="1" max="100" value="50"
+            oninput='onValueChange(this, "brightness")' />
+        <output id="brightnessOutput"></output>
+    </div>
+
+    <div>
+        <input id="timeoutEnabled" type="checkbox" />
+        Back to OFF after:
+        <input id="timeoutSlider" style="width: 50%;" type="range" min="10" max="3600" value="60"
+            oninput='onValueChange(this, "timeout")' />
+        <output id="timeoutOutput"></output>
+    </div>
+
+    <div id="snackbar"></div>
+
 </body>
 
 </html>
