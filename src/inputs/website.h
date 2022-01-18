@@ -4,6 +4,7 @@
 #include "modes/snake.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
+#include <SPIFFS.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 
 namespace Website {
@@ -94,9 +95,12 @@ void GetSnake(AsyncWebServerRequest* request) {
 // contract: WiFi must be enabled already
 void setup() {
     println(F("Preparing website"));
-    server.on("/", HTTP_GET, GetRoot);
+    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
     server.on("/api", HTTP_GET, GetAPI);
     server.on("/snake", HTTP_GET, GetSnake);
+    server.on("/favicon.ico", HTTP_GET,
+              [](AsyncWebServerRequest* request) { request->send(SPIFFS, "/favicon.png", "image/png"); });
+
     server.onNotFound(notFound);
 
     server.begin();
