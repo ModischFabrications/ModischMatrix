@@ -7,21 +7,20 @@
 
 // multiplayer snake. Eat snacks to grow, let others crash into you.
 
-// TODO const and pointer everything!
-
 namespace Modes_Snake {
 
 enum Direction : uint8_t { OFF, UP, DOWN, LEFT, RIGHT, DEAD };
 
 namespace {
-const uint16_t UPDATE_DELAY = 400;
+const uint16_t UPDATE_DELAY = 400; // 400*64 ~= 30s max
 const uint16_t SNACK_DELAY = 10 * 1000;
 
 const uint8_t N_MAX_PLAYERS = 4;
-const uint8_t N_MAX_SNACKS = 4;
+const uint8_t N_MAX_SNACKS = 6;
 // trailing to darkness
-const uint16_t C_PLAYERS[] = {0x001F, 0x07FF, 0xF81F, 0xFFE0};
-const uint16_t C_FOOD = 0xFFFF;
+const uint16_t C_PLAYERS[] = {0x001F, 0x07E0, 0xF81F, 0xFFE0};
+const uint16_t C_SNACK = 0xFFFF;
+const uint16_t C_DEAD = 0x8410;
 const uint8_t MIN_LENGTH = 4;
 const uint8_t MAX_LENGTH = 32;
 
@@ -64,7 +63,13 @@ struct Snake {
 };
 
 Snake players[N_MAX_PLAYERS];
-XY snacks[N_MAX_SNACKS];
+
+struct Snack {
+    bool active;
+    XY pos;
+};
+
+Snack snacks[N_MAX_SNACKS];
 uint8_t iSnack = 0;
 
 XY dirToPos(const Direction& dir) {
@@ -83,6 +88,15 @@ XY dirToPos(const Direction& dir) {
         logError(F("invalid direction!"));
         return XY(0, 0);
     }
+}
+
+void makeSnack() {
+    println(F("New snack"));
+    Snack& sn = snacks[iSnack++];
+    sn.active = true;
+    sn.pos = XY::random();
+    while (iSnack >= N_MAX_SNACKS)
+        iSnack -= N_MAX_SNACKS;
 }
 
 void printPlayer(uint8_t ip) {
@@ -112,7 +126,50 @@ void move() {
             sn.pos[i] = sn.pos[i - 1];
         }
         sn.pos[0] = sn.pos[1] + dirToPos(sn.dir);
-        // TODO check for collisions
+    }
+}
+
+bool collideSnakes(const XY& me, uint8_t myIndex) {
+    for (uint8_t j = 0; j < N_MAX_PLAYERS; j++) {
+        if (myIndex == j) continue;
+        Snake& sn2 = players[j];
+        // if (sn2.dir == DEAD) continue;
+        for (XY& pos : sn2.pos) {
+            if (me == pos) {
+                print(F("Collision from P "));
+                printlnRaw(myIndex);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool collideSnack(const XY& me) {
+    for (Snack& sn : snacks) {
+        if (!sn.active) continue;
+        if (me == sn.pos) {
+            sn.active = false;
+            return true;
+        }
+    }
+    return false;
+}
+
+// expensive, but cleaner than comparing RGB buffers
+void collide() {
+    for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
+        Snake& sn = players[i];
+        if (sn.dir == DEAD || sn.dir == OFF) continue;
+        if (collideSnakes(sn.pos[0], i)) {
+            sn.dir = DEAD;
+            continue;
+        }
+        if (collideSnack(sn.pos[0])) {
+            if (sn.len >= MAX_LENGTH) continue;
+            sn.pos[sn.len] = sn.pos[sn.len - 1];
+            sn.len += 1;
+        }
     }
 }
 
@@ -120,34 +177,50 @@ void draw() {
     Display::clear();
     for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
         Snake& sn = players[i];
-        if (sn.dir == DEAD) continue;
-        Display::screen->drawPixel(sn.pos[0].x, sn.pos[0].y, C_PLAYERS[i]);
+        uint16_t color = C_PLAYERS[i];
+        if (sn.dir == DEAD) { color = C_DEAD; }
+        Display::screen->drawPixel(sn.pos[0].x, sn.pos[0].y, color);
         for (uint8_t j = 1; j < sn.len; j++) {
             // TODO dim down by i*(256/MAX_LENGTH-1)
-            Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, C_PLAYERS[i]);
+            Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, color);
         }
     }
-    printPlayer(0);
+
+    for (uint8_t i = 0; i < N_MAX_SNACKS; i++) {
+        Snack& sn = snacks[i];
+        if (!sn.active) continue;
+        Display::screen->drawPixel(sn.pos.x, sn.pos.y, C_SNACK);
+    }
+
+    // printPlayer(0);
 }
 
 uint32_t nextSnack = 0;
 void updateScreen() {
     move();
+    collide();
     draw();
 
     uint32_t now = millis();
     if (now < nextSnack) return;
     nextSnack = now + SNACK_DELAY;
-    // TODO create snack instead
-    println(F("New snack at [TODO]"));
+    makeSnack();
+}
+
+bool dirAllowed(const Direction& oldD, const Direction& newD) {
+    if (newD == OFF || newD == DEAD) return false;
+    if (oldD == OFF || oldD == DEAD) return true;
+
+    XY delta = dirToPos(oldD) + dirToPos(newD);
+    return (abs(delta.x) == 1 && abs(delta.y) == 1);
 }
 
 } // namespace
 
 void setDirection(uint8_t player, const Direction direction) {
-    if (direction == OFF || direction == DEAD) return;
-    if (players[player].dir == direction) return;
     if (player >= N_MAX_PLAYERS) return;
+    if (players[player].dir == DEAD || players[player].dir == direction) return;
+    if (!dirAllowed(players[player].dir, direction)) return;
     players[player].dir = direction;
     print(F("P "));
     printRaw(player);
@@ -166,7 +239,6 @@ void reset() {
             sn.pos[i] = pos;
         }
     }
-    printPlayer(0);
 }
 
 void setup() { reset(); }
