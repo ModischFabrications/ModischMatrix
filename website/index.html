@@ -13,44 +13,81 @@
 
 <body onload="init()">
 
-    <h1 style="border-radius: 1rem;
-                margin: auto;
-                width: fit-content;
-                padding: 2rem;
-                background: black;
-                color: white;
-                margin-bottom: 1rem;
-        ">
+    <h1 class="title">
         ModischMatrix
     </h1>
 
-    <div class="container">
-        <div class="fixed">
-            Print text:
+    <!-- Tab links -->
+    <div class="tab">
+        <button class="tablinks" id="mode_0" onclick="openTab(this)">Off</button>
+        <button class="tablinks" id="mode_1" onclick="openTab(this)">Static</button>
+        <button class="tablinks" id="mode_2" onclick="openTab(this)">Login</button>
+        <button class="tablinks" id="mode_3" onclick="openTab(this)">Clock</button>
+        <button class="tablinks" id="mode_4" onclick="openTab(this)">Dashboard</button>
+        <button class="tablinks" id="mode_5" onclick="openTab(this)">Colorwave</button>
+        <button class="tablinks" id="mode_6" onclick="openTab(this)">Fire</button>
+        <button class="tablinks" id="mode_7" onclick="openTab(this)">Sprinkles</button>
+        <button class="tablinks" id="mode_8" onclick="openTab(this)">Game of Life</button>
+        <button class="tablinks" id="mode_9" onclick="openTab(this)">Snake</button>
+    </div>
+
+    <!-- Tab content -->
+    <div id="mode_0_tab" class="tabcontent">
+        <h3>Off</h3>
+        <p>Nothing to do here...</p>
+    </div>
+
+    <div id="mode_1_tab" class="tabcontent">
+        <h3>Static</h3>
+        <p>Print text:
             <input id="printTxt" type="text">
             <input id="printSubmit" type="submit">
-        </div>
-
-        <div class="flex-item">
-            Set Mode to:
-            <select id="mode" oninput='onValueChange(this, "mode")'>
-                <option value="0">Off</option>
-                <option value="2">Login</option>
-                <option value="3" selected>Clock</option>
-                <option value="4">Dashboard</option>
-                <option value="5">Colorwave</option>
-                <option value="6">Fire</option>
-                <option value="7">Sprinkles</option>
-                <option value="8">Game of Life</option>
-                <option value="9">Snake</option>
-            </select>
-        </div>
+        </p>
     </div>
+
+    <div id="mode_2_tab" class="tabcontent">
+        <h3>Login</h3>
+        <p>TODO URL settings</p>
+    </div>
+
+    <div id="mode_3_tab" class="tabcontent">
+        <h3>Clock</h3>
+
+    </div>
+
+    <div id="mode_4_tab" class="tabcontent">
+        <h3>Dashboard</h3>
+
+    </div>
+
+    <div id="mode_5_tab" class="tabcontent">
+        <h3>Colorwave</h3>
+
+    </div>
+    <div id="mode_6_tab" class="tabcontent">
+        <h3>Fire</h3>
+
+    </div>
+    <div id="mode_7_tab" class="tabcontent">
+        <h3>Sprinkles</h3>
+
+    </div>
+    <div id="mode_8_tab" class="tabcontent">
+        <h3>Game of Life</h3>
+
+    </div>
+
+    <div id="mode_9_tab" class="tabcontent">
+        <h3>Snake</h3>
+
+    </div>
+
+    <hr>
 
     <div>
         <input id="brightnessEnabled" type="checkbox" />
         Set brightness to:
-        <input id="brightnessSlider" style="width: 50%;" type="range" min="1" max="100" value="50"
+        <input id="brightnessSlider" type="range" class="slider" min="1" max="100" value="50"
             oninput='onValueChange(this, "brightness")' />
         <output id="brightnessOutput"></output>
     </div>
@@ -58,7 +95,7 @@
     <div>
         <input id="timeoutEnabled" type="checkbox" />
         Back to OFF after:
-        <input id="timeoutSlider" style="width: 50%;" type="range" min="10" max="3600" value="60"
+        <input id="timeoutSlider" class="slider" type="range" min="10" max="3600" value="60"
             oninput='onValueChange(this, "timeout")' />
         <output id="timeoutOutput"></output>
     </div>
