@@ -4,15 +4,15 @@
 #include "modes/snake.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
-#include <SPIFFS.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
+#include <SPIFFS.h>
 
 namespace Website {
 
 namespace {
 AsyncWebServer server(80);
 
-void notFound(AsyncWebServerRequest* request) {
+void GetUnknown(AsyncWebServerRequest* request) {
     request->send(404, "text/plain", "Not found");
     print(F("Unable to provide "));
     printlnRaw(request->url());
@@ -29,7 +29,7 @@ void GetAPI(AsyncWebServerRequest* request) {
     String message = F("Possible Commands, chain with \"&\":\n");
     message.reserve(200);
     // always show possible commands
-    message += F("/api?\n?mode={0..?}\n?print=TXT\n?brightness={0..255}\n?timeout=SECONDS\n\n");
+    message += F("/api?\n?mode={0..?}\n?brightness={0..255}\n?timeout=SECONDS\n\n");
     if (request->params() <= 0) {
         request->send(400, "text/plain", message);
         Display::flashDot();
@@ -37,7 +37,6 @@ void GetAPI(AsyncWebServerRequest* request) {
     }
     message += F("OK: \n");
 
-    // TODO streamline
     String paramKey;
     paramKey.reserve(20);
     paramKey = F("mode");
@@ -54,14 +53,6 @@ void GetAPI(AsyncWebServerRequest* request) {
         message += val;
         Controller::setBrightness(val);
     }
-    paramKey = F("print");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey + "=";
-        String val = request->getParam(paramKey)->value();
-        message += val;
-        val.replace(F("\\n"), F("\n"));
-        Controller::printText(val);
-    }
     paramKey = F("timeout");
     if (request->hasParam(paramKey)) {
         message += "\n" + paramKey + "=";
@@ -73,7 +64,26 @@ void GetAPI(AsyncWebServerRequest* request) {
     Display::flashDot();
 }
 
-// separate mode handlers out!
+// --- separate mode handlers
+
+void GetPrint(AsyncWebServerRequest* request) {
+    if (!request->hasParam(F("msg"))) {
+        request->send(400, "text/plain", F("/print?msg=Row1\nRow2"));
+        Display::flashDot();
+        return;
+    }
+    RebootManager::reset();
+    Controller::setMode(Controller::Mode::STATIC);
+
+    String val = request->getParam(F("msg"))->value();
+    val.replace(F("\\n"), F("\n"));
+    // TODO replace emoji and other special characters
+    Controller::printText(val);
+
+    request->send(200, "text/plain", "OK");
+    Display::flashDot();
+}
+
 void GetSnake(AsyncWebServerRequest* request) {
     if (!request->hasParam(F("p")) || !request->hasParam(F("dir"))) {
         request->send(400, "text/plain", F("/snake?p={0..3}&dir={0..3}"));
@@ -97,11 +107,12 @@ void setup() {
     println(F("Preparing website"));
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
     server.on("/api", HTTP_GET, GetAPI);
+    server.on("/print", HTTP_GET, GetPrint);
     server.on("/snake", HTTP_GET, GetSnake);
     server.on("/favicon.ico", HTTP_GET,
               [](AsyncWebServerRequest* request) { request->send(SPIFFS, "/favicon.png", "image/png"); });
 
-    server.onNotFound(notFound);
+    server.onNotFound(GetUnknown);
 
     server.begin();
 }
