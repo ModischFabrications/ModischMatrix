@@ -5,6 +5,6 @@
 .vscode/settings.json
 .vscode/ipch
 
+data/
 src/secrets.h
 platformio-device-monitor*
-

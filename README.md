@@ -16,7 +16,7 @@ Features are best described by the available API calls, see [API](#API).
 ### First Setup
 1. Build the hardware as referenced in the PCB manual 
 2. Open Jumper, power Matrix via connector and ESP32 via USB
-2. Checkout this repo and Build + Upload with PlatformIO
+2. Checkout this repo and follow [Full Upload]
 3. Watch serial output, try connecting to the new WiFi hotspot-> WiFiLoginPortal
 4. If everything worked the hotspot should disappear and the clock should show up. Repeat if not.
 5. Test some commands to the displayed address, look for visual feedback
@@ -24,6 +24,15 @@ Features are best described by the available API calls, see [API](#API).
 
 Finding out your clock IP address is easy: Either watch the serial output or use a network analyser, for example [Network Analyzer](https://play.google.com/store/apps/details?id=net.techet.netanalyzerlite.an) (Android).
 Watch out, disconnected devices will persist a bit longer than powered.
+
+### Full Upload
+VSCode should offer you a task to do everything automatically:
+1. Close Serial Monitor
+2. CTRL+ALT+T -> "deploy project"
+
+Call "/deploy/deploy.sh" manually if that doesn't work or you don't believe in VSCode.
+It still depends on platformIO, be aware that you might have to install the toolchain manually without VSCode.
+
 
 ## API
 
@@ -83,7 +92,15 @@ Similar products, copy functionality:
 ## Design Choices
 
 ### Web Calls
-I'm not good with HTML, so everything is based on simple calls instead. GET instead of POST is semantically worse, but much easier to use with generic web browsers. 
+I'm not good with HTML, so everything is based on simple calls. GET instead of POST is semantically worse, but much easier to use with generic web browsers. 
+
+Feel free to improve my design!
+
+### Deployment
+Using a build script makes preprocessing the website much easier. 
+Minifying, compression to gzip and upload to the device can be done as one step!
+
+Packed data increases transmission speed and reduces memory usage. Unpacking happens automatically on all modern browsers, good thing that your device has x100 the power than this chip. 
 
 ### Shared Library
 Many features persist between projects, so I try to keep a collection of important infrastructure. Might be extracted into a submodule eventually. 
