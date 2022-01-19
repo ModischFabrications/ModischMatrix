@@ -7,7 +7,7 @@ echo "[MPC] --- Deploying to target device file system --- "
 
 command -v pio >/dev/null 2>&1 || { echo >&2 "pio can't be found. Add to PATH!"; exit 1; }
 
-echo "[MPC] prepare /data"
+echo "[MPC] clearing /data"
 rm -rf ./data/
 mkdir ./data/
 
