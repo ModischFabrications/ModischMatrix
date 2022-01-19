@@ -17,6 +17,10 @@
         ModischMatrix
     </h1>
 
+    <noscript>
+        No JavaScript, no function. Sorry buddy!
+    </noscript>
+
     <!-- Tab links -->
     <div class="tab">
         <button class="tablinks" id="mode_0" onclick="openTab(this)">Off</button>
@@ -32,72 +36,78 @@
     </div>
 
     <!-- Tab content -->
-    <div id="mode_0_tab" class="tabcontent">
-        <h3>Off</h3>
-        <p>Nothing to do here...</p>
-    </div>
+    <div>
+        <div id="mode_0_tab" class="tabcontent">
+            <h3>Off</h3>
+            <p>Nothing to do here...</p>
+        </div>
 
-    <div id="mode_1_tab" class="tabcontent">
-        <h3>Static</h3>
-        <p>Print text:
-            <input id="printTxt" type="text">
-            <input id="printSubmit" type="submit">
-        </p>
-    </div>
+        <div id="mode_1_tab" class="tabcontent">
+            <h3>Static</h3>
+            <p>Print text:
+                <input id="printTxt" type="text">
+                <input id="printSubmit" type="submit">
+            </p>
+        </div>
 
-    <div id="mode_2_tab" class="tabcontent">
-        <h3>Login</h3>
-        <p>TODO URL settings</p>
-    </div>
+        <div id="mode_2_tab" class="tabcontent">
+            <h3>Login</h3>
+            <p id="URL"></p>
+        </div>
 
-    <div id="mode_3_tab" class="tabcontent">
-        <h3>Clock</h3>
+        <div id="mode_3_tab" class="tabcontent">
+            <h3>Clock</h3>
 
-    </div>
+        </div>
 
-    <div id="mode_4_tab" class="tabcontent">
-        <h3>Dashboard</h3>
+        <div id="mode_4_tab" class="tabcontent">
+            <h3>Dashboard</h3>
 
-    </div>
+        </div>
 
-    <div id="mode_5_tab" class="tabcontent">
-        <h3>Colorwave</h3>
+        <div id="mode_5_tab" class="tabcontent">
+            <h3>Colorwave</h3>
 
-    </div>
-    <div id="mode_6_tab" class="tabcontent">
-        <h3>Fire</h3>
+        </div>
+        <div id="mode_6_tab" class="tabcontent">
+            <h3>Fire</h3>
 
-    </div>
-    <div id="mode_7_tab" class="tabcontent">
-        <h3>Sprinkles</h3>
+        </div>
+        <div id="mode_7_tab" class="tabcontent">
+            <h3>Sprinkles</h3>
 
-    </div>
-    <div id="mode_8_tab" class="tabcontent">
-        <h3>Game of Life</h3>
+        </div>
+        <div id="mode_8_tab" class="tabcontent">
+            <h3>Game of Life</h3>
 
-    </div>
+        </div>
 
-    <div id="mode_9_tab" class="tabcontent">
-        <h3>Snake</h3>
+        <div id="mode_9_tab" class="tabcontent">
+            <h3>Snake</h3>
 
+        </div>
     </div>
 
     <hr>
 
-    <div>
-        <input id="brightnessEnabled" type="checkbox" />
-        Set brightness to:
-        <input id="brightnessSlider" type="range" class="slider" min="1" max="100" value="50"
-            oninput='onValueChange(this, "brightness")' />
-        <output id="brightnessOutput"></output>
-    </div>
-
+    <!-- TODO 
+        - disable row on disabled checkbox
+        - always display label
+        - dynamic slider length     -->
     <div>
         <input id="timeoutEnabled" type="checkbox" />
         Back to OFF after:
-        <input id="timeoutSlider" class="slider" type="range" min="10" max="3600" value="60"
+        <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
             oninput='onValueChange(this, "timeout")' />
         <output id="timeoutOutput"></output>
+    </div>
+
+    <div>
+        <input id="brightnessEnabled" type="checkbox" />
+        Set brightness to:
+        <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
+            oninput='onValueChange(this, "brightness")' />
+        <output id="brightnessOutput"></output>
     </div>
 
     <div id="snackbar"></div>

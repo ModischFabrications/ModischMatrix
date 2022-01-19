@@ -66,8 +66,13 @@ void GetAPI(AsyncWebServerRequest* request) {
 
 // --- separate mode handlers
 
-void GetPrint(AsyncWebServerRequest* request) {
-    if (!request->hasParam(F("msg"))) {
+void GetMode(AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", String(Controller::mode));
+    Display::flashDot();
+}
+
+void PostMode(AsyncWebServerRequest* request) {
+    if (!request->hasParam(F("msg"), true)) {
         request->send(400, "text/plain", F("/print?msg=Row1\nRow2"));
         Display::flashDot();
         return;
@@ -75,7 +80,7 @@ void GetPrint(AsyncWebServerRequest* request) {
     RebootManager::reset();
     Controller::setMode(Controller::Mode::STATIC);
 
-    String val = request->getParam(F("msg"))->value();
+    String val = request->getParam(F("msg"), true)->value();
     val.replace(F("\\n"), F("\n"));
     // TODO replace emoji and other special characters
     Controller::printText(val);
@@ -84,8 +89,26 @@ void GetPrint(AsyncWebServerRequest* request) {
     Display::flashDot();
 }
 
-void GetSnake(AsyncWebServerRequest* request) {
-    if (!request->hasParam(F("p")) || !request->hasParam(F("dir"))) {
+void PostPrint(AsyncWebServerRequest* request) {
+    if (!request->hasParam(F("msg"), true)) {
+        request->send(400, "text/plain", F("/print?msg=Row1\nRow2"));
+        Display::flashDot();
+        return;
+    }
+    RebootManager::reset();
+    Controller::setMode(Controller::Mode::STATIC);
+
+    String val = request->getParam(F("msg"), true)->value();
+    val.replace(F("\\n"), F("\n"));
+    // TODO replace emoji and other special characters
+    Controller::printText(val);
+
+    request->send(200, "text/plain", "OK");
+    Display::flashDot();
+}
+
+void PostSnake(AsyncWebServerRequest* request) {
+    if (!request->hasParam(F("p"), true) || !request->hasParam(F("dir"), true)) {
         request->send(400, "text/plain", F("/snake?p={0..3}&dir={0..3}"));
         Display::flashDot();
         return;
@@ -93,8 +116,8 @@ void GetSnake(AsyncWebServerRequest* request) {
     RebootManager::reset();
     Controller::setMode(Controller::Mode::SNAKE);
 
-    uint8_t player = request->getParam(F("p"))->value().toInt();
-    Modes_Snake::Direction direction = (Modes_Snake::Direction)request->getParam(F("dir"))->value().toInt();
+    uint8_t player = request->getParam(F("p"), true)->value().toInt();
+    Modes_Snake::Direction direction = (Modes_Snake::Direction)request->getParam(F("dir"), true)->value().toInt();
     Modes_Snake::setDirection(player, direction);
 
     request->send(200, "text/plain", "OK");
@@ -102,13 +125,16 @@ void GetSnake(AsyncWebServerRequest* request) {
 }
 } // namespace
 
-// contract: WiFi must be enabled already
+// contract: WiFi and modes must be enabled already
 void setup() {
     println(F("Preparing website"));
     server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
+    // TODO split into GET and POST
     server.on("/api", HTTP_GET, GetAPI);
-    server.on("/print", HTTP_GET, GetPrint);
-    server.on("/snake", HTTP_GET, GetSnake);
+    server.on("/mode", HTTP_GET, GetMode);
+    server.on("/mode", HTTP_POST, PostMode);
+    server.on("/print", HTTP_POST, PostPrint);
+    server.on("/snake", HTTP_POST, PostSnake);
     server.on("/favicon.ico", HTTP_GET,
               [](AsyncWebServerRequest* request) { request->send(SPIFFS, "/favicon.png", "image/png"); });
 
