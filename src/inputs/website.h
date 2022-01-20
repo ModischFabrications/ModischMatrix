@@ -21,22 +21,32 @@ const String* GetPostValue(AsyncWebServerRequest* request, const String& paramKe
         return nullptr;
     }
     RebootManager::reset();
-    return &(request->getParam(paramKey, true)->value());
+
+    const String& val = request->getParam(paramKey, true)->value();
+    print(F("Post value: "));
+    printlnRaw(val);
+
+    return &(val);
 }
 
 String GetPathArgument(const String& path) {
-    uint8_t i_slash = path.indexOf("/");
-    uint8_t i_slash2 = path.indexOf("/", i_slash);
+    // skip first entry from base url
+    uint8_t i_slash = path.indexOf("/", 1);
+    uint8_t i_slash2 = path.indexOf("/", i_slash + 1);
     if (i_slash2 == -1) i_slash2 = path.length();
 
-    return path.substring(i_slash + 1, i_slash2);
+    const String arg = path.substring(i_slash + 1, i_slash2);
+    print(F("Path arg: "));
+    printlnRaw(arg);
+
+    return arg;
 }
 
 // --- separate mode handlers
 
-void GetUnknown(AsyncWebServerRequest* request) {
-    request->send(404, "text/plain", "Not found");
-    print(F("Unable to provide "));
+void RedirectUnknown(AsyncWebServerRequest* request) {
+    request->redirect("/");
+    print(F("Redirecting request to root from "));
     printlnRaw(request->url());
 }
 
@@ -117,12 +127,10 @@ void setup() {
     }
 
     println(F("Preparing webserver..."));
-    // cache for 10min
+    // needed to fetch css/js, pictures and more; might be deobfuscation risk for hidden files
     server.serveStatic("/", SPIFFS, "/").setCacheControl("max-age=600").setDefaultFile("index.html");
     server.serveStatic("/favicon.ico", SPIFFS, "/favicon.png").setCacheControl("max-age=600");
-    // server.onNotFound(GetUnknown);
-    // server.on("/favicon.ico", HTTP_GET,
-    //          [](AsyncWebServerRequest* request) { request->send(SPIFFS, "/favicon.png", "image/png"); });
+    server.onNotFound(RedirectUnknown);
 
     server.on("/brightness", HTTP_POST, PostBrightness);
     server.on("/timeout", HTTP_POST, PostTimeout);
