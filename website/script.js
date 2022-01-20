@@ -7,7 +7,7 @@ function init() {
 }
 
 function updateURL() {
-    // TODO share button for URL
+    // TODO "share" button for URL, mDNS
     document.getElementById("URL").innerHTML = document.URL;
 }
 

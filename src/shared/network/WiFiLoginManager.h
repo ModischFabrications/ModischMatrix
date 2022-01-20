@@ -58,7 +58,6 @@ void setupWiFi(const char* name) {
 }
 
 void setupMDNS(const char* name) {
-    // TODO register MDNS
     if (!MDNS.begin(name)) { // Start the mDNS responder
         logWarning(F("Error setting up mDNS responder!"));
     }
