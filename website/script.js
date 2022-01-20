@@ -44,6 +44,11 @@ function openTab(element, shallSendUpdate = true) {
 
 }
 
+function sendText(){
+    let msg = document.getElementById("printInput").value;
+    postValue("/print", msg);
+}
+
 function onValueChange(element, targetVar) {
     let newValue = element.value;
     //console.log(`"${targetVar}" changed to ${newValue}`);
@@ -72,13 +77,6 @@ async function getValue(url) {
 
 async function postValue(url, value) {
     console.log(`Sending value "${value}" to ${url}`);
-
-    if (brightnessEnabled.value) {
-        // TODO append "?brightness=${newValue/100*255}"
-    }
-    if (timeoutEnabled.value) {
-        // TODO append "?brightness=${newValue/100*255}"
-    }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     // can't use plaintext because ESP32AsyncWebserver can't parse it
