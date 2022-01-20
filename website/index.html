@@ -37,62 +37,32 @@
 
     <!-- Tab content -->
     <div>
-        <div id="mode_0_tab" class="tabcontent">
-            <h3>Off</h3>
-            <p>Nothing to do here...</p>
-        </div>
+        <div id="mode_0_tab" class="tabcontent"></div>
 
         <div id="mode_1_tab" class="tabcontent">
-            <h3>Static</h3>
             <p>Print text:</p>
             <!-- wrap="hard" doesn't always add \n, but it's not that important; &#10; is newline -->
             <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40" placeholder="Row1&#10;Row2"
                 wrap="hard" onkeydown="checkSendText(event)"></textarea>
             <input id="printSubmit" type="submit" onclick="sendText()">
-
         </div>
 
         <div id="mode_2_tab" class="tabcontent">
-            <h3>Login</h3>
             <p id="URL"></p>
         </div>
 
-        <div id="mode_3_tab" class="tabcontent">
-            <h3>Clock</h3>
-
-        </div>
-
-        <div id="mode_4_tab" class="tabcontent">
-            <h3>Dashboard</h3>
-
-        </div>
-
-        <div id="mode_5_tab" class="tabcontent">
-            <h3>Colorwave</h3>
-
-        </div>
-        <div id="mode_6_tab" class="tabcontent">
-            <h3>Fire</h3>
-
-        </div>
-        <div id="mode_7_tab" class="tabcontent">
-            <h3>Sprinkles</h3>
-
-        </div>
-        <div id="mode_8_tab" class="tabcontent">
-            <h3>Game of Life</h3>
-
-        </div>
-
-        <div id="mode_9_tab" class="tabcontent">
-            <h3>Snake</h3>
-
-        </div>
+        <div id="mode_3_tab" class="tabcontent"></div>
+        <div id="mode_4_tab" class="tabcontent"></div>
+        <div id="mode_5_tab" class="tabcontent"></div>
+        <div id="mode_6_tab" class="tabcontent"></div>
+        <div id="mode_7_tab" class="tabcontent"></div>
+        <div id="mode_8_tab" class="tabcontent"></div>
+        <div id="mode_9_tab" class="tabcontent"> </div>
     </div>
 
-    <hr>
+    <p>
 
-    <!-- TODO 
+        <!-- TODO 
         - disable row on disabled checkbox
         - always display label
         - dynamic slider length     -->
@@ -111,6 +81,7 @@
             oninput='onValueChange(this, "brightness")' />
         <output id="brightnessOutput"></output>
     </div>
+    </p>
 
     <div id="snackbar"></div>
 
