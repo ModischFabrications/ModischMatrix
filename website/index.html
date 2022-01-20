@@ -57,13 +57,36 @@
         <div id="mode_6_tab" class="tabcontent"></div>
         <div id="mode_7_tab" class="tabcontent"></div>
         <div id="mode_8_tab" class="tabcontent"></div>
-        <div id="mode_9_tab" class="tabcontent"> </div>
+        <div id="mode_9_tab" class="tabcontent">
+            <div>
+                <p>Choose a player slot:</p>
+                <input type="radio" id="playerIndexChoice1" name="playerIndex" value="0" checked>
+                <label for="playerIndexChoice1">1</label>
+
+                <input type="radio" id="playerIndexChoice2" name="playerIndex" value="1">
+                <label for="playerIndexChoice2">2</label>
+
+                <input type="radio" id="playerIndexChoice3" name="playerIndex" value="2">
+                <label for="playerIndexChoice3">3</label>
+
+                <input type="radio" id="playerIndexChoice4" name="playerIndex" value="3">
+                <label for="playerIndexChoice4">4</label>
+            </div>
+
+            <div class="keys">
+                <div class="up arr" onpointerdown="arrowPressed(1)">↑</div>
+                <br />
+                <div class="left arr" onpointerdown="arrowPressed(3)">←</div>
+                <div class="down arr" onpointerdown="arrowPressed(2)">↓</div>
+                <div class="right arr" onpointerdown="arrowPressed(4)">→</div>
+            </div>
+        </div>
     </div>
 
     <p>
 
         <!-- TODO 
-        - disable row on disabled checkbox
+        - Add submit button to end of row
         - always display label
         - dynamic slider length     -->
     <div>

@@ -24,6 +24,14 @@ const String* GetPostValue(AsyncWebServerRequest* request, const String& paramKe
     return &(request->getParam(paramKey, true)->value());
 }
 
+String GetPathArgument(const String& path) {
+    uint8_t i_slash = path.indexOf("/");
+    uint8_t i_slash2 = path.indexOf("/", i_slash);
+    if (i_slash2 == -1) i_slash2 = path.length();
+
+    return path.substring(i_slash + 1, i_slash2);
+}
+
 // --- separate mode handlers
 
 void GetUnknown(AsyncWebServerRequest* request) {
@@ -82,22 +90,19 @@ void PostPrint(AsyncWebServerRequest* request) {
     Display::flashDot();
 }
 
+void GetNSnakes(AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", String(Modes_Snake::N_MAX_PLAYERS));
+    Display::flashDot();
+}
+
+// snake/0[/]
 void PostSnake(AsyncWebServerRequest* request) {
-    printlnRaw(request->pathArg(0));
-    printlnRaw(request->pathArg(1));
-    printlnRaw(request->pathArg(2));
+    uint8_t player = GetPathArgument(request->url()).toInt();
+    const String* value = GetPostValue(request);
+    if (value == nullptr || player < 0) return;
 
-    if (!request->hasParam(F("p"), true) || !request->hasParam(F("dir"), true)) {
-        request->send(400, "text/plain", F("/snake?p={0..3}&dir={0..3}"));
-        Display::flashDot();
-        return;
-    }
-    RebootManager::reset();
     Controller::setMode(Controller::Mode::SNAKE);
-
-    uint8_t player = request->getParam(F("p"), true)->value().toInt();
-    Modes_Snake::Direction direction = (Modes_Snake::Direction)request->getParam(F("dir"), true)->value().toInt();
-    Modes_Snake::setDirection(player, direction);
+    Modes_Snake::setDirection(player, (Modes_Snake::Direction)value->toInt());
 
     request->send(200, "text/plain", "OK");
     Display::flashDot();
@@ -124,6 +129,7 @@ void setup() {
     server.on("/mode", HTTP_GET, GetMode);
     server.on("/mode", HTTP_POST, PostMode);
     server.on("/print", HTTP_POST, PostPrint);
+    server.on("/snake", HTTP_GET, GetNSnakes);
     server.on("/snake", HTTP_POST, PostSnake);
 
     server.begin();

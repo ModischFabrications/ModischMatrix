@@ -55,6 +55,11 @@ function sendText() {
     postValue("/print", msg);
 }
 
+function arrowPressed(code) {
+    let player = document.querySelector('input[name="playerIndex"]:checked').value;
+    postValue(`/snake/${player}`, code);
+}
+
 function onValueChange(element, targetVar) {
     let newValue = element.value;
     //console.log(`"${targetVar}" changed to ${newValue}`);

@@ -78,6 +78,50 @@ body {
   to {opacity: 1;}
 }
 
+/* ------ snake arrow keys (https://codepen.io/kaypooma/pen/xBgqi) */
+
+.keys {
+  font-family: 'Lato', sans-serif;    
+  text-align: center;
+  width: 400px;
+  height: 200px;
+  margin: auto;
+}
+
+.arr {
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 50px;
+  background: grey;
+  color: white;
+  font-size: 36px;
+  border-right: 8px solid #4d4d4d;
+  border-bottom: 8px solid #4d4d4d;
+  border-left: 8px solid #5a5a5a;
+  border-top: 8px solid #676767;
+  display: inline-block;
+  margin: 5px;
+  transition: all 0.05s linear;
+  user-select: none;
+}
+.arr:active {
+  border-bottom: 6px solid #4d4d4d;
+  text-shadow: 0 0 10px white, 0 0 10px white, 0 0 20px white;
+  transform: translate(0, 2px);
+}
+.up {
+  position: relative;
+  top: -4px;
+}
+.pressed {
+  border-bottom: 6px solid #4d4d4d;
+  text-shadow: 0 0 10px white;
+  transform: translate(0, 2px);
+}
+
+
 /* ------ snackbar bottom */
 #snackbar {
   visibility: hidden; /* Hidden by default. Visible on click */
