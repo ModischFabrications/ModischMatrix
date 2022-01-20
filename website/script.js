@@ -44,8 +44,14 @@ function openTab(element, shallSendUpdate = true) {
 
 }
 
-function sendText(){
-    let msg = document.getElementById("printInput").value;
+function checkSendText(event) {
+    if ((event.ctrlKey || event.metaKey) && (event.keyCode == 13 || event.keyCode == 10)) {
+        sendText();
+    }
+}
+
+function sendText() {
+    let msg = document.getElementById("printInput").value.substr(0, 50);
     postValue("/print", msg);
 }
 
@@ -54,8 +60,6 @@ function onValueChange(element, targetVar) {
     //console.log(`"${targetVar}" changed to ${newValue}`);
 
     switch (targetVar) {
-        case 'mode':
-            break;
         case 'brightness':
             brightnessOutput.value = newValue + "%";
             break;
@@ -70,7 +74,7 @@ function onValueChange(element, targetVar) {
 
 async function getValue(url) {
     let rep = await fetch(url);
-    let msg = rep.status == 200 ? rep.text() : null;
+    let msg = rep.status == 200 ? await rep.text() : null;
     console.log(`${url} -> "${msg ?? ""}"`);
     return msg;
 }
@@ -83,7 +87,7 @@ async function postValue(url, value) {
     let rep = await fetch(url, { method: 'POST', body: "value=" + value, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
 
     let msg = rep.status + ": ";
-    if (rep.status == 200) msg += rep.text();
+    if (rep.status == 200) msg += await rep.text();
     else msg += rep.statusText;
     showSnackbar(msg);
 }

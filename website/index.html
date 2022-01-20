@@ -44,10 +44,12 @@
 
         <div id="mode_1_tab" class="tabcontent">
             <h3>Static</h3>
-            <p>Print text:
-                <input id="printInput" type="text">
-                <input id="printSubmit" type="submit" onclick="sendText()">
-            </p>
+            <p>Print text:</p>
+            <!-- wrap="hard" doesn't always add \n, but it's not that important; &#10; is newline -->
+            <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40" placeholder="Row1&#10;Row2"
+                wrap="hard" onkeydown="checkSendText(event)"></textarea>
+            <input id="printSubmit" type="submit" onclick="sendText()">
+
         </div>
 
         <div id="mode_2_tab" class="tabcontent">
