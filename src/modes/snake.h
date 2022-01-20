@@ -9,7 +9,7 @@
 
 namespace Modes_Snake {
 
-enum Direction : uint8_t { OFF, UP, DOWN, LEFT, RIGHT, DEAD };
+enum Direction : uint8_t { OFF = 0, UP, DOWN, LEFT, RIGHT, DEAD };
 
 namespace {
 const uint16_t UPDATE_DELAY = 400; // 400*64 ~= 30s max
@@ -238,6 +238,10 @@ void reset() {
         for (uint8_t i = 0; i < sn.len; i++) {
             sn.pos[i] = pos;
         }
+    }
+
+    for (Snack& sn : snacks) {
+        sn.active = OFF;
     }
 }
 
