@@ -1,8 +1,7 @@
 "use strict";
 
 function init() {
-    // TODO get current mode
-    openTab(document.getElementById("mode_0"), false);
+    getValue("/mode").then(m => { openTab(document.getElementById(`mode_${m ?? 0}`), false); });
     updateAutoload();
     updateURL();
 }
@@ -40,7 +39,7 @@ function openTab(element, shallSendUpdate = true) {
     element.className += " active";
 
     if (shallSendUpdate) {
-        postUpdate("/mode", element.id.split('_')[1]);
+        postValue("/mode", element.id.split('_')[1]);
     }
 
 }
@@ -64,8 +63,15 @@ function onValueChange(element, targetVar) {
 
 }
 
-async function postUpdate(url, value) {
-    console.log("Sending update...");
+async function getValue(url) {
+    let rep = await fetch(url);
+    let msg = rep.status == 200 ? rep.text() : null;
+    console.log(`${url} -> "${msg ?? ""}"`);
+    return msg;
+}
+
+async function postValue(url, value) {
+    console.log(`Sending value "${value}" to ${url}`);
 
     if (brightnessEnabled.value) {
         // TODO append "?brightness=${newValue/100*255}"
@@ -75,7 +81,8 @@ async function postUpdate(url, value) {
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
-    let rep = await fetch(url, { method: 'POST', body: value, headers: { 'Accept': "text/plain", "Content-Type": "text/plain" } });
+    // can't use plaintext because ESP32AsyncWebserver can't parse it
+    let rep = await fetch(url, { method: 'POST', body: "value=" + value, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
 
     let msg = rep.status + ": ";
     if (rep.status == 200) msg += rep.text();

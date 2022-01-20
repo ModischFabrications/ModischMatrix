@@ -40,6 +40,7 @@ void _toMode(Mode new_mode) {
         break;
     case STATIC:
         println(F("STATIC"));
+        Display::clear();
         break;
     case LOGIN:
         println(F("LOGIN"));

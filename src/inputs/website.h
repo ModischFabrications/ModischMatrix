@@ -18,11 +18,7 @@ void GetUnknown(AsyncWebServerRequest* request) {
     printlnRaw(request->url());
 }
 
-void GetRoot(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", "Hello there! Check /api for commands");
-    println(F("W> /"));
-}
-
+// TODO make brightness & timeout standalones, no need to combine
 void GetAPI(AsyncWebServerRequest* request) {
     RebootManager::reset();
 
@@ -72,33 +68,34 @@ void GetMode(AsyncWebServerRequest* request) {
 }
 
 void PostMode(AsyncWebServerRequest* request) {
-    if (!request->hasParam(F("msg"), true)) {
-        request->send(400, "text/plain", F("/print?msg=Row1\nRow2"));
+    String paramKey = F("value");
+
+    if (!request->hasParam(paramKey, true)) {
+        print(F("Missing param "));
+        printlnRaw(paramKey);
+        request->send(400, "text/plain", "missing param " + paramKey);
         Display::flashDot();
         return;
     }
     RebootManager::reset();
-    Controller::setMode(Controller::Mode::STATIC);
 
-    String val = request->getParam(F("msg"), true)->value();
-    val.replace(F("\\n"), F("\n"));
-    // TODO replace emoji and other special characters
-    Controller::printText(val);
+    uint8_t val = request->getParam(paramKey, true)->value().toInt();
+    Controller::setMode(val);
 
     request->send(200, "text/plain", "OK");
     Display::flashDot();
 }
 
 void PostPrint(AsyncWebServerRequest* request) {
-    if (!request->hasParam(F("msg"), true)) {
-        request->send(400, "text/plain", F("/print?msg=Row1\nRow2"));
+    if (!request->hasParam(F("value"), true)) {
+        request->send(400, "text/plain", F("/print?value=Row1\nRow2"));
         Display::flashDot();
         return;
     }
     RebootManager::reset();
     Controller::setMode(Controller::Mode::STATIC);
 
-    String val = request->getParam(F("msg"), true)->value();
+    String val = request->getParam(F("value"), true)->value();
     val.replace(F("\\n"), F("\n"));
     // TODO replace emoji and other special characters
     Controller::printText(val);
@@ -127,9 +124,13 @@ void PostSnake(AsyncWebServerRequest* request) {
 
 // contract: WiFi and modes must be enabled already
 void setup() {
+    if (!SPIFFS.begin(true)) {
+        Serial.println("An Error has occurred while mounting SPIFFS");
+        return;
+    }
+
     println(F("Preparing website"));
-    server.serveStatic("/", SPIFFS, "/").setDefaultFile("index.html");
-    // TODO split into GET and POST
+    server.serveStatic("/", SPIFFS, "/").setCacheControl("max-age=600").setDefaultFile("index.html");
     server.on("/api", HTTP_GET, GetAPI);
     server.on("/mode", HTTP_GET, GetMode);
     server.on("/mode", HTTP_POST, PostMode);
