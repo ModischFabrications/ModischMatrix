@@ -11,12 +11,15 @@ function updateDeviceConfig() {
 }
 
 function updateURL() {
-    document.getElementById("URL_FIELD").value = document.URL;
+    let urlField = document.getElementById("URL_FIELD")
+    urlField.value = document.URL;
+    urlField.style.width = urlField.value.length + "ch";
 
     // TODO read from somewhere
     let mDnsUrl = "http://modischMatrix.local";
     let mdns = document.getElementById("MDNS_FIELD");
     mdns.value = mDnsUrl;
+    mdns.style.width = urlField.style.width;
 
     mdns.parentNode.style.display = document.URL.includes(mDnsUrl) ? "none" : "block";
 }
