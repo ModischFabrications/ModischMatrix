@@ -1,14 +1,29 @@
 "use strict";
 
 function init() {
-    getValue("/mode").then(m => { openTab(document.getElementById(`mode_${m ?? 0}`), false); });
+    updateDeviceConfig();
     updateAutoload();
     updateURL();
 }
 
+function updateDeviceConfig() {
+    getValue("/mode").then(m => { openTab(document.getElementById(`mode_${m ?? 0}`), false); });
+}
+
 function updateURL() {
-    // TODO "share" button for URL, mDNS
-    document.getElementById("URL").innerHTML = document.URL;
+    document.getElementById("URL_FIELD").value = document.URL;
+
+    // TODO read from somewhere
+    let mDnsUrl = "http://modischMatrix.local";
+    let mdns = document.getElementById("MDNS_FIELD");
+    mdns.value = mDnsUrl;
+
+    mdns.parentNode.style.display = document.URL.includes(mDnsUrl) ? "none" : "block";
+}
+
+function copyToClipboard(msg) {
+    navigator.clipboard.writeText(msg);
+    showSnackbar("Copied to clipboard: " + msg);
 }
 
 function updateAutoload() {
@@ -60,7 +75,7 @@ function arrowPressed(code) {
     postValue(`/snake/${player}`, code);
 }
 
-function onTimeoutChanged(element){
+function onTimeoutChanged(element) {
     let x = new Date(element.value * 1000).toISOString().substr(11, 8);
     timeoutOutput.value = x;
 }

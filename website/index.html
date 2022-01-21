@@ -48,7 +48,13 @@
         </div>
 
         <div id="mode_2_tab" class="tabcontent">
-            <p id="URL"></p>
+            <p> <input id="URL_FIELD" class="formText" type="text" readonly>
+                <button onclick="copyToClipboard(URL_FIELD.value)">Copy</button>
+            </p>
+
+            <p> <input id="MDNS_FIELD" class="formText" type="text" readonly>
+                <button onclick="copyToClipboard(MDNS_FIELD.value)">Copy</button>
+            </p>
         </div>
 
         <div id="mode_3_tab" class="tabcontent"></div>
@@ -90,7 +96,7 @@
         <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
             oninput='onTimeoutChanged(this)' />
         <output id="timeoutOutput"></output>
-        <input id="printSubmit" type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
+        <input type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
     </div>
 
     <div class="rangeInput">
@@ -98,8 +104,7 @@
         <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
             oninput='brightnessOutput.value = value + "%"' />
         <output id="brightnessOutput"></output>
-        <input id="printSubmit" type="submit"
-            onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
+        <input type="submit" onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
     </div>
     </p>
 

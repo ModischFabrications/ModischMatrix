@@ -39,6 +39,10 @@ body {
   resize: none;
 }
 
+.formText {
+  width: 20rem;
+}
+
 /* ---- selectable tabs -----*/
 /* Style the tab */
 .tab {
