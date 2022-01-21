@@ -22,9 +22,15 @@ body {
   margin-bottom: 1rem;
 }
 
-/* TODO remaining width without labels*/
+.rangeInput {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 0.25rem;
+}
+
 .slider {
-  width: 60%;
+  flex:auto;
 }
 
 .matrixText {

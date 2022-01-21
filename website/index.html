@@ -85,24 +85,21 @@
 
     <p>
 
-        <!-- TODO 
-        - Add submit button to end of row
-        - always display label
-        - dynamic slider length     -->
-    <div>
-        <input id="timeoutEnabled" type="checkbox" />
+    <div class="rangeInput">
         Back to OFF after:
         <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
-            oninput='onValueChange(this, "timeout")' />
+            oninput='onTimeoutChanged(this)' />
         <output id="timeoutOutput"></output>
+        <input id="printSubmit" type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
     </div>
 
-    <div>
-        <input id="brightnessEnabled" type="checkbox" />
+    <div class="rangeInput">
         Set brightness to:
         <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
-            oninput='onValueChange(this, "brightness")' />
+            oninput='brightnessOutput.value = value + "%"' />
         <output id="brightnessOutput"></output>
+        <input id="printSubmit" type="submit"
+            onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
     </div>
     </p>
 

@@ -60,21 +60,9 @@ function arrowPressed(code) {
     postValue(`/snake/${player}`, code);
 }
 
-function onValueChange(element, targetVar) {
-    let newValue = element.value;
-    //console.log(`"${targetVar}" changed to ${newValue}`);
-
-    switch (targetVar) {
-        case 'brightness':
-            brightnessOutput.value = newValue + "%";
-            break;
-        case 'timeout':
-            let x = new Date(newValue * 1000).toISOString().substr(11, 8);
-            timeoutOutput.value = x;
-        default:
-            break;
-    }
-
+function onTimeoutChanged(element){
+    let x = new Date(element.value * 1000).toISOString().substr(11, 8);
+    timeoutOutput.value = x;
 }
 
 async function getValue(url) {
