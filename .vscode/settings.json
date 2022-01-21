@@ -1,4 +1,5 @@
 {
+    //"terminal.integrated.automationShell.windows": "bash.exe",   
     "files.associations": {
         "functional": "cpp",
         "*.tcc": "cpp",

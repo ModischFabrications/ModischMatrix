@@ -18,12 +18,10 @@ Features are best described by the available API calls, see [API](#API).
 2. Open Jumper, power Matrix via connector and ESP32 via USB
 2. Checkout this repo and follow [Full Upload]
 3. Watch serial output, try connecting to the new WiFi hotspot-> WiFiLoginPortal
-4. If everything worked the hotspot should disappear and the clock should show up. Repeat if not.
+4. If everything worked the hotspot should disappear and the new address should show up. Repeat if not.
 5. Test some commands to the displayed address, look for visual feedback
 5. Remove USB, connect jumper for final deployment
 
-Finding out your clock IP address is easy: Either watch the serial output or use a network analyser, for example [Network Analyzer](https://play.google.com/store/apps/details?id=net.techet.netanalyzerlite.an) (Android).
-Watch out, disconnected devices will persist a bit longer than powered.
 
 ### Full Upload
 VSCode should offer you a task to do everything automatically:
@@ -32,6 +30,8 @@ VSCode should offer you a task to do everything automatically:
 
 Call "/deploy/deploy.sh" manually if that doesn't work or you don't believe in VSCode.
 It still depends on platformIO, be aware that you might have to install the toolchain manually without VSCode.
+
+Feel free to copy /website manually to /data if everything else fails; it's working, just not as efficient. 
 
 
 ## API
@@ -64,6 +64,8 @@ See platformio.ini for details, should be handled automatically.
 - https://github.com/marian-craciunescu/ESP32Ping@^1.6 : Simple tool, does what it says. Somewhat unstable.
 - ~~https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot : Great idea, sadly pretty unstable and performance-hungry.~~
 - ~~https://github.com/PowerBroker2/SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations.~~
+- https://github.com/tdewolff/minify/tree/master/cmd/minify : Used during deployment to minify the website; optional
+
 
 ## References
 These were useful while refining the concept, check them out as well if you are still shopping around: 

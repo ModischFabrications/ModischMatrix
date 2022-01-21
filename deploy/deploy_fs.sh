@@ -11,11 +11,15 @@ echo "[MPC] clearing /data"
 rm -rf ./data/
 mkdir ./data/
 
+# -- better alternative, but I'm unable to get it running
+# echo "[MPC] copying /website to /data, minifying in the process"
+# minify -s -o ./data ./website
+
 echo "[MPC] copying /website to /data"
 cp -rf ./website/* ./data/
+# ---
 
 echo "[MPC] converting to *.gz"
-
 gzip -rf ./data*
 
 pio run --target uploadfs || exit 4
