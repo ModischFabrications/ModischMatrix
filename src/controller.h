@@ -40,6 +40,7 @@ void _toMode(Mode new_mode) {
         break;
     case STATIC:
         println(F("STATIC"));
+        Display::clear();
         break;
     case LOGIN:
         println(F("LOGIN"));
@@ -82,7 +83,7 @@ void _toMode(Mode new_mode) {
 }
 } // namespace
 
-void hideAfter(uint16_t milliseconds) { timeout = millis() + milliseconds; }
+void hideAfter(uint32_t milliseconds) { timeout = millis() + milliseconds; }
 
 void turnOff() {
     Display::clear();

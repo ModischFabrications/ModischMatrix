@@ -6,7 +6,7 @@
 #include "shared/weatherService.h"
 #include <Arduino.h>
 
-// TODO: this mode really needs some love from an artist
+// barebones combination of date, time and weather. Could be much more!
 
 namespace Modes_Dashboard {
 namespace {
@@ -16,7 +16,7 @@ char out[16];
 void updateScreen() {
     MatrixPanel_I2S_DMA* s = Display::screen;
     s->clearScreen();
-    // TODO draw all static background elements as icon
+    // draw all static background elements as icon?
 
     s->setTextSize(1);
 

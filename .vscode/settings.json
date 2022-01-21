@@ -1,4 +1,5 @@
 {
+    //"terminal.integrated.automationShell.windows": "bash.exe",   
     "files.associations": {
         "functional": "cpp",
         "*.tcc": "cpp",
@@ -15,6 +16,8 @@
         "limits": "cpp",
         "sstream": "cpp",
         "cmath": "cpp",
-        "tuple": "cpp"
+        "tuple": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp"
     }
 }

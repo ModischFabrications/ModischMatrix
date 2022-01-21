@@ -29,7 +29,7 @@ void clear() { screen->clearScreen(); }
 void printText(const String& msg, uint16_t colorText = white, uint16_t colorBg = black) {
     screen->clearScreen();
     screen->setTextColor(colorText, colorBg);
-    screen->setCursor(1, 1);
+    screen->setCursor(0, 0);
     screen->print(msg);
 }
 

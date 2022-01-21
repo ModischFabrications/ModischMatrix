@@ -9,7 +9,7 @@
 
 namespace Modes_Snake {
 
-enum Direction : uint8_t { OFF, UP, DOWN, LEFT, RIGHT, DEAD };
+enum Direction : uint8_t { OFF = 0, UP, DOWN, LEFT, RIGHT, DEAD };
 
 namespace {
 const uint16_t UPDATE_DELAY = 400; // 400*64 ~= 30s max
@@ -34,14 +34,14 @@ struct XY {
     XY() : x{0}, y{0} {}
     XY(int8_t _x, int8_t _y) : x{_x}, y{_y} {}
     bool const operator==(const XY& other) const { return x == other.x && y == other.y; }
-    XY const operator+(const XY& other) const { return XY(x + other.x, y + other.y).wrapped(); }
+    XY const operator+(const XY& other) const { return XY(x + other.x, y + other.y); }
     XY const operator+=(const XY& other) {
         x += other.x;
         y += other.y;
-        return wrapped();
+        return *this;
     }
 
-    XY wrapped() {
+    void wrap() {
         while (x >= WIDTH)
             x -= WIDTH;
         while (y >= HEIGHT)
@@ -50,7 +50,6 @@ struct XY {
             x += WIDTH;
         while (y < 0)
             y += HEIGHT;
-        return *this;
     }
 
     static XY random() { return XY(random8(0, WIDTH), random8(0, HEIGHT)); }
@@ -126,20 +125,19 @@ void move() {
             sn.pos[i] = sn.pos[i - 1];
         }
         sn.pos[0] = sn.pos[1] + dirToPos(sn.dir);
+        sn.pos[0].wrap();
     }
 }
 
 bool collideSnakes(const XY& me, uint8_t myIndex) {
     for (uint8_t j = 0; j < N_MAX_PLAYERS; j++) {
-        if (myIndex == j) continue;
         Snake& sn2 = players[j];
         // if (sn2.dir == DEAD) continue;
-        for (XY& pos : sn2.pos) {
-            if (me == pos) {
-                print(F("Collision from P "));
-                printlnRaw(myIndex);
-                return true;
-            }
+        for (uint8_t ip = 0; ip < sn2.len; ip++) {
+            XY& pos = sn2.pos[ip];
+            // skip collision check with own head
+            if (myIndex == j && ip == 0) continue;
+            if (me == pos) { return true; }
         }
     }
     return false;
@@ -211,7 +209,7 @@ bool dirAllowed(const Direction& oldD, const Direction& newD) {
     if (newD == OFF || newD == DEAD) return false;
     if (oldD == OFF || oldD == DEAD) return true;
 
-    XY delta = dirToPos(oldD) + dirToPos(newD);
+    const XY delta = dirToPos(oldD) + dirToPos(newD);
     return (abs(delta.x) == 1 && abs(delta.y) == 1);
 }
 
@@ -238,6 +236,10 @@ void reset() {
         for (uint8_t i = 0; i < sn.len; i++) {
             sn.pos[i] = pos;
         }
+    }
+
+    for (Snack& sn : snacks) {
+        sn.active = OFF;
     }
 }
 

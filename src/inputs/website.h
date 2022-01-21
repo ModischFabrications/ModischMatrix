@@ -5,101 +5,143 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
+#include <SPIFFS.h>
 
 namespace Website {
 
 namespace {
 AsyncWebServer server(80);
 
-void notFound(AsyncWebServerRequest* request) {
-    request->send(404, "text/plain", "Not found");
-    print(F("Unable to provide "));
+const String* GetPostValue(AsyncWebServerRequest* request, const String& paramKey = F("value")) {
+    if (!request->hasParam(paramKey, true)) {
+        print(F("Missing param "));
+        printlnRaw(paramKey);
+        request->send(400, "text/plain", "missing param " + paramKey);
+        Display::flashDot();
+        return nullptr;
+    }
+    RebootManager::reset();
+
+    const String& val = request->getParam(paramKey, true)->value();
+    print(F("Post value: "));
+    printlnRaw(val);
+
+    return &(val);
+}
+
+String GetPathArgument(const String& path) {
+    // skip first entry from base url
+    uint8_t i_slash = path.indexOf("/", 1);
+    uint8_t i_slash2 = path.indexOf("/", i_slash + 1);
+    if (i_slash2 == -1) i_slash2 = path.length();
+
+    const String arg = path.substring(i_slash + 1, i_slash2);
+    print(F("Path arg: "));
+    printlnRaw(arg);
+
+    return arg;
+}
+
+// --- separate mode handlers
+
+void RedirectUnknown(AsyncWebServerRequest* request) {
+    request->redirect("/");
+    print(F("Redirecting request to root from "));
     printlnRaw(request->url());
 }
 
-void GetRoot(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", "Hello there! Check /api for commands");
-    println(F("W> /"));
-}
+void PostBrightness(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
 
-void GetAPI(AsyncWebServerRequest* request) {
-    RebootManager::reset();
+    Controller::setBrightness(value->toInt());
 
-    String message = F("Possible Commands, chain with \"&\":\n");
-    message.reserve(200);
-    // always show possible commands
-    message += F("/api?\n?mode={0..?}\n?print=TXT\n?brightness={0..255}\n?timeout=SECONDS\n\n");
-    if (request->params() <= 0) {
-        request->send(400, "text/plain", message);
-        Display::flashDot();
-        return;
-    }
-    message += F("OK: \n");
-
-    // TODO streamline
-    String paramKey;
-    paramKey.reserve(20);
-    paramKey = F("mode");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey + "=";
-        uint8_t val = request->getParam(paramKey)->value().toInt();
-        message += val;
-        Controller::setMode(val);
-    }
-    paramKey = F("brightness");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey + "=";
-        uint8_t val = request->getParam(paramKey)->value().toInt();
-        message += val;
-        Controller::setBrightness(val);
-    }
-    paramKey = F("print");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey + "=";
-        String val = request->getParam(paramKey)->value();
-        message += val;
-        val.replace(F("\\n"), F("\n"));
-        Controller::printText(val);
-    }
-    paramKey = F("timeout");
-    if (request->hasParam(paramKey)) {
-        message += "\n" + paramKey + "=";
-        uint16_t val = request->getParam(paramKey)->value().toInt();
-        message += val;
-        Controller::hideAfter(val * 1000);
-    }
-    request->send(200, "text/plain", message);
+    request->send(200, "text/plain", "OK");
     Display::flashDot();
 }
 
-// separate mode handlers out!
-void GetSnake(AsyncWebServerRequest* request) {
-    if (!request->hasParam(F("p")) || !request->hasParam(F("dir"))) {
-        request->send(400, "text/plain", F("/snake?p={0..3}&dir={0..3}"));
-        Display::flashDot();
-        return;
-    }
-    RebootManager::reset();
-    Controller::setMode(Controller::Mode::SNAKE);
+void PostTimeout(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
 
-    uint8_t player = request->getParam(F("p"))->value().toInt();
-    Modes_Snake::Direction direction = (Modes_Snake::Direction)request->getParam(F("dir"))->value().toInt();
-    Modes_Snake::setDirection(player, direction);
+    Controller::hideAfter(value->toInt() * 1000);
+
+    request->send(200, "text/plain", "OK");
+    Display::flashDot();
+}
+
+void GetMode(AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", String(Controller::mode));
+    Display::flashDot();
+}
+
+void PostMode(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
+
+    uint8_t val = value->toInt();
+    Controller::setMode(val);
+
+    request->send(200, "text/plain", "OK");
+    Display::flashDot();
+}
+
+void PostPrint(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
+    Controller::setMode(Controller::Mode::STATIC);
+
+    String val = *value;
+    val.replace(F("\\n"), F("\n"));
+    // TODO replace emoji and other special characters
+    Controller::printText(val);
+
+    request->send(200, "text/plain", "OK");
+    Display::flashDot();
+}
+
+void GetNSnakes(AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", String(Modes_Snake::N_MAX_PLAYERS));
+    Display::flashDot();
+}
+
+// snake/0[/]
+void PostSnake(AsyncWebServerRequest* request) {
+    uint8_t player = GetPathArgument(request->url()).toInt();
+    const String* value = GetPostValue(request);
+    if (value == nullptr || player < 0) return;
+
+    Controller::setMode(Controller::Mode::SNAKE);
+    Modes_Snake::setDirection(player, (Modes_Snake::Direction)value->toInt());
 
     request->send(200, "text/plain", "OK");
     Display::flashDot();
 }
 } // namespace
 
-// contract: WiFi must be enabled already
+// contract: WiFi and modes must be enabled already
 void setup() {
-    println(F("Preparing website"));
-    server.on("/", HTTP_GET, GetRoot);
-    server.on("/api", HTTP_GET, GetAPI);
-    server.on("/snake", HTTP_GET, GetSnake);
-    server.onNotFound(notFound);
+    if (!SPIFFS.begin(true)) {
+        Serial.println("An Error has occurred while mounting SPIFFS");
+        return;
+    }
+
+    println(F("Preparing webserver..."));
+    // needed to fetch css/js, pictures and more; might be deobfuscation risk for hidden files
+    server.serveStatic("/", SPIFFS, "/").setCacheControl("max-age=600").setDefaultFile("index.html");
+    server.serveStatic("/favicon.ico", SPIFFS, "/favicon.png").setCacheControl("max-age=600");
+    server.onNotFound(RedirectUnknown);
+
+    server.on("/brightness", HTTP_POST, PostBrightness);
+    server.on("/timeout", HTTP_POST, PostTimeout);
+    server.on("/mode", HTTP_GET, GetMode);
+    server.on("/mode", HTTP_POST, PostMode);
+    server.on("/print", HTTP_POST, PostPrint);
+    server.on("/snake", HTTP_GET, GetNSnakes);
+    server.on("/snake", HTTP_POST, PostSnake);
 
     server.begin();
+    println(F("Serving website at '/"));
 }
 
 void loop() {}
