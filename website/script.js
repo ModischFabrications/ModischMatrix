@@ -113,5 +113,5 @@ function showSnackbar(text) {
     clearTimeout(snackbarTimeout);
     setTimeout(function () {
         el.className = el.className.replace('show', '');
-    }, 5000)
+    }, 3000)
 }
