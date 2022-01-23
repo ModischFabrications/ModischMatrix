@@ -21,7 +21,7 @@ function updateURL() {
     mdns.value = mDnsUrl;
     mdns.style.width = urlField.style.width;
 
-    mdns.parentNode.style.display = document.URL.includes(mDnsUrl) ? "none" : "block";
+    mdns.parentNode.style.display = document.URL.toLowerCase().includes("local") ? "none" : "block";
 }
 
 function copyToClipboard(msg) {
