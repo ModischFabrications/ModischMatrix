@@ -48,6 +48,9 @@ void updateScreen() {
 
 void setup() { currentPalette = RainbowColors_p; }
 
-void loop() { updateScreen(); }
+void loop() {
+    updateScreen();
+    delay(1);
+}
 
 } // namespace Modes_Colorwave
