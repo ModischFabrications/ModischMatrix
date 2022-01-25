@@ -90,8 +90,6 @@ void setup() {
     println(F("Starting matrix..."));
 
     setupPanel();
-
-    flashScreen();
 }
 
 } // namespace Display
