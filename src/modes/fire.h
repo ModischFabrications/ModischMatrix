@@ -41,6 +41,8 @@ DEFINE_GRADIENT_PALETTE(emrld_pal){
 
 const CRGBPalette256 activePalette = fire_pal; // select the pallet to use
 
+uint8_t intensity[WIDTH * HEIGHT];
+
 // Turn coordinates X/Y into string of LEDs
 uint16_t XY(uint8_t x, uint8_t y) {
     uint16_t i;
@@ -49,7 +51,6 @@ uint16_t XY(uint8_t x, uint8_t y) {
     return i;
 }
 
-uint8_t intensity[WIDTH * HEIGHT];
 void updateScreen() {
     // update intensity with neighboring average of lower row
     for (uint8_t row = (HEIGHT - 1); row >= 1; row--) {
@@ -105,6 +106,11 @@ void updateScreen() {
 }
 
 } // namespace
+
+void reset() {
+    for (auto& v : intensity)
+        v = 0;
+}
 
 void setup() {}
 

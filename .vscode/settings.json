@@ -18,6 +18,11 @@
         "cmath": "cpp",
         "tuple": "cpp",
         "system_error": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp"
     }
 }

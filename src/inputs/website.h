@@ -71,7 +71,7 @@ void PostTimeout(AsyncWebServerRequest* request) {
 }
 
 void GetMode(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", String(Controller::mode));
+    request->send(200, "text/plain", String(Controller::activeMode->mode));
     Display::flashDot();
 }
 

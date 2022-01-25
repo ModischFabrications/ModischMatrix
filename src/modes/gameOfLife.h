@@ -22,7 +22,7 @@ const uint8_t ALIVE_CHANCE = 80; // of 255
 const uint8_t WIDTH = Display::PANEL_RES_X;
 const uint8_t HEIGHT = Display::PANEL_RES_Y;
 
-const uint16_t C_ALIVE = Display::screen->color565(70, 140, 70);
+const uint16_t C_ALIVE = Display::screen->color565(90, 200, 90);
 const uint16_t C_DEAD = Display::screen->color565(0, 0, 0);
 
 bool storeA[WIDTH][HEIGHT];
