@@ -9,20 +9,21 @@
 // realtime version of conways Game of Life. Random seed, running forever.
 // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
 // heavily inspired by https://codereview.stackexchange.com/questions/47167/conways-game-of-life-in-c/47179#47179
+// look into https://github.com/claby2/gol if you want a better implementation
 
 // a lot of pointer witchcraft for performance, see https://stackoverflow.com/a/33983464/7924138
 
 namespace Modes_GOL {
 namespace {
 
-const uint16_t UPDATE_DELAY = 500;
-const uint8_t ALIVE_CHANCE = 45; // of 255
+const uint16_t UPDATE_DELAY = 100;
+const uint8_t ALIVE_CHANCE = 80; // of 255
 
 const uint8_t WIDTH = Display::PANEL_RES_X;
 const uint8_t HEIGHT = Display::PANEL_RES_Y;
 
-const uint16_t C_ALIVE = Display::screen->color565(115, 127, 115);
-const uint16_t C_DEAD = Display::screen->color565(6, 2, 2);
+const uint16_t C_ALIVE = Display::screen->color565(70, 140, 70);
+const uint16_t C_DEAD = Display::screen->color565(0, 0, 0);
 
 bool storeA[WIDTH][HEIGHT];
 bool storeB[WIDTH][HEIGHT];
@@ -32,8 +33,9 @@ auto currState = &storeB;
 
 // TODO could theoretically be passed as a parameter
 void reseed() {
-    for (uint8_t y = 4; y < HEIGHT - 4; y++) {
-        for (uint8_t x = 4; x < WIDTH - 4; x++) {
+    uint8_t padding = 2;
+    for (uint8_t y = padding; y < HEIGHT - padding; y++) {
+        for (uint8_t x = padding; x < WIDTH - padding; x++) {
             (*currState)[x][y] = random8() <= ALIVE_CHANCE;
             //print((*currState)[x][y] ? F("X") : F(" "));
         }
