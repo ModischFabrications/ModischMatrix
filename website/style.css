@@ -44,6 +44,12 @@ body {
   width: 20rem;
 }
 
+.golRulesText {
+  font-family: monospace;
+  font-size: 20px;
+  resize: none;
+}
+
 /* ---- selectable tabs -----*/
 /* Style the tab */
 .tab {

@@ -65,6 +65,7 @@ See platformio.ini for details, should be handled automatically.
 - ~~https://github.com/witnessmenow/Universal-Arduino-Telegram-Bot : Great idea, sadly pretty unstable and performance-hungry.~~
 - ~~https://github.com/PowerBroker2/SafeString : Midway between safe, but crazy complex c-arrays and easy, but unstable and expensive Arduino-Strings. Somewhat unusual documentation/environment, but responsive author. No library-integrations.~~
 - https://github.com/tdewolff/minify/tree/master/cmd/minify : Used during deployment to minify the website; optional
+- https://github.com/nickgammon/Regexp : Used to validate and parse web calls; great author, even without these libs
 
 
 ## References

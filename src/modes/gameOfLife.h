@@ -14,6 +14,9 @@
 // a lot of pointer witchcraft for performance, see https://stackoverflow.com/a/33983464/7924138
 
 namespace Modes_GOL {
+
+void reset();
+
 namespace {
 
 const uint16_t UPDATE_DELAY = 100;
@@ -25,11 +28,15 @@ const uint8_t HEIGHT = Display::PANEL_RES_Y;
 const uint16_t C_ALIVE = Display::screen->color565(90, 200, 90);
 const uint16_t C_DEAD = Display::screen->color565(0, 0, 0);
 
+// swapping pointers is cheaper than copying arrays
 bool storeA[WIDTH][HEIGHT];
 bool storeB[WIDTH][HEIGHT];
-
 auto prevState = &storeA;
 auto currState = &storeB;
+
+// default rule: B3/S23 -> born with 3 neighbors, survives with 2 or 3, dies otherwise
+String bornRule = "3";
+String surviveRule = "23";
 
 // TODO could theoretically be passed as a parameter
 void reseed() {
@@ -37,9 +44,9 @@ void reseed() {
     for (uint8_t y = padding; y < HEIGHT - padding; y++) {
         for (uint8_t x = padding; x < WIDTH - padding; x++) {
             (*currState)[x][y] = random8() <= ALIVE_CHANCE;
-            //print((*currState)[x][y] ? F("X") : F(" "));
+            // print((*currState)[x][y] ? F("X") : F(" "));
         }
-        //println();
+        // println();
     }
 }
 
@@ -56,11 +63,9 @@ uint8_t nNeighbors(uint8_t x_pos, uint8_t y_pos, bool array[WIDTH][HEIGHT]) {
     return count;
 }
 
-// TODO pass rules as parameters
-// default rule: B3/S23 -> born with 3 neighbors, survives with 2 or 3, dies otherwise
 bool isAlive(bool alive, uint8_t neighbors) {
-    if (!alive && neighbors == 3) return true;
-    if (alive && (neighbors == 2 || neighbors == 3)) return true;
+    if (!alive && bornRule.indexOf(String(neighbors)) >= 0) return true;
+    if (alive && surviveRule.indexOf(String(neighbors)) >= 0) return true;
     return false;
 }
 
@@ -99,6 +104,20 @@ void updateScreen() {
 }
 
 } // namespace
+
+// caller shall check rules
+void setRule(const String& born, const String& survive) {
+    bornRule = born;
+    surviveRule = survive;
+
+    print(F("New ruleset: Born with "));
+    printRaw(bornRule);
+    print(F(", surviving with "));
+    printRaw(surviveRule);
+    println();
+
+    reset();
+}
 
 void reset() {
     println(F("GOL: Clearing board, creating new seed"));

@@ -42,8 +42,8 @@
         <div id="mode_1_tab" class="tabcontent">
             <p>Print text:</p>
             <!-- wrap="hard" doesn't always add \n, but it's not that important; &#10; is newline -->
-            <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40" placeholder="Row1&#10;Row2"
-                wrap="hard" onkeydown="checkSendText(event)"></textarea>
+            <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40" placeholder="Row1&#10;Row2&#10;..."
+                wrap="hard" onkeydown="checkEnter(event, sendText)">Hello&#10;World!</textarea>
             <input id="printSubmit" type="submit" onclick="sendText()">
         </div>
 
@@ -62,7 +62,17 @@
         <div id="mode_5_tab" class="tabcontent"></div>
         <div id="mode_6_tab" class="tabcontent"></div>
         <div id="mode_7_tab" class="tabcontent"></div>
-        <div id="mode_8_tab" class="tabcontent"></div>
+
+        <div id="mode_8_tab" class="tabcontent">
+            <p>Use custom ruleset:</p>
+            <textarea id="golRuleInput" class="golRulesText" cols="20" rows="1" maxlength="20" placeholder="B3/S23"
+                wrap="hard" onkeydown="checkEnter(event, sendGOLRules)">B36/S23</textarea>
+            <input type="submit" onclick="sendGOLRules()">
+            <p>Each Cell is: (B)orn from exactly {} neighbors, (S)urviving with exactly {} neighbors, dying otherwise.</p>
+            <p>HighLife: B36/S23</p>
+            <p>Seeds: B2/S</p>
+        </div>
+
         <div id="mode_9_tab" class="tabcontent">
             <div>
                 <p>Choose a player slot:</p>

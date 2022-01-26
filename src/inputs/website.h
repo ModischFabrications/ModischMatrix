@@ -5,6 +5,7 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
+#include <Regexp.h>
 #include <SPIFFS.h>
 
 namespace Website {
@@ -16,7 +17,7 @@ const String* GetPostValue(AsyncWebServerRequest* request, const String& paramKe
     if (!request->hasParam(paramKey, true)) {
         print(F("Missing param "));
         printlnRaw(paramKey);
-        request->send(400, "text/plain", "missing param " + paramKey);
+        request->send(400, F("text/plain"), "missing param " + paramKey);
         Display::flashDot();
         return nullptr;
     }
@@ -56,7 +57,7 @@ void PostBrightness(AsyncWebServerRequest* request) {
 
     Controller::setBrightness(value->toInt());
 
-    request->send(200, "text/plain", "OK");
+    request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
 
@@ -66,12 +67,12 @@ void PostTimeout(AsyncWebServerRequest* request) {
 
     Controller::hideAfter(value->toInt() * 1000);
 
-    request->send(200, "text/plain", "OK");
+    request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
 
 void GetMode(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", String(Controller::activeMode->mode));
+    request->send(200, F("text/plain"), String(Controller::activeMode->mode));
     Display::flashDot();
 }
 
@@ -82,7 +83,7 @@ void PostMode(AsyncWebServerRequest* request) {
     uint8_t val = value->toInt();
     Controller::setMode(val);
 
-    request->send(200, "text/plain", "OK");
+    request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
 
@@ -96,12 +97,37 @@ void PostPrint(AsyncWebServerRequest* request) {
     // TODO replace emoji and other special characters
     Controller::printText(val);
 
-    request->send(200, "text/plain", "OK");
+    request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
 
+void PostGOLRule(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
+    Controller::setMode(Controller::Mode::GOL);
+
+    char val[25], born[11], survive[11];
+    value->toCharArray(val, 23);
+
+    MatchState ms;
+    ms.Target(val);
+    uint8_t res = ms.Match("B(%d*)/S(%d*)", 0);
+    if (res != REGEXP_MATCHED) {
+        print(F("REGEX Error "));
+        printlnRaw(res);
+        request->send(400, F("text/plain"), F("invalid pattern"));
+        Display::flashDot();
+        return;
+    }
+    Modes_GOL::setRule(ms.GetCapture(born, 0), ms.GetCapture(survive, 1));
+
+    request->send(200, F("text/plain"), F("OK"));
+    Display::flashDot();
+}
+
+// TODO might want to return player colors instead
 void GetNSnakes(AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", String(Modes_Snake::N_MAX_PLAYERS));
+    request->send(200, F("text/plain"), String(Modes_Snake::N_MAX_PLAYERS));
     Display::flashDot();
 }
 
@@ -114,7 +140,7 @@ void PostSnake(AsyncWebServerRequest* request) {
     Controller::setMode(Controller::Mode::SNAKE);
     Modes_Snake::setDirection(player, (Modes_Snake::Direction)value->toInt());
 
-    request->send(200, "text/plain", "OK");
+    request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
 } // namespace
@@ -137,6 +163,7 @@ void setup() {
     server.on("/mode", HTTP_GET, GetMode);
     server.on("/mode", HTTP_POST, PostMode);
     server.on("/print", HTTP_POST, PostPrint);
+    server.on("/gol/rule", HTTP_POST, PostGOLRule);
     server.on("/snake", HTTP_GET, GetNSnakes);
     server.on("/snake", HTTP_POST, PostSnake);
 

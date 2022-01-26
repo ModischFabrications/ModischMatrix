@@ -62,15 +62,22 @@ function openTab(element, shallSendUpdate = true) {
 
 }
 
-function checkSendText(event) {
+function checkEnter(event, delegate) {
     if ((event.ctrlKey || event.metaKey) && (event.keyCode == 13 || event.keyCode == 10)) {
-        sendText();
+        delegate();
     }
 }
 
 function sendText() {
     let msg = document.getElementById("printInput").value.substr(0, 50);
     postValue("/print", msg);
+}
+
+
+function sendGOLRules() {
+    let msg = document.getElementById("golRuleInput").value.substr(0, 20);
+    // TODO check validity via regex
+    postValue("/gol/rule", msg);
 }
 
 function arrowPressed(code) {
@@ -91,6 +98,7 @@ async function getValue(url) {
 }
 
 async function postValue(url, value) {
+    if (value == null || value == "") throw "missing argument";
     console.log(`Sending value "${value}" to ${url}`);
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
