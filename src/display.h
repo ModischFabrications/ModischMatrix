@@ -26,11 +26,33 @@ const uint16_t orange = screen->color565(252, 152, 3);
 
 void clear() { screen->clearScreen(); }
 
+String reformatText(const String& msg){
+    String val = msg;
+    val.replace(F("\\n"), F("\n"));
+
+    val.replace(F("ä"), F("\x84"));
+    val.replace(F("ö"), F("\x94"));
+    val.replace(F("ü"), F("\x81"));
+
+    val.replace(F("\\heart"), F("\x03"));
+    val.replace(F("❤"), F("\x03"));
+    val.replace(F("♥"), F("\x03"));
+
+    val.replace(F("->"), F("\x1A"));
+    val.replace(F("<-"), F("\x1B"));
+
+    val.replace(F("%"), F("\x25"));
+    val.replace(F("+"), F("\x2B"));
+    val.replace(F("€"), F("\x9B"));
+
+    return val;
+}
+
 void printText(const String& msg, uint16_t colorText = white, uint16_t colorBg = black) {
     screen->clearScreen();
     screen->setTextColor(colorText, colorBg);
     screen->setCursor(0, 0);
-    screen->print(msg);
+    screen->print(reformatText(msg));
 }
 
 void setBrightness(uint8_t brightness) {
@@ -38,6 +60,7 @@ void setBrightness(uint8_t brightness) {
 }
 
 void setupText() {
+    screen->cp437(true);
     screen->setTextSize(1); // size 1..3; 1 is 8 pixels high
     screen->setTextWrap(true);
 }

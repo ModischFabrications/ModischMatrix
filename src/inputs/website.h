@@ -92,10 +92,7 @@ void PostPrint(AsyncWebServerRequest* request) {
     if (value == nullptr) return;
     Controller::setMode(Controller::Mode::STATIC);
 
-    String val = *value;
-    val.replace(F("\\n"), F("\n"));
-    // TODO replace emoji and other special characters
-    Controller::printText(val);
+    Controller::printText(*value);
 
     request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
