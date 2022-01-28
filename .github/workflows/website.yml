@@ -2,7 +2,11 @@ name: Website CI
 
 on:
   push:
-
+    paths:
+      - ./website
+      - ./.github/workflows/website.yml
+      - ./.github/config/lighthouserc.json
+      - ./.github/config/budget.json
   workflow_dispatch:
 
 jobs:
@@ -18,4 +22,7 @@ jobs:
       uses: treosh/lighthouse-ci-action@v2
       with:
         # no urls needed, since it uses local folder to scan .html files
-        configPath: "./.github/workflows/lighthouserc.json"
+        configPath: "./.github/config/lighthouserc.json"
+        budgetPath: '.github/config/budget.json'
+        uploadArtifacts: true
+        temporaryPublicStorage: true
