@@ -1,0 +1,22 @@
+name: Website CI
+
+on:
+  push:
+    paths:
+      - ./website
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: Load repo
+      uses: actions/checkout@v2
+    
+    - name: Audit using Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v2
+      with:
+        # no urls needed, since it uses local folder to scan .html files
+        configPath: "./.github/workflows/lighthouserc.json"
