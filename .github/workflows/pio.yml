@@ -1,12 +1,12 @@
 name: PlatformIO CI
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - "./src"
-      - "./platformio.ini"
-      - "./.github/workflows/pio.yml"
-  workflow_dispatch:
+      - "src/**"
+      - "platformio.ini"
+      - ".github/workflows/pio.yml"
 
 jobs:
   build:
