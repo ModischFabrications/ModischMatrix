@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - ./website
+      - ./.github/workflows/website.yml
+      - ./.github/workflows/lighthouserc.json
   workflow_dispatch:
 
 jobs:

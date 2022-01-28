@@ -2,8 +2,10 @@ name: PlatformIO CI
 
 on:
   push:
-    paths-ignore:
-        - '**.md'
+    paths:
+      - ./src
+      - ./platformio.ini
+      - ./.github/workflows/pio.yml
   workflow_dispatch:
 
 jobs:
