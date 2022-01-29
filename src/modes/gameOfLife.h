@@ -4,7 +4,6 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
-#include <FastLED.h>
 
 // realtime version of conways Game of Life. Random seed, running forever.
 // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life

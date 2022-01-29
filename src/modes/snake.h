@@ -4,6 +4,7 @@
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
+#include <FastLED.h>
 
 // multiplayer snake. Eat snacks to grow, let others crash into you.
 
@@ -20,14 +21,14 @@ const uint8_t N_MAX_SNACKS = 6;
 
 // TODO: trailing to darkness
 // copy from/to website css!
-const uint16_t C_PLAYERS[] = {
-    Display::screen->color565(231, 76, 60),
-    Display::screen->color565(46, 204, 113),
-    Display::screen->color565(52, 152, 219),
-    Display::screen->color565(185, 173, 0),
+const CRGB C_PLAYERS[] = {
+    CRGB(231, 76, 60),
+    CRGB(46, 204, 113),
+    CRGB(52, 152, 219),
+    CRGB(185, 173, 0),
 };
-const uint16_t C_SNACK = Display::screen->color565(200, 200, 200);
-const uint16_t C_DEAD = Display::screen->color565(40, 40, 40);
+const CRGB C_SNACK = CRGB(200, 200, 200);
+const CRGB C_DEAD = CRGB(40, 40, 40);
 const uint8_t MIN_LENGTH = 4;
 const uint8_t MAX_LENGTH = 32;
 
@@ -182,19 +183,19 @@ void draw() {
     Display::clear();
     for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
         Snake& sn = players[i];
-        uint16_t color = C_PLAYERS[i];
+        CRGB color = C_PLAYERS[i];
         if (sn.dir == DEAD) { color = C_DEAD; }
-        Display::screen->drawPixel(sn.pos[0].x, sn.pos[0].y, color);
+        Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, color.r, color.g, color.b);
         for (uint8_t j = 1; j < sn.len; j++) {
-            // TODO dim down by i*(256/MAX_LENGTH-1)
-            Display::screen->drawPixel(sn.pos[j].x, sn.pos[j].y, color);
+            color.fadeToBlackBy(i * (256 / MAX_LENGTH - 1));
+            Display::screen->drawPixelRGB888(sn.pos[j].x, sn.pos[j].y, color.r, color.g, color.b);
         }
     }
 
     for (uint8_t i = 0; i < N_MAX_SNACKS; i++) {
         Snack& sn = snacks[i];
         if (!sn.active) continue;
-        Display::screen->drawPixel(sn.pos.x, sn.pos.y, C_SNACK);
+        Display::screen->drawPixelRGB888(sn.pos.x, sn.pos.y, C_SNACK.r, C_SNACK.g, C_SNACK.b);
     }
 
     // printPlayer(0);
