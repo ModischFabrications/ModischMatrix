@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta http-equiv="Content-type" content="text/html" ; charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0, shrink-to-fit=no" />
     <meta name="author" content="Modisch Fabrications">
+    <meta name="description" content="Remote control page for ModischMatrix">
+    <meta name="theme-color" content="#858585"/>
     <title>ModischMatrix</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
@@ -103,18 +105,18 @@
     <p>
 
     <div class="rangeInput">
-        Back to OFF after:
+        <p>Back to OFF after:</p>
         <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
             oninput='onTimeoutChanged(this)' />
-        <output id="timeoutOutput"></output>
+        <p><output id="timeoutOutput"></output></p>
         <input type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
     </div>
 
     <div class="rangeInput">
-        Set brightness to:
+        <p>Set brightness to:</p>
         <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
             oninput='brightnessOutput.value = value + "%"' />
-        <output id="brightnessOutput"></output>
+        <p><output id="brightnessOutput"></output></p>
         <input type="submit" onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
     </div>
     </p>

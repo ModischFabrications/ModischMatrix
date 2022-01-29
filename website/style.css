@@ -1,6 +1,8 @@
 * {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 14px;
+  text-align: center;
+  vertical-align: middle;
   color: rgb(31, 31, 31);
 }
 
@@ -23,6 +25,11 @@ body {
   margin-bottom: 1rem;
 }
 
+button, input[type=submit] {
+  padding: 0.4rem;
+  margin: 0.4rem;
+}
+
 .rangeInput {
   display: flex;
   flex-direction: row;
@@ -37,10 +44,12 @@ body {
 .matrixText {
   font-family: monospace;
   font-size: 18px;
+  text-align: start;
   resize: none;
 }
 
 .formText {
+  padding: 0.4rem;
   width: 20rem;
 }
 
