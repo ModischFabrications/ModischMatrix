@@ -1,13 +1,22 @@
 "use strict";
 
+let updateTimer;
+
 function init() {
-    updateDeviceConfig();
     updateAutoload();
     updateURL();
+
+    updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
+    updateDeviceConfig();
 }
 
-function updateDeviceConfig() {
-    getValue("/mode").then(m => { openTab(document.getElementById(`mode_${m ?? 0}`), false); });
+async function updateDeviceConfig() {
+    let m = await getValue("/mode");
+    if (m == null || m == "") {
+        clearInterval(updateTimer);
+        return;
+    }
+    openTab(document.getElementById(`mode_${m}`), false);
 }
 
 function updateURL() {
