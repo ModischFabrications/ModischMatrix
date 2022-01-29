@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0, shrink-to-fit=no" />
     <meta name="author" content="Modisch Fabrications">
     <meta name="description" content="Remote control page for ModischMatrix">
-    <meta name="theme-color" content="#858585"/>
+    <meta name="theme-color" content="#858585" />
     <title>ModischMatrix</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
@@ -14,112 +14,122 @@
 </head>
 
 <body onload="init()">
+    <div id="page-container">
 
-    <h1 class="title">
-        ModischMatrix
-    </h1>
+        <h1 class="title">
+            ModischMatrix
+        </h1>
 
-    <noscript>
-        No JavaScript, no function. Sorry buddy!
-    </noscript>
+        <noscript>
+            No JavaScript, no function. Sorry buddy!
+        </noscript>
 
-    <!-- Tab links -->
-    <div class="tab">
-        <button class="tablinks" id="mode_0" onclick="openTab(this)">Off</button>
-        <button class="tablinks" id="mode_1" onclick="openTab(this)">Static</button>
-        <button class="tablinks" id="mode_2" onclick="openTab(this)">Login</button>
-        <button class="tablinks" id="mode_3" onclick="openTab(this)">Clock</button>
-        <button class="tablinks" id="mode_4" onclick="openTab(this)">Dashboard</button>
-        <button class="tablinks" id="mode_5" onclick="openTab(this)">Colorwave</button>
-        <button class="tablinks" id="mode_6" onclick="openTab(this)">Fire</button>
-        <button class="tablinks" id="mode_7" onclick="openTab(this)">Sprinkles</button>
-        <button class="tablinks" id="mode_8" onclick="openTab(this)">Game of Life</button>
-        <button class="tablinks" id="mode_9" onclick="openTab(this)">Snake</button>
-    </div>
+        <section>
+            <!-- Tab links -->
+            <div class="tab">
+                <button class="tablinks" id="mode_0" onclick="openTab(this)">Off</button>
+                <button class="tablinks" id="mode_1" onclick="openTab(this)">Static</button>
+                <button class="tablinks" id="mode_2" onclick="openTab(this)">Login</button>
+                <button class="tablinks" id="mode_3" onclick="openTab(this)">Clock</button>
+                <button class="tablinks" id="mode_4" onclick="openTab(this)">Dashboard</button>
+                <button class="tablinks" id="mode_5" onclick="openTab(this)">Colorwave</button>
+                <button class="tablinks" id="mode_6" onclick="openTab(this)">Fire</button>
+                <button class="tablinks" id="mode_7" onclick="openTab(this)">Sprinkles</button>
+                <button class="tablinks" id="mode_8" onclick="openTab(this)">Game of Life</button>
+                <button class="tablinks" id="mode_9" onclick="openTab(this)">Snake</button>
+            </div>
 
-    <!-- Tab content -->
-    <div>
-        <div id="mode_0_tab" class="tabcontent"></div>
-
-        <div id="mode_1_tab" class="tabcontent">
-            <p>Print text:</p>
-            <!-- wrap="hard" doesn't always add \n, but it's not that important; &#10; is newline -->
-            <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40" placeholder="Row1&#10;Row2&#10;..."
-                wrap="hard" onkeydown="checkEnter(event, sendText)">Hello&#10;World!</textarea>
-            <input id="printSubmit" type="submit" onclick="sendText()">
-            <p>Some symbols are supported, try <code>-></code> or <code>♥</code>. </p>
-        </div>
-
-        <div id="mode_2_tab" class="tabcontent">
-            <p> <input id="URL_FIELD" class="formText" type="text" readonly>
-                <button onclick="copyToClipboard(URL_FIELD.value)">Copy</button>
-            </p>
-
-            <p> <input id="MDNS_FIELD" class="formText" type="text" readonly>
-                <button onclick="copyToClipboard(MDNS_FIELD.value)">Copy</button>
-            </p>
-        </div>
-
-        <div id="mode_3_tab" class="tabcontent"></div>
-        <div id="mode_4_tab" class="tabcontent"></div>
-        <div id="mode_5_tab" class="tabcontent"></div>
-        <div id="mode_6_tab" class="tabcontent"></div>
-        <div id="mode_7_tab" class="tabcontent"></div>
-
-        <div id="mode_8_tab" class="tabcontent">
-            <p>Use custom ruleset:</p>
-            <textarea id="golRuleInput" class="golRulesText" cols="20" rows="1" maxlength="20" placeholder="B3/S23"
-                wrap="hard" onkeydown="checkEnter(event, sendGOLRules)">B36/S23</textarea>
-            <input type="submit" onclick="sendGOLRules()">
-            <p>Each Cell is: (B)orn from exactly {} neighbors, (S)urviving with exactly {} neighbors, dying otherwise.</p>
-            <p>HighLife: B36/S23</p>
-            <p>Seeds: B2/S</p>
-        </div>
-
-        <div id="mode_9_tab" class="tabcontent">
+            <!-- Tab content -->
             <div>
-                <p>Choose a player slot:</p>
-                <input type="radio" id="playerIndexChoice1" name="playerIndex" value="0" checked>
-                <label for="playerIndexChoice1">1</label>
+                <div id="mode_0_tab" class="tabcontent"></div>
 
-                <input type="radio" id="playerIndexChoice2" name="playerIndex" value="1">
-                <label for="playerIndexChoice2">2</label>
+                <div id="mode_1_tab" class="tabcontent">
+                    <p>Print text:</p>
+                    <!-- wrap="hard" doesn't always add \n, but it's not that important; &#10; is newline -->
+                    <textarea id="printInput" class="matrixText" cols="10" rows="4" maxlength="40"
+                        placeholder="Row1&#10;Row2&#10;..." wrap="hard"
+                        onkeydown="checkEnter(event, sendText)">Hello&#10;World!</textarea>
+                    <input id="printSubmit" type="submit" onclick="sendText()">
+                    <p>Some symbols are supported, try <code>-></code> or <code>♥</code>. </p>
+                </div>
 
-                <input type="radio" id="playerIndexChoice3" name="playerIndex" value="2">
-                <label for="playerIndexChoice3">3</label>
+                <div id="mode_2_tab" class="tabcontent">
+                    <p> <input id="URL_FIELD" class="formText" type="text" readonly>
+                        <button onclick="copyToClipboard(URL_FIELD.value)">Copy</button>
+                    </p>
 
-                <input type="radio" id="playerIndexChoice4" name="playerIndex" value="3">
-                <label for="playerIndexChoice4">4</label>
+                    <p> <input id="MDNS_FIELD" class="formText" type="text" readonly>
+                        <button onclick="copyToClipboard(MDNS_FIELD.value)">Copy</button>
+                    </p>
+                </div>
+
+                <div id="mode_3_tab" class="tabcontent"></div>
+                <div id="mode_4_tab" class="tabcontent"></div>
+                <div id="mode_5_tab" class="tabcontent"></div>
+                <div id="mode_6_tab" class="tabcontent"></div>
+                <div id="mode_7_tab" class="tabcontent"></div>
+
+                <div id="mode_8_tab" class="tabcontent">
+                    <p>Use custom ruleset:</p>
+                    <textarea id="golRuleInput" class="golRulesText" cols="20" rows="1" maxlength="20"
+                        placeholder="B3/S23" wrap="hard" onkeydown="checkEnter(event, sendGOLRules)">B36/S23</textarea>
+                    <input type="submit" onclick="sendGOLRules()">
+                    <p>Each Cell is: (B)orn from exactly {} neighbors, (S)urviving with exactly {} neighbors, dying
+                        otherwise.
+                    </p>
+                    <p>HighLife: B36/S23</p>
+                    <p>Seeds: B2/S</p>
+                </div>
+
+                <div id="mode_9_tab" class="tabcontent">
+                    <div class="radio">
+                        <p>Choose a player slot:</p>
+                        <input type="radio" id="playerIndexChoice1" name="playerIndex" value="0" checked>
+                        <label for="playerIndexChoice1">1</label>
+
+                        <input type="radio" id="playerIndexChoice2" name="playerIndex" value="1">
+                        <label for="playerIndexChoice2">2</label>
+
+                        <input type="radio" id="playerIndexChoice3" name="playerIndex" value="2">
+                        <label for="playerIndexChoice3">3</label>
+
+                        <input type="radio" id="playerIndexChoice4" name="playerIndex" value="3">
+                        <label for="playerIndexChoice4">4</label>
+                    </div>
+
+                    <div class="keys">
+                        <div class="up arr" onpointerdown="arrowPressed(1)">↑</div>
+                        <br />
+                        <div class="left arr" onpointerdown="arrowPressed(3)">←</div>
+                        <div class="down arr" onpointerdown="arrowPressed(2)">↓</div>
+                        <div class="right arr" onpointerdown="arrowPressed(4)">→</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="rangeInput">
+                <p>Back to OFF after:</p>
+                <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
+                    oninput='onTimeoutChanged(this)' />
+                <p><output id="timeoutOutput"></output></p>
+                <input type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
             </div>
 
-            <div class="keys">
-                <div class="up arr" onpointerdown="arrowPressed(1)">↑</div>
-                <br />
-                <div class="left arr" onpointerdown="arrowPressed(3)">←</div>
-                <div class="down arr" onpointerdown="arrowPressed(2)">↓</div>
-                <div class="right arr" onpointerdown="arrowPressed(4)">→</div>
+            <div class="rangeInput">
+                <p>Set brightness to:</p>
+                <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
+                    oninput='brightnessOutput.value = value + "%"' />
+                <p><output id="brightnessOutput"></output></p>
+                <input type="submit" onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
             </div>
-        </div>
+        </section>
     </div>
 
-    <p>
-
-    <div class="rangeInput">
-        <p>Back to OFF after:</p>
-        <input id="timeoutSlider" class="slider autoload" type="range" min="10" max="3600" value="60"
-            oninput='onTimeoutChanged(this)' />
-        <p><output id="timeoutOutput"></output></p>
-        <input type="submit" onclick="postValue('/timeout', timeoutSlider.value)">
+    <div class="footer">
+        <p>(C) Modisch Fabrications</p>
     </div>
-
-    <div class="rangeInput">
-        <p>Set brightness to:</p>
-        <input id="brightnessSlider" class="slider autoload" type="range" min="1" max="100" value="50"
-            oninput='brightnessOutput.value = value + "%"' />
-        <p><output id="brightnessOutput"></output></p>
-        <input type="submit" onclick="postValue('/brightness', Math.round(brightnessSlider.value*2.55))">
-    </div>
-    </p>
 
     <div id="snackbar"></div>
 

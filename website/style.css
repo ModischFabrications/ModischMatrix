@@ -8,9 +8,16 @@
 
 body {
   margin:0 auto;
-  padding:16px;
   background-color: rgb(255, 255, 255);
   max-width: max-content;
+  display:flex; 
+  flex-direction:column;
+  min-height: 100vh;
+}
+
+#page-container {
+  padding:16px;
+  flex: 1;
 }
 
 .title {
@@ -22,12 +29,23 @@ body {
   padding: 1rem;
   background: black;
   color: white;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer{
+  padding: 1rem;
+}
+
+.footer > p{
+  font-size: 12px;
 }
 
 button, input[type=submit] {
   padding: 0.4rem;
-  margin: 0.4rem;
+}
+
+section {
+  padding: 0.5rem 0rem;
 }
 
 .rangeInput {
@@ -91,17 +109,30 @@ button, input[type=submit] {
 /* Style the tab content */
 .tabcontent {
   display: none;
-  padding: 6px 12px;
+  padding: 0px 12px;
   border: 1px solid #ccc;
   border-top: none;
-  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+  overflow: hidden;
+  transform-origin: top;
+  animation: fadeEffect 0.5s; /* Fading effect takes 1 second */
 }
 
 /* TODO fade content only, animate height*/
 /* Go from zero to full opacity */
 @keyframes fadeEffect {
-  from {opacity: 0;}
-  to {opacity: 1;}
+  from {
+    opacity: 0; 
+    /* transform: scaleY(0); */
+  }
+  to {
+    opacity: 1; 
+    /* transform: scaleY(1); */
+  }
+}
+
+.radio > *{
+  padding: 0.5rem;
+  vertical-align: top;
 }
 
 /* ------ snake arrow keys (https://codepen.io/kaypooma/pen/xBgqi) */
@@ -109,8 +140,9 @@ button, input[type=submit] {
 .keys {
   font-family: 'Lato', sans-serif;    
   text-align: center;
-  width: 400px;
+  width: 350px;
   height: 200px;
+  padding: 2rem;
   margin: auto;
 }
 
