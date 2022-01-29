@@ -82,7 +82,6 @@ function sendText() {
     postValue("/print", msg);
 }
 
-
 function sendGOLRules() {
     let msg = document.getElementById("golRuleInput").value.substr(0, 20);
     // TODO check validity via regex

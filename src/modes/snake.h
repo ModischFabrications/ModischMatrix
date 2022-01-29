@@ -17,10 +17,17 @@ const uint16_t SNACK_DELAY = 10 * 1000;
 
 const uint8_t N_MAX_PLAYERS = 4;
 const uint8_t N_MAX_SNACKS = 6;
-// trailing to darkness
-const uint16_t C_PLAYERS[] = {0x001F, 0x07E0, 0xF81F, 0xFFE0};
-const uint16_t C_SNACK = 0xFFFF;
-const uint16_t C_DEAD = 0x8410;
+
+// TODO: trailing to darkness
+// copy from/to website css!
+const uint16_t C_PLAYERS[] = {
+    Display::screen->color565(231, 76, 60),
+    Display::screen->color565(46, 204, 113),
+    Display::screen->color565(52, 152, 219),
+    Display::screen->color565(185, 173, 0),
+};
+const uint16_t C_SNACK = Display::screen->color565(200, 200, 200);
+const uint16_t C_DEAD = Display::screen->color565(40, 40, 40);
 const uint8_t MIN_LENGTH = 4;
 const uint8_t MAX_LENGTH = 32;
 

@@ -1,3 +1,11 @@
+:root {
+  /* copy from snake.h! */
+  --snake_color-1: rgb(204, 11, 162);
+  --snake_color-2: rgb(46, 204, 113);
+  --snake_color-3: rgb(52, 152, 219);
+  --snake_color-4: rgb(185, 173, 0);
+}
+
 * {
   font-family: "Trebuchet MS", sans-serif;
   font-size: 14px;
@@ -130,9 +138,25 @@ section {
   }
 }
 
-.radio > *{
-  padding: 0.5rem;
-  vertical-align: top;
+.radio > input[type=radio]{
+  transform: scale(2);
+  margin: 1rem;
+}
+
+#playerSlotRadio1 {
+  accent-color: var(--snake_color-1);
+}
+
+#playerSlotRadio2 {
+  accent-color: var(--snake_color-2);
+}
+
+#playerSlotRadio3 {
+  accent-color: var(--snake_color-3);
+}
+
+#playerSlotRadio4 {
+  accent-color: var(--snake_color-4);
 }
 
 /* ------ snake arrow keys (https://codepen.io/kaypooma/pen/xBgqi) */
