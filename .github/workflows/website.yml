@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "website/**"
+      - "website/*"
       - ".github/workflows/website.yml"
       - ".github/config/lighthouserc.json"
       - ".github/config/budget.json"
