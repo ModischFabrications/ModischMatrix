@@ -58,6 +58,7 @@ void setup() {
 }
 
 void loop() {
+    Display::loop();
     TimeService::loop();
     WeatherService::loop();
 

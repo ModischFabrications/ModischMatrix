@@ -22,9 +22,13 @@ const uint16_t grey = screen->color565(64, 64, 64);
 const uint16_t blue = screen->color565(3, 144, 252);
 const uint16_t orange = screen->color565(252, 152, 3);
 
+// milli-less animations
+uint32_t t_delayed_call = 0;
+void (*delayed_call)() = nullptr;
+
 void clear() { screen->clearScreen(); }
 
-String reformatText(const String& msg){
+String reformatText(const String& msg) {
     String val = msg;
     val.replace(F("\\n"), F("\n"));
 
@@ -90,27 +94,34 @@ void colorDot(uint16_t color) {
 
 void flashDot() {
     colorDot(white);
-    delay(200);
-    colorDot(black);
+    t_delayed_call = millis() + 200;
+    delayed_call = []() { colorDot(black); };
 }
 
 void flashBorder() {
     screen->drawRect(0, 0, screen->width(), screen->height(), grey);
-    delay(200);
-    screen->drawRect(0, 0, screen->width(), screen->height(), black);
+    t_delayed_call = millis() + 200;
+    delayed_call = []() { screen->drawRect(0, 0, screen->width(), screen->height(), black); };
 }
 
 void flashScreen() {
     screen->clearScreen();
     screen->fillScreen(grey);
-    delay(1000);
-    screen->clearScreen();
+    t_delayed_call = millis() + 200;
+    delayed_call = []() { screen->clearScreen(); };
 }
 
 void setup() {
     println(F("Starting matrix..."));
 
     setupPanel();
+}
+
+void loop() {
+    if (t_delayed_call == 0 || millis() < t_delayed_call || delayed_call == nullptr) return;
+    t_delayed_call = 0;
+    delayed_call();
+    delayed_call = nullptr;
 }
 
 } // namespace Display
