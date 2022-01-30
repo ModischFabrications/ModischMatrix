@@ -19,7 +19,6 @@ const uint16_t SNACK_DELAY = 10 * 1000;
 const uint8_t N_MAX_PLAYERS = 4;
 const uint8_t N_MAX_SNACKS = 6;
 
-// TODO: trailing to darkness
 // copy from/to website css!
 const CRGB C_PLAYERS[] = {
     CRGB(231, 76, 60),
@@ -183,11 +182,11 @@ void draw() {
     Display::clear();
     for (uint8_t i = 0; i < N_MAX_PLAYERS; i++) {
         Snake& sn = players[i];
-        CRGB color = C_PLAYERS[i];
-        if (sn.dir == DEAD) { color = C_DEAD; }
-        Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, color.r, color.g, color.b);
+        CRGB head_color = C_PLAYERS[i];
+        if (sn.dir == DEAD) { head_color = C_DEAD; }
+        Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, head_color.r, head_color.g, head_color.b);
         for (uint8_t j = 1; j < sn.len; j++) {
-            color.fadeToBlackBy(i * (256 / MAX_LENGTH - 1));
+            CRGB color = head_color.fadeToBlackBy(i * (256 / (sn.len + 2) - 1));
             Display::screen->drawPixelRGB888(sn.pos[j].x, sn.pos[j].y, color.r, color.g, color.b);
         }
     }
