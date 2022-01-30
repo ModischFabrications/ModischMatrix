@@ -1,7 +1,5 @@
 #pragma once
 
-#define FASTLED_INTERNAL // disable pragma message
-
 #include "pinout.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>

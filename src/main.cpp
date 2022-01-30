@@ -1,6 +1,8 @@
-#include <Arduino.h>
 
 #define DEBUG
+
+#define FASTLED_INTERNAL // disable pragma message
+#include <Arduino.h>
 
 #include "pinout.h"
 
