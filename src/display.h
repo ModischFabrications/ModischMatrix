@@ -2,6 +2,7 @@
 
 #include "pinout.h"
 #include "shared/serialWrapper.h"
+#include "shared/simpleTimer.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h> // https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-I2S-DMA
 
@@ -22,9 +23,7 @@ const uint16_t grey = screen->color565(64, 64, 64);
 const uint16_t blue = screen->color565(3, 144, 252);
 const uint16_t orange = screen->color565(252, 152, 3);
 
-// milli-less animations
-uint32_t t_delayed_call = 0;
-void (*delayed_call)() = nullptr;
+SimpleTimer timer;
 
 void clear() { screen->clearScreen(); }
 
@@ -94,21 +93,18 @@ void colorDot(uint16_t color) {
 
 void flashDot() {
     colorDot(white);
-    t_delayed_call = millis() + 200;
-    delayed_call = []() { colorDot(black); };
+    timer.registerCall([]() { colorDot(black); }, 100);
 }
 
 void flashBorder() {
     screen->drawRect(0, 0, screen->width(), screen->height(), grey);
-    t_delayed_call = millis() + 200;
-    delayed_call = []() { screen->drawRect(0, 0, screen->width(), screen->height(), black); };
+    timer.registerCall([]() { screen->drawRect(0, 0, screen->width(), screen->height(), black); }, 100);
 }
 
 void flashScreen() {
     screen->clearScreen();
     screen->fillScreen(grey);
-    t_delayed_call = millis() + 200;
-    delayed_call = []() { screen->clearScreen(); };
+    timer.registerCall([]() { screen->clearScreen(); }, 100);
 }
 
 void setup() {
@@ -117,11 +113,6 @@ void setup() {
     setupPanel();
 }
 
-void loop() {
-    if (t_delayed_call == 0 || millis() < t_delayed_call || delayed_call == nullptr) return;
-    t_delayed_call = 0;
-    delayed_call();
-    delayed_call = nullptr;
-}
+void loop() { timer.loop(); }
 
 } // namespace Display

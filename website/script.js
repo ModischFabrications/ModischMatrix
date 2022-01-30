@@ -67,6 +67,8 @@ function openTab(element, shallSendUpdate = true) {
 
     if (shallSendUpdate) {
         postValue("/mode", element.id.split('_')[1]);
+        clearInterval(updateTimer);
+        updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
     }
 
 }
