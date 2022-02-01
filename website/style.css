@@ -223,11 +223,11 @@ section {
 #freeDrawCanvas {
   margin: var(--pad_default);
   border: 1px solid rgba(0,0,0,.5);
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 64 / 32;
   width: 95%;
   touch-action: none;
   cursor: crosshair;
-  image-rendering: pixelated;
+  image-rendering: pixelated; /* no alternative is cross-platform */
 }
 
 /* ------ snackbar bottom */
