@@ -103,27 +103,32 @@
                 <div id="mode_10_tab" class="tabcontent">
                     <div id="freeDrawSettings">
                         <div class="colorSelection">
-                            <input type="radio" id="drawColorRadio1" name="drawColorRadio" value="1" checked>
+                            <input type="radio" id="drawColorRadio1" name="drawColorRadio" value="1"
+                                onclick="c.setColor(drawColor1.value)" checked>
                             <input id="drawColor1" type="color" value="#111111">
                         </div>
                         <div class="colorSelection">
-                            <input type="radio" id="drawColorRadio2" name="drawColorRadio" value="2">
+                            <input type="radio" id="drawColorRadio2" name="drawColorRadio" value="2"
+                                onclick="c.setColor(drawColor2.value)">
                             <input id="drawColor2" type="color" value="#dddddd">
                         </div>
                         <div class="colorSelection">
-                            <input type="radio" id="drawColorRadio3" name="drawColorRadio" value="3">
+                            <input type="radio" id="drawColorRadio3" name="drawColorRadio" value="3"
+                                onclick="c.setColor(drawColor3.value)">
                             <input id="drawColor3" type="color" value="#aa2222">
                         </div>
                         <div class="colorSelection">
-                            <input type="radio" id="drawColorRadio4" name="drawColorRadio" value="4">
+                            <input type="radio" id="drawColorRadio4" name="drawColorRadio" value="4"
+                                onclick="c.setColor(drawColor4.value)">
                             <input id="drawColor4" type="color" value="#11cc22">
                         </div>
                         <div class="colorSelection">
-                            <input type="radio" id="drawColorRadio5" name="drawColorRadio" value="5">
+                            <input type="radio" id="drawColorRadio5" name="drawColorRadio" value="5"
+                                onclick="c.setColor(drawColor5.value)">
                             <input id="drawColor5" type="color" value="#1111cc">
                         </div>
-                        <button>Fill</button>
-                        <button>Clear</button>
+                        <button onclick="c.fill()">Fill</button>
+                        <button onclick="c.clear()">Clear</button>
                     </div>
                     <canvas id="freeDrawCanvas" width="64" height="32"></canvas>
 

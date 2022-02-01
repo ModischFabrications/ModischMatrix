@@ -132,11 +132,13 @@ class Canvas {
         this.height = height;
         this.canvas = document.getElementById("freeDrawCanvas");
         this.ctx = this.canvas.getContext('2d');
+        this.rect = this.canvas.getBoundingClientRect();
         this.active = false;
 
         this.canvas.addEventListener("pointerdown", this);
         this.canvas.addEventListener("pointerup", this);
         this.canvas.addEventListener("pointercancel", this);
+        this.canvas.addEventListener("pointerleave", this); // TODO better check if mouse is still down on enter
         this.canvas.addEventListener("pointermove", this);
         this.canvas.addEventListener("click", this);
         this.canvas.addEventListener("dblclick", this);
@@ -144,15 +146,16 @@ class Canvas {
 
     // "this" is a moving target in JS, so we return to this class asap instead of handling individually
     handleEvent(e) {
+        // update regularly to account for transformations
+        this.ctx = this.canvas.getContext('2d');
         this.rect = this.canvas.getBoundingClientRect();
         switch (e.type) {
             case "pointerdown":
                 this.active = true;
                 break;
             case "pointerup":
-                this.active = false;
-                break;
             case "pointercancel":
+            case "pointerleave":
                 this.active = false;
                 break;
             case "pointermove":
@@ -175,20 +178,20 @@ class Canvas {
 
     draw(x, y) {
         this.ctx.fillRect(x, y, 1, 1); // creates a 50 X 50 rectangle with upper-left corner at (10,10)
+        // TODO cache last drawn field, send to ESP if different
     }
 
     setColor(color) {
         this.ctx.fillStyle = color;
     }
 
-    setmode(i) { } // method to set the active tool 
-    save() { } // method to save pixel art as image clear() {} // method to clear canvas 
-    addFrame() { } // method to add current frame to frame list 
-    deleteFrame(f) { } // method to delete a specific frame loadFrame(f) {} // method to load a specific frame onto canvas 
-    renderGIF() { } // method to render a GIF using frames 
-    undo() { } // method to undo a given step 
-    redo() { } // method to redo a given step 
-    addImage() { } // method to load an image as pixel art 
+    fill() {
+        this.ctx.fillRect(0, 0, this.width, this.height);
+    }
+
+    clear() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    }
 }
 
 // -------------- snackbar
