@@ -37,6 +37,7 @@
                 <button class="tablinks" id="mode_7" onclick="openTab(this)">Sprinkles</button>
                 <button class="tablinks" id="mode_8" onclick="openTab(this)">Game of Life</button>
                 <button class="tablinks" id="mode_9" onclick="openTab(this)">Snake</button>
+                <button class="tablinks" id="mode_10" onclick="openTab(this)">Freedraw</button>
             </div>
 
             <!-- Tab content -->
@@ -85,11 +86,8 @@
                     <div class="radio">
                         <p>Choose your Snake: </p>
                         <input type="radio" id="playerSlotRadio1" name="playerIndex" value="0" checked>
-
                         <input type="radio" id="playerSlotRadio2" name="playerIndex" value="1">
-
                         <input type="radio" id="playerSlotRadio3" name="playerIndex" value="2">
-
                         <input type="radio" id="playerSlotRadio4" name="playerIndex" value="3">
                     </div>
 
@@ -100,6 +98,35 @@
                         <div class="down arr" onpointerdown="arrowPressed(2)">↓</div>
                         <div class="right arr" onpointerdown="arrowPressed(4)">→</div>
                     </div>
+                </div>
+
+                <div id="mode_10_tab" class="tabcontent">
+                    <div id="freeDrawSettings">
+                        <div class="colorSelection">
+                            <input type="radio" id="drawColorRadio1" name="drawColorRadio" value="1" checked>
+                            <input id="drawColor1" type="color" value="#111111">
+                        </div>
+                        <div class="colorSelection">
+                            <input type="radio" id="drawColorRadio2" name="drawColorRadio" value="2">
+                            <input id="drawColor2" type="color" value="#dddddd">
+                        </div>
+                        <div class="colorSelection">
+                            <input type="radio" id="drawColorRadio3" name="drawColorRadio" value="3">
+                            <input id="drawColor3" type="color" value="#aa2222">
+                        </div>
+                        <div class="colorSelection">
+                            <input type="radio" id="drawColorRadio4" name="drawColorRadio" value="4">
+                            <input id="drawColor4" type="color" value="#11cc22">
+                        </div>
+                        <div class="colorSelection">
+                            <input type="radio" id="drawColorRadio5" name="drawColorRadio" value="5">
+                            <input id="drawColor5" type="color" value="#1111cc">
+                        </div>
+                        <button>Fill</button>
+                        <button>Clear</button>
+                    </div>
+                    <canvas id="freeDrawCanvas" width="64" height="32"></canvas>
+
                 </div>
             </div>
         </section>
