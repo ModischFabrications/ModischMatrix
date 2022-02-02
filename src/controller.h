@@ -9,6 +9,7 @@
 #include "modes/gameOfLife.h"
 #include "modes/snake.h"
 #include "modes/sprinkles.h"
+#include "modes/freedraw.h"
 
 #include "shared/network/WiFiLoginManager.h"
 #include "shared/persistence/persistenceManager.h"
@@ -17,7 +18,7 @@
 
 // manages all modes, they shouldn't be accessed directly!
 namespace Controller {
-enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, DASHBOARD, COLORWAVE, FIRE, SPRINKLES, GOL, SNAKE, SIZE };
+enum Mode : uint8_t { OFF = 0, STATIC, LOGIN, CLOCK, DASHBOARD, COLORWAVE, FIRE, SPRINKLES, GOL, SNAKE, FREEDRAW, SIZE };
 
 typedef void (*cMethod)();
 struct ModeInterface {
@@ -48,6 +49,7 @@ const ModeInterface modes[Mode::SIZE] = {
     {SPRINKLES, F("SPRINKLES"), Modes_Sprinkles::setup, Modes_Sprinkles::loop, Modes_Sprinkles::reset},
     {GOL, F("GOL"), Modes_GOL::setup, Modes_GOL::loop, Modes_GOL::reset},
     {SNAKE, F("SNAKE"), Modes_Snake::setup, Modes_Snake::loop, Modes_Snake::reset},
+    {FREEDRAW, F("FREEDRAW"), Modes_FreeDraw::setup, Modes_FreeDraw::loop, Modes_FreeDraw::reset},
 };
 
 const ModeInterface* activeMode = &modes[0];
