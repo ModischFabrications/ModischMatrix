@@ -4,13 +4,13 @@ let updateTimer;
 let c;
 
 function init() {
+    c = new Canvas(64, 32);
+
     updateAutoload();
     updateURL();
 
     updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
     updateDeviceConfig();
-
-    c = new Canvas(64, 32);
 }
 
 async function updateDeviceConfig() {
@@ -44,7 +44,8 @@ function copyToClipboard(msg) {
 function updateAutoload() {
     let autoloaders = document.getElementsByClassName("autoload");
     for (let i = 0; i < autoloaders.length; i++) {
-        autoloaders[i].oninput();
+        autoloaders[i].oninput?.();
+        autoloaders[i].onclick?.();
     }
 }
 
@@ -110,13 +111,23 @@ async function getValue(url) {
     return msg;
 }
 
-async function postValue(url, value) {
-    if (value == null || value == "") throw "missing argument";
+async function postValue(url, value = null) {
     console.log(`Sending value "${value}" to ${url}`);
+
+    let content = "";
+    if (value == null){
+        content = "";
+    }
+    else if (typeof value == "object"){
+        content = Object.keys(value).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(value[key])).join('&');
+    }
+    else {
+        content = "value=" + value;
+    };
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     // can't use plaintext because ESP32AsyncWebserver can't parse it
-    let rep = await fetch(url, { method: 'POST', body: "value=" + value, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
+    let rep = await fetch(url, { method: 'POST', body: content, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
 
     let msg = rep.status + ": ";
     if (rep.status == 200) msg += await rep.text();
@@ -134,6 +145,8 @@ class Canvas {
         this.ctx = this.canvas.getContext('2d');
         this.rect = this.canvas.getBoundingClientRect();
         this.active = false;
+        this.color = "#aaaaaa";
+        this.lastPos = null;
 
         this.canvas.addEventListener("pointerdown", this);
         this.canvas.addEventListener("pointerup", this);
@@ -177,20 +190,26 @@ class Canvas {
     }
 
     draw(x, y) {
+        let state = [x, y, this.color];
+        if (state.toString() === this.lastPos?.toString()) return;
         this.ctx.fillRect(x, y, 1, 1); // creates a 50 X 50 rectangle with upper-left corner at (10,10)
-        // TODO cache last drawn field, send to ESP if different
+        postValue("/draw/pixel", state);
+        this.lastPos = state;
     }
 
     setColor(color) {
+        this.color = color;
         this.ctx.fillStyle = color;
     }
 
     fill() {
         this.ctx.fillRect(0, 0, this.width, this.height);
+        postValue("/draw/fill", this.color);
     }
 
     clear() {
         this.ctx.clearRect(0, 0, this.width, this.height);
+        postValue("/draw/clear");
     }
 }
 
