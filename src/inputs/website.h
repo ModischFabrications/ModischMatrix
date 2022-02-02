@@ -1,6 +1,7 @@
 #pragma once
 
 #include "controller.h"
+#include "modes/freedraw.h"
 #include "modes/snake.h"
 #include "shared/serialWrapper.h"
 #include <Arduino.h>
@@ -140,6 +141,41 @@ void PostSnake(AsyncWebServerRequest* request) {
     request->send(200, F("text/plain"), F("OK"));
     Display::flashDot();
 }
+
+// draw/pixel
+void PostDrawPixel(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
+
+    // TODO parse params
+    Controller::setMode(Controller::Mode::FREEDRAW);
+    Modes_FreeDraw::pixel(1, 1, "#aa1111");
+
+    // no flashing, it's too quick
+    request->send(200, F("text/plain"), F("OK"));
+}
+
+// draw/fill
+void PostDrawFill(AsyncWebServerRequest* request) {
+    const String* value = GetPostValue(request);
+    if (value == nullptr) return;
+
+    Controller::setMode(Controller::Mode::FREEDRAW);
+    Modes_FreeDraw::fill(*value);
+
+    // no flashing, needs crazy quick responses
+    request->send(200, F("text/plain"), F("OK"));
+}
+
+// draw/clear
+void PostDrawClear(AsyncWebServerRequest* request) {
+    Controller::setMode(Controller::Mode::FREEDRAW);
+    Modes_FreeDraw::clear();
+
+    request->send(200, F("text/plain"), F("OK"));
+    Display::flashDot();
+}
+
 } // namespace
 
 // contract: WiFi and modes must be enabled already
@@ -163,6 +199,9 @@ void setup() {
     server.on("/gol/rule", HTTP_POST, PostGOLRule);
     server.on("/snake", HTTP_GET, GetNSnakes);
     server.on("/snake", HTTP_POST, PostSnake);
+    server.on("/draw/pixel", HTTP_POST, PostDrawPixel);
+    server.on("/draw/fill", HTTP_POST, PostDrawFill);
+    server.on("/draw/clear", HTTP_POST, PostDrawClear);
 
     server.begin();
     println(F("Serving website at '/"));

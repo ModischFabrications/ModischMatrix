@@ -27,6 +27,12 @@ SimpleTimer timer;
 
 void clear() { screen->clearScreen(); }
 
+uint16_t parseRGB(const String& rgbcode) {
+    uint16_t r, g, b;
+    sscanf(rgbcode.c_str(), "#%02x%02x%02x", &r, &g, &b);
+    return screen->color565(r, g, b);
+}
+
 String reformatText(const String& msg) {
     String val = msg;
     val.replace(F("\\n"), F("\n"));
