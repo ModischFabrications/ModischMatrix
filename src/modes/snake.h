@@ -24,7 +24,7 @@ const CRGB C_PLAYERS[] = {
     CRGB(231, 76, 60),
     CRGB(46, 204, 113),
     CRGB(52, 152, 219),
-    CRGB(185, 173, 0),
+    CRGB(255, 238, 0),
 };
 const CRGB C_SNACK = CRGB(200, 200, 200);
 const CRGB C_DEAD = CRGB(40, 40, 40);
@@ -185,7 +185,8 @@ void draw() {
         CRGB head_color = C_PLAYERS[i];
         if (sn.dir == DEAD) { head_color = C_DEAD; }
         Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, head_color.r, head_color.g, head_color.b);
-        for (uint8_t j = 1; j < sn.len; j++) {
+        // draw reverse to show brighter colors on overlap
+        for (uint8_t j = sn.len - 1; j > 1; j--) {
             CRGB color = head_color.fadeToBlackBy(i * (256 / (sn.len + 2) - 1));
             Display::screen->drawPixelRGB888(sn.pos[j].x, sn.pos[j].y, color.r, color.g, color.b);
         }
