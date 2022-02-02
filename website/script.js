@@ -111,14 +111,14 @@ async function getValue(url) {
     return msg;
 }
 
-async function postValue(url, value = null) {
+async function postValue(url, value = null, hideSnackbar = false) {
     console.log(`Sending value "${value}" to ${url}`);
 
     let content = "";
-    if (value == null){
+    if (value == null) {
         content = "";
     }
-    else if (typeof value == "object"){
+    else if (typeof value == "object") {
         content = Object.keys(value).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(value[key])).join('&');
     }
     else {
@@ -129,10 +129,12 @@ async function postValue(url, value = null) {
     // can't use plaintext because ESP32AsyncWebserver can't parse it
     let rep = await fetch(url, { method: 'POST', body: content, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
 
-    let msg = rep.status + ": ";
-    if (rep.status == 200) msg += await rep.text();
-    else msg += rep.statusText;
-    showSnackbar(msg);
+    if (!hideSnackbar) {
+        let msg = rep.status + ": ";
+        if (rep.status == 200) msg += await rep.text();
+        else msg += rep.statusText;
+        showSnackbar(msg);
+    }
 }
 
 // -------------- freeDraw
@@ -193,7 +195,7 @@ class Canvas {
         let state = [x, y, this.color];
         if (state.toString() === this.lastPos?.toString()) return;
         this.ctx.fillRect(x, y, 1, 1); // creates a 50 X 50 rectangle with upper-left corner at (10,10)
-        postValue("/draw/pixel", state);
+        postValue("/draw/pixel", state, true);
         this.lastPos = state;
     }
 

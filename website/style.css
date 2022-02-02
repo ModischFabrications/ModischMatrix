@@ -221,6 +221,7 @@ section {
 }
 
 #freeDrawCanvas {
+  background-color: #3b3b3b;
   margin: var(--pad_default);
   border: 1px solid rgba(0,0,0,.5);
   aspect-ratio: 64 / 32;
