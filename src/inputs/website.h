@@ -144,12 +144,13 @@ void PostSnake(AsyncWebServerRequest* request) {
 
 // draw/pixel
 void PostDrawPixel(AsyncWebServerRequest* request) {
-    const String* value = GetPostValue(request);
-    if (value == nullptr) return;
+    const String* x = GetPostValue(request, F("0"));
+    const String* y = GetPostValue(request, F("1"));
+    const String* color = GetPostValue(request, F("2"));
+    if (x == nullptr || y == nullptr || color == nullptr) return;
 
-    // TODO parse params
     Controller::setMode(Controller::Mode::FREEDRAW);
-    Modes_FreeDraw::pixel(1, 1, "#aa1111");
+    Modes_FreeDraw::pixel(x->toInt(), y->toInt(), *color);
 
     // no flashing, it's too quick
     request->send(200, F("text/plain"), F("OK"));
