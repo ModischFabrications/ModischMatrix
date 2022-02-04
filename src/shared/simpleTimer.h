@@ -11,7 +11,7 @@ class SimpleTimer {
   public:
     void registerCall(void (*call)(), uint32_t delay) {
         if (delayed_call != nullptr) delayed_call();
-        t_delayed_call = millis() + 200;
+        t_delayed_call = millis() + delay;
         delayed_call = call;
     }
 

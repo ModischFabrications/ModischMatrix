@@ -15,6 +15,9 @@ const uint8_t PANEL_RES_X = 64;
 const uint8_t PANEL_RES_Y = 32;
 const uint8_t PANEL_CHAIN = 1;
 
+const uint8_t CHARS_PER_LINE = 10;
+const uint8_t CHAR_WIDTH = 6;
+
 MatrixPanel_I2S_DMA* screen = nullptr;
 
 const uint16_t black = screen->color565(0, 0, 0);
@@ -53,6 +56,14 @@ String reformatText(const String& msg) {
     val.replace(F("€"), F("\x9B"));
 
     return val;
+}
+
+void printTextCentered(const String& msg, uint16_t colorText = white, uint16_t colorBg = black) {
+    uint8_t xStart = ((float)CHARS_PER_LINE - msg.length())/2 * CHAR_WIDTH;
+    screen->clearScreen();
+    screen->setTextColor(colorText, colorBg);
+    screen->setCursor(xStart, MATRIX_HEIGHT*0.4);
+    screen->print(reformatText(msg));
 }
 
 void printText(const String& msg, uint16_t colorText = white, uint16_t colorBg = black) {

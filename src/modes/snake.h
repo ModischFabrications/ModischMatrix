@@ -2,6 +2,7 @@
 
 #include "display.h"
 #include "shared/serialWrapper.h"
+#include "shared/simpleTimer.h"
 #include <Arduino.h>
 #include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 #include <FastLED.h>
@@ -9,8 +10,12 @@
 // multiplayer snake. Eat snacks to grow, let others crash into you.
 
 namespace Modes_Snake {
+void reset();
 
 enum Direction : uint8_t { OFF = 0, UP, DOWN, LEFT, RIGHT, DEAD };
+
+enum GameState : uint8_t { WAITING, PLAYING, DONE };
+GameState gameState = WAITING;
 
 namespace {
 const uint16_t UPDATE_DELAY = 400; // 400*64 ~= 30s max
@@ -94,6 +99,22 @@ XY dirToPos(const Direction& dir) {
         logError(F("invalid direction!"));
         return XY(0, 0);
     }
+}
+
+uint8_t nPlayersDead() {
+    uint8_t n = 0;
+    for (Snake& sn : players) {
+        if (sn.dir == DEAD) n++;
+    }
+    return n;
+}
+
+uint16_t GetWinnerColor() {
+    CRGB winner = C_SNACK; // better to show trash than to crash
+    for (uint8_t j = 0; j < N_MAX_PLAYERS; j++) {
+        if (players[j].dir != DEAD) winner = C_PLAYERS[j];
+    }
+    return Display::screen->color565(winner.r, winner.g, winner.b);
 }
 
 void makeSnack() {
@@ -184,12 +205,14 @@ void draw() {
         Snake& sn = players[i];
         CRGB head_color = C_PLAYERS[i];
         if (sn.dir == DEAD) { head_color = C_DEAD; }
-        Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, head_color.r, head_color.g, head_color.b);
-        // draw reverse to show brighter colors on overlap
-        for (uint8_t j = sn.len - 1; j > 1; j--) {
-            CRGB color = head_color.fadeToBlackBy(i * (256 / (sn.len + 2) - 1));
+
+        for (uint8_t j = 1; j < sn.len; j++) {
+            // prevent accidental copy
+            CRGB color = CRGB(head_color).fadeToBlackBy(j * (256 / (sn.len + 1) - 1));
             Display::screen->drawPixelRGB888(sn.pos[j].x, sn.pos[j].y, color.r, color.g, color.b);
         }
+        // draw last to show brighter colors on overlap
+        Display::screen->drawPixelRGB888(sn.pos[0].x, sn.pos[0].y, head_color.r, head_color.g, head_color.b);
     }
 
     for (uint8_t i = 0; i < N_MAX_SNACKS; i++) {
@@ -201,8 +224,16 @@ void draw() {
     // printPlayer(0);
 }
 
+SimpleTimer timer;
 uint32_t nextSnack = 0;
 void updateScreen() {
+    if (gameState == DONE) return;
+    if (nPlayersDead() >= 3) {
+        gameState = DONE;
+        Display::printTextCentered(F("YOU WON!"), GetWinnerColor());
+        timer.registerCall([] { reset(); }, 10 * 1000);
+        return;
+    }
     move();
     collide();
     draw();
@@ -249,12 +280,15 @@ void reset() {
     for (Snack& sn : snacks) {
         sn.active = OFF;
     }
+    gameState = WAITING;
 }
 
 void setup() { reset(); }
 
 uint32_t nextUpdate = 0;
 void loop() {
+    timer.loop();
+    delay(10);
     uint32_t now = millis();
     if (now < nextUpdate) return;
     nextUpdate = now + UPDATE_DELAY;
