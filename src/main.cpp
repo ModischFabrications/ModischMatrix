@@ -21,13 +21,14 @@
 #include "display.h"
 
 void setup() {
-    delay(0); // watchdog timer (WDT)
+    delay(0); // reset watchdog timer (WDT)
 
     Pinout::setup();
     digitalWrite(Pinout::STATUS_LED, true);
 
     setupSerial(115200);
     println(F("Starting up, this will take ~5 seconds..."));
+    FileServer::setup();
     PersistenceManager::setup();
 
     println(F(".prepare outputs."));

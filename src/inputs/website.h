@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include <ESPAsyncWebServer.h> // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <Regexp.h>
-#include <SPIFFS.h>
+#include <LittleFS.h>
 
 namespace Website {
 
@@ -46,6 +46,11 @@ String GetPathArgument(const String& path) {
 
 // --- separate mode handlers
 
+void GetHealth(AsyncWebServerRequest* request) {
+    request->send(200, F("text/plain"), F("I'm alive!"));
+    Display::flashDot();
+}
+
 void RedirectUnknown(AsyncWebServerRequest* request) {
     request->redirect("/");
     print(F("Redirecting request to root from "));
@@ -59,7 +64,6 @@ void PostBrightness(AsyncWebServerRequest* request) {
     Controller::setBrightness(value->toInt());
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 void PostTimeout(AsyncWebServerRequest* request) {
@@ -69,12 +73,10 @@ void PostTimeout(AsyncWebServerRequest* request) {
     Controller::hideAfter(value->toInt() * 1000);
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 void GetMode(AsyncWebServerRequest* request) {
     request->send(200, F("text/plain"), String(Controller::activeMode->mode));
-    Display::flashDot();
 }
 
 void PostMode(AsyncWebServerRequest* request) {
@@ -85,7 +87,6 @@ void PostMode(AsyncWebServerRequest* request) {
     Controller::setMode(val);
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 void PostPrint(AsyncWebServerRequest* request) {
@@ -96,7 +97,6 @@ void PostPrint(AsyncWebServerRequest* request) {
     Controller::printText(*value);
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 void PostGOLRule(AsyncWebServerRequest* request) {
@@ -120,13 +120,11 @@ void PostGOLRule(AsyncWebServerRequest* request) {
     Modes_GOL::setRule(ms.GetCapture(born, 0), ms.GetCapture(survive, 1));
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 // TODO might want to return player colors instead
 void GetNSnakes(AsyncWebServerRequest* request) {
     request->send(200, F("text/plain"), String(Modes_Snake::N_MAX_PLAYERS));
-    Display::flashDot();
 }
 
 // snake/0[/]
@@ -139,7 +137,6 @@ void PostSnake(AsyncWebServerRequest* request) {
     Modes_Snake::setDirection(player, (Modes_Snake::Direction)value->toInt());
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 // draw/pixel
@@ -174,24 +171,21 @@ void PostDrawClear(AsyncWebServerRequest* request) {
     Modes_FreeDraw::clear();
 
     request->send(200, F("text/plain"), F("OK"));
-    Display::flashDot();
 }
 
 } // namespace
 
 // contract: WiFi and modes must be enabled already
 void setup() {
-    if (!SPIFFS.begin(true)) {
-        Serial.println("An Error has occurred while mounting SPIFFS");
-        return;
-    }
+    // TODO check if littleFS was already started, log error if not?
 
     println(F("Preparing webserver..."));
     // needed to fetch css/js, pictures and more; might be deobfuscation risk for hidden files
-    server.serveStatic("/", SPIFFS, "/").setCacheControl("max-age=600").setDefaultFile("index.html");
-    server.serveStatic("/favicon.ico", SPIFFS, "/favicon.png").setCacheControl("max-age=600");
+    server.serveStatic("/", LittleFS, "/").setCacheControl("max-age=600").setDefaultFile("index.html");
+    server.serveStatic("/favicon.ico", LittleFS, "/favicon.png").setCacheControl("max-age=600");
     server.onNotFound(RedirectUnknown);
 
+    server.on("/health", HTTP_ANY, GetHealth);
     server.on("/brightness", HTTP_POST, PostBrightness);
     server.on("/timeout", HTTP_POST, PostTimeout);
     server.on("/mode", HTTP_GET, GetMode);

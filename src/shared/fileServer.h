@@ -5,6 +5,9 @@
 
 #include "serialWrapper.h"
 
+// route every existing library call into LittleFS
+#define SPIFFS LITTLEFS
+
 namespace FileServer {
 void setup();
 const String getContentType(String filename);
@@ -12,6 +15,7 @@ const bool fileExists(String path);
 const File getFile(String path);
 
 void setup() {
+    // autoformat to skip installing an additional script during setup
     if (!LittleFS.begin(true))
         logWarning(F("An Error has occurred while mounting LittleFS."));
 }
