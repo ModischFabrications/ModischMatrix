@@ -27,6 +27,8 @@ Make sure to use a good 5V power supply. Minimum draw with only the ESP32 runnin
 5. Test some commands to the displayed address, look for visual feedback
 5. Remove USB, connect jumper for final deployment
 
+There is also an indicator light in the top right corner. Blue means starting up, Yellow means "Check hotspot", all black means everything should be ready. 
+The module won't connect to saved WiFi on restart sometimes, no idea why, feel free to restart a few times if you think everything is correct. 
 
 ### Full Upload
 VSCode should offer you a task to do everything automatically:
