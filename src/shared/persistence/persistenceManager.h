@@ -26,7 +26,7 @@ void callListeners();
 
 const uint8_t N_MAX_LISTENERS = 7;
 
-const uint16_t delayToSaveMs = (60 * 1000);
+const uint32_t delayToSaveMs = 60L * 1000;
 
 // we are unable to determine if a variable was initialized and
 // we don't want to define a "null" Configuration as default
@@ -61,7 +61,7 @@ void callListeners() {
         fListener listener = listeners[i];
 
         // check for value
-        if (listener == nullptr) { println(F("Listener not initialised")); }
+        if (listener == nullptr) { logError(F("Invalid listener")); }
         // unpack function pointer from list and call
         (*listener)();
     }

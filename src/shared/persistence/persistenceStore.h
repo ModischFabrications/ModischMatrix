@@ -34,22 +34,27 @@ namespace {
 const uint16_t EEPROM_VERSION_ADDR = VERSION;
 const uint16_t EEPROM_SETTINGS_ADDR = EEPROM_VERSION_ADDR + sizeof(VERSION);
 
+#if defined(ESP32) || defined(ESP8266)
+// ESP needs to know how much storage we actually need, AVR won't
 const uint16_t MAX_BYTES_USED = 127;
+#endif
 } // namespace
 
 // call once at startup to reserve (emulated) storage for usage
 void setup() {
-    // ESP needs to know how much storage we actually need, AVR won't
+#if defined(ESP32) || defined(ESP8266)
     EEPROM.begin(MAX_BYTES_USED);
+#endif
 }
 
 // save settings to EEPROM for persistent storage
 void saveSettings(const Configuration settings) {
     EEPROM.write(EEPROM_VERSION_ADDR, VERSION);
     EEPROM.put(EEPROM_SETTINGS_ADDR, settings);
-
+#if defined(ESP32) || defined(ESP8266)
     // commit planned changes
     EEPROM.commit();
+#endif
 }
 
 /**
