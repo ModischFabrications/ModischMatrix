@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Arduino.h>
-#include <LITTLEFS.h>
+#include <LittleFS.h>   // https://github.com/espressif/arduino-esp32/blob/master/libraries/LittleFS/examples/LITTLEFS_test/LITTLEFS_test.ino
 
 #include "serialWrapper.h"
 
@@ -12,7 +12,8 @@ const bool fileExists(String path);
 const File getFile(String path);
 
 void setup() {
-    if (!LITTLEFS.begin()) logWarning(F("An Error has occurred while mounting LittleFS."));
+    if (!LittleFS.begin(true))
+        logWarning(F("An Error has occurred while mounting LittleFS."));
 }
 
 // map file name to content type
@@ -33,16 +34,16 @@ const String getContentType(String filename) {
 // includes a check for a .gz variant
 const bool fileExists(String path) {
     String pathWithGz = path + ".gz";
-    return (LITTLEFS.exists(pathWithGz) || LITTLEFS.exists(path));
+    return (LittleFS.exists(pathWithGz) || LittleFS.exists(path));
 }
 
 // get the original file or a .gz variant
 const File getFile(String path) {
     String pathWithGz = path + ".gz";
-    if (LITTLEFS.exists(pathWithGz)) path += ".gz";
+    if (LittleFS.exists(pathWithGz)) path += ".gz";
     print(F("Getting file from path: "));
     printlnRaw(path);
-    return LITTLEFS.open(path, "r");
+    return LittleFS.open(path, "r");
 }
 
 } // namespace FileServer
