@@ -11,6 +11,7 @@ function init() {
 
     updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
     updateDeviceConfig();
+    updateBuildTime();
 }
 
 async function updateDeviceConfig() {
@@ -20,6 +21,12 @@ async function updateDeviceConfig() {
         return;
     }
     openTab(document.getElementById(`mode_${m}`), false);
+}
+
+async function updateBuildTime() {
+    let v = await getValue("/build_time");
+    let field = document.getElementById(`BUILD_FIELD`);
+    field.textContent += new Date(parseInt(v) * 1000).toISOString();
 }
 
 function updateURL() {
@@ -111,7 +118,7 @@ async function getValue(url) {
     return msg;
 }
 
-async function postValue(url, value = null, hideSnackbar = false) {
+async function postValue(url, value = null) {
     console.log(`Sending value "${value}" to ${url}`);
 
     let content = "";
@@ -128,13 +135,11 @@ async function postValue(url, value = null, hideSnackbar = false) {
     // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
     // can't use plaintext because ESP32AsyncWebserver can't parse it
     let rep = await fetch(url, { method: 'POST', body: content, headers: { 'Accept': "text/plain", "Content-Type": "application/x-www-form-urlencoded" } });
+    if (rep.status == 200)
+        return;
 
-    if (!hideSnackbar) {
-        let msg = rep.status + ": ";
-        if (rep.status == 200) msg += await rep.text();
-        else msg += rep.statusText;
-        showSnackbar(msg);
-    }
+    let msg = rep.status + ": " + rep.statusText;
+    showSnackbar(msg);
 }
 
 // -------------- freeDraw

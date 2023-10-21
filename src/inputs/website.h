@@ -188,8 +188,8 @@ void setup() {
     server.serveStatic("/favicon.ico", LittleFS, "/favicon.png").setCacheControl("max-age=600");
     server.onNotFound(RedirectUnknown);
 
-    server.on("/health", HTTP_ANY, GetHealth);
-    server.on("/build_time", HTTP_ANY, GetBuildTime);
+    server.on("/health", HTTP_GET, GetHealth);
+    server.on("/build_time", HTTP_GET, GetBuildTime);
     server.on("/brightness", HTTP_POST, PostBrightness);
     server.on("/timeout", HTTP_POST, PostTimeout);
     server.on("/mode", HTTP_GET, GetMode);
