@@ -9,8 +9,12 @@ Everything is housed in a 3D-printed enclosure, see [HUB75_Panel_Enclosure](TODO
 
 I don't plan on selling (premade) kits yet, but feel free to contact for inquiries. 
 Making everything yourself should set you back ~60€ and half a day of work, but requires some tools, parts and finesse.
+It's still one of my simpler projects with a pretty clean codebase (for embedded), feel free to look into modes for easy animations. 
 
 Features are best described by the available API calls, see [API](#API).
+
+Make sure to use a good 5V power supply. Minimum draw with only the ESP32 running seems to be around 1.5W, single color with 60% brightness hovers around 3W. 
+100% brightness and fully white is the worst you can have, use at your own risk. The theoretical maximum of a single panel is 5V x 3.5A, so a 20W supply is recommended. 
 
 ## Usage
 
