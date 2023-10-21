@@ -101,7 +101,6 @@ void showLogin() {
     Display::clear();
     Display::setupText();
     Display::printText(msg);
-    setMode(LOGIN);
 }
 
 void setMode(uint8_t new_mode) {

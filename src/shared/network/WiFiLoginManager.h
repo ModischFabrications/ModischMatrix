@@ -41,7 +41,7 @@ void setupWiFi(const char* name) {
     // wifiManager.resetSettings();
 
     wifiManager.setAPCallback(configModeCallback);
-    // wifiManager.setConnectTimeout(15); // spams console?
+    wifiManager.setConnectTimeout(10);
     wifiManager.setMinimumSignalQuality(10);
     wifiManager.setAPStaticIPConfig(IPAddress(192, 168, 1, 1), IPAddress(192, 168, 1, 1), IPAddress(255, 255, 255, 0));
     WiFi.hostname(name);

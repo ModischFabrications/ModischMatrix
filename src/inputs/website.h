@@ -149,7 +149,6 @@ void PostDrawPixel(AsyncWebServerRequest* request) {
     Controller::setMode(Controller::Mode::FREEDRAW);
     Modes_FreeDraw::pixel(x->toInt(), y->toInt(), *color);
 
-    // no flashing, it's too quick
     request->send(200, F("text/plain"), F("OK"));
 }
 
@@ -161,7 +160,6 @@ void PostDrawFill(AsyncWebServerRequest* request) {
     Controller::setMode(Controller::Mode::FREEDRAW);
     Modes_FreeDraw::fill(*value);
 
-    // no flashing, needs crazy quick responses
     request->send(200, F("text/plain"), F("OK"));
 }
 
@@ -175,9 +173,9 @@ void PostDrawClear(AsyncWebServerRequest* request) {
 
 } // namespace
 
-// contract: WiFi and modes must be enabled already
+// contract: LittleFS, WiFi and modes must be enabled already
 void setup() {
-    // TODO check if littleFS was already started, log error if not?
+    // TODO check if dependencies were already enabled, log error if not?
 
     println(F("Preparing webserver..."));
     // needed to fetch css/js, pictures and more; might be deobfuscation risk for hidden files

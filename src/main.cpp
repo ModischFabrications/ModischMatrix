@@ -49,6 +49,8 @@ void setup() {
 
     println(F(".prepare logic."));
     Controller::setup();
+    Controller::showLogin();
+    delay(5000);
 
     PersistenceManager::callListeners();
 
