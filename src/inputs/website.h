@@ -51,6 +51,11 @@ void GetHealth(AsyncWebServerRequest* request) {
     Display::flashDot();
 }
 
+void GetBuildTime(AsyncWebServerRequest* request) {
+    request->send(200, F("text/plain"), String(LAST_BUILD_TIME));
+    Display::flashDot();
+}
+
 void RedirectUnknown(AsyncWebServerRequest* request) {
     request->redirect("/");
     print(F("Redirecting request to root from "));
@@ -184,6 +189,7 @@ void setup() {
     server.onNotFound(RedirectUnknown);
 
     server.on("/health", HTTP_ANY, GetHealth);
+    server.on("/build_time", HTTP_ANY, GetBuildTime);
     server.on("/brightness", HTTP_POST, PostBrightness);
     server.on("/timeout", HTTP_POST, PostTimeout);
     server.on("/mode", HTTP_GET, GetMode);

@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include <time.h>
 
 #define DEBUG
 
@@ -27,7 +28,12 @@ void setup() {
     digitalWrite(Pinout::STATUS_LED, true);
 
     setupSerial(115200);
-    println(F("Starting up, this will take ~5 seconds..."));
+    println(F("Starting up, this should take <10 seconds..."));
+
+    const time_t unixBuildTime = LAST_BUILD_TIME;
+    print(F("Build date: "));
+    printlnRaw(ctime(&unixBuildTime));  // this formatting is not great, but easy
+
     FileServer::setup();
     PersistenceManager::setup();
 
