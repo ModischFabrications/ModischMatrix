@@ -133,6 +133,7 @@ void GetNSnakes(AsyncWebServerRequest* request) {
 }
 
 // snake/0[/]
+// TODO this should probably use a proper WebSocket instead for low latency
 void PostSnake(AsyncWebServerRequest* request) {
     uint8_t player = GetPathArgument(request->url()).toInt();
     const String* value = GetPostValue(request);

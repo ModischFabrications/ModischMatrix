@@ -42,6 +42,7 @@ void setup() {
     Display::colorDot(Display::blue); // asap
 
     println(F(".prepare connections."));
+    delay(10);
     WiFiLoginManager::onConfigNeeded = [] { Display::colorDot(Display::orange); };
     WiFiLoginManager::setup("ModischMatrix");
     delay(10);

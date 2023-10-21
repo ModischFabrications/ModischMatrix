@@ -9,7 +9,8 @@ function init() {
     updateAutoload();
     updateURL();
 
-    updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
+    // this is technically better for synchronisation, but every call costs 150ms
+    // updateTimer = setInterval(updateDeviceConfig, 5 * 1000, 0);
     updateDeviceConfig();
     updateBuildTime();
 }
